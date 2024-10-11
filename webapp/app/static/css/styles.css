@@ -2,6 +2,7 @@ body {
     word-wrap: break-word;
     font-family: Arial, sans-serif;
     display: flex;
+    font-weight: bold;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -17,6 +18,16 @@ body {
     background: #ffffff;
 }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 100px);  /* Tre kolonner */
+    grid-gap: 20px;  /* Avstand mellom knappene */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 input {
     display: block;
     width: 180px;
@@ -28,31 +39,63 @@ input {
 
 button {
     width: 180px;
+    height: 50px;
     padding: 10px;
     margin: 10px 0;
-    border: none;
-    background-color: #007bff;
+
+    font-weight: bold;
+    background-color: #3497da;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    text-align: center;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
+.backButton {
+    bottom: 10%;
+}
 
-        /* Tidsvisning */
-        .time-display {
-            width: 120px;
-            height: 50px;
-            margin: 20px auto;
-            border: 2px solid black;
-            border-radius: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
+.button-container {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #e0f7ff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+
+.button-container:hover {
+    transform: translateY(-5px);  /* Løfter knappen ved hover */
+}
+
+.button-container img {
+    width: 50px;  /* Bildestørrelse */
+    height: 50px;
+}
+
+.button-container span {
+    display: block;
+    margin-top: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.time-display {
+    width: 120px;
+    height: 50px;
+    margin: 20px auto;
+    border: 2px solid black;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
         }

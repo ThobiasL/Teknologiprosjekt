@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Innlogging</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
 </head>
 <body>
     <div class="container">
         <h2>Innlogging</h2>
-        <input type="text" id="username" placeholder="Brukernavn"><br>
-        <input type="password" id="password" placeholder="Passord"><br>
+        
+        <form action="{{ url_for('handle_login') }}" method="post">
+            <input type="text" id="username" name="username" placeholder="Brukernavn"><br>
+            <input type="password" id="password" name="password" placeholder="Passord"><br>
+            <button type="submit">Logg Inn</button><br>
+        </form>
+
         <button onclick="login()">Logg Inn</button><br>
         <img src="qrcode.png" alt="QR Kode"><br>
     </div>
-    <script src="../static/js/scripts.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
