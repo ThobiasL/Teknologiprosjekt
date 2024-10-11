@@ -5,7 +5,7 @@ body {
     font-weight: bold;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     margin: 0;
     background-color: #f0f0f0;
 }
@@ -25,7 +25,6 @@ body {
     padding: 20px;
     background-color: #ffffff;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 input {
@@ -38,36 +37,38 @@ input {
 }
 
 button {
-    width: 180px;
+    width: 150px;
     height: 50px;
-    padding: 10px;
+    padding: 15px;
     margin: 10px 0;
-
     font-weight: bold;
-    background-color: #3497da;
-    color: white;
+    background-color: #e0f7ff;
+    color: black;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
 }
 
 button:hover {
-    background-color: #0056b3;
-}
-
-.backButton {
-    bottom: 10%;
+    background-color: #56d1ff;
 }
 
 .button-container {
     text-align: center;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 15px;
+    border: 2px solid black;
     background-color: #e0f7ff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }
 
+.button-container a {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+}
 
 .button-container:hover {
     transform: translateY(-5px);  /* Løfter knappen ved hover */
@@ -79,11 +80,12 @@ button:hover {
 }
 
 .button-container span {
-    display: block;
+    display: inline-block;
     margin-top: 8px;
     font-family: Arial, sans-serif;
     font-size: 14px;
     color: #333;
+    pointer-events: none;
 }
 
 .time-display {
@@ -99,3 +101,7 @@ button:hover {
     font-family: Arial, sans-serif;
     font-weight: bold;
         }
+
+.button-container a {
+    text-decoration: none;
+}

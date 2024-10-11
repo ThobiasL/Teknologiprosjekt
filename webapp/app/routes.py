@@ -1,15 +1,15 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Blueprint, render_template
 
-app = Flask(__name__)
+main = Blueprint('main', __name__)
 
-@app.route('/')
-def index():
-    return render_template('main.html')
+@main.route('/')
+def login():
+    return render_template('login.html')
 
-@app.route('/handle_redirect', methods=['POST'])
-def handle_redirect():
-    # Når skjemaet sendes, omdirigerer vi til en ny rute
-    return redirect(url_for('redirected'))
+@main.route('/home')
+def home():
+    return render_template('home.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@main.route('/lock')
+def lock():
+    return render_template('lock.html')
