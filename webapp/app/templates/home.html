@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrollpanel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+<body>
+    <div class="container">
+
+        <div class="grid-container">
+            <div class="button-container">
+                <a href="{{ url_for('main.lock') }}">
+                    <img src="{{ url_for('static', filename='img/door_icon.png') }}" alt="Dørlås" />
+                    <span>Dørlås</span>
+                </a>
+            </div>
+
+            <div class="button-container">
+                <img src="../static/img/med_icon.png" alt="Medisiner" onclick="goTo('medication.html')">
+                <span>Medisiner</span>
+            </div>
+            <div class="button-container">
+                <img src="../static/img/todo_icon.png" alt="Huskeliste" onclick="goTo('todolist.html')">
+                <span>Huskeliste</span>
+            </div>
+            <div class="button-container">
+                <img src="../static/img/food_icon.png" alt="Handleliste" onclick="g">
+                <span>Handleliste</span>
+            </div>
+
+
+        </div>
+ 
+        <button >Logg ut</button>
+    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
