@@ -8,20 +8,30 @@
 </head>
 <body>
     <div class="container">
-        <h3>Automatisk låsetid</h3>
-        <div class="time-display">10:50</div><br>
-        <button>Endre låsetid</button><br>
+        <h2>Automatisk låsetid</h2>
+        
+        <form action="{{ url_for('lock.update_lock_time') }}" method="POST">
+            <input type="time" name="lock_time" class="time-input" value="{{ lock_time }}">
+            <br>
+            <button type="submit" class="action-btn">Endre låsetid</button>
+        </form>
 
-        <div class="grid-container">
-            <div class="button-container">
-                <img src="{{ url_for('static', filename='img/lockdoor_icon.png') }}" alt="Lock Door">
+        <!-- Lås dør knapp -->
+        <form action="{{ url_for('lock.lock_door') }}" method="POST">
+            <button type="submit" class="menu-item">
+                <img src="{{ url_for('static', filename='img/lockdoor_icon.png') }}" alt="Lås dør" class="icon">
                 <span>Lås dør</span>
-            </div>
-            <div class="button-container">
-                <img src="{{ url_for('static', filename='img/unlockdoor_icon.png') }}" alt="Unlock Door">
+            </button>
+        </form>
+
+        <!-- Lås opp dør knapp -->
+        <form action="{{ url_for('lock.unlock_door') }}" method="POST">
+            <button type="submit" class="menu-item">
+                <img src="{{ url_for('static', filename='img/unlockdoor_icon.png') }}" alt="Lås opp dør" class="icon">
                 <span>Lås opp dør</span>
-            </div>
-        </div>
+            </button>
+        </form>
+
         <a href="{{ url_for('main.home') }}">
             <button>Tilbake</button>
         </a>

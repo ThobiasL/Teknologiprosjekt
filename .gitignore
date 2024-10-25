@@ -5,7 +5,8 @@ __pycache__/
 *.pyo
 
 .vscode/
-*.swp
-.DS_Store
 
 *.log
+
+instance/
+

@@ -1,3 +1,10 @@
+/* Generelle stiler og reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     word-wrap: break-word;
     font-family: Arial, sans-serif;
@@ -10,82 +17,32 @@ body {
     background-color: #f0f0f0;
 }
 
+a {
+    text-decoration: none;
+    color: white;
+}
+
+h2 {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
 .container {
     border: 2px solid black;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
     background: #ffffff;
-}
-
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 100px);  /* Tre kolonner */
-    grid-gap: 20px;  /* Avstand mellom knappene */
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Visuell dybde */
 }
 
 input {
     display: block;
-    width: 180px;
+    width: 100%;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-}
-
-button {
-    width: 150px;
-    height: 50px;
-    padding: 15px;
-    margin: 10px 0;
-    font-weight: bold;
-    background-color: #e0f7ff;
-    color: black;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-}
-
-button:hover {
-    background-color: #56d1ff;
-}
-
-.button-container {
-    text-align: center;
-    padding: 10px;
-    border-radius: 15px;
-    border: 2px solid black;
-    background-color: #e0f7ff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-.button-container a {
-    display: block;
-    width: 100%;
-    height: 100%;
-
-}
-
-.button-container:hover {
-    transform: translateY(-5px);  /* Løfter knappen ved hover */
-}
-
-.button-container img {
-    width: 50px;  /* Bildestørrelse */
-    height: 50px;
-}
-
-.button-container span {
-    display: inline-block;
-    margin-top: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #333;
-    pointer-events: none;
 }
 
 .time-display {
@@ -100,8 +57,85 @@ button:hover {
     font-size: 24px;
     font-family: Arial, sans-serif;
     font-weight: bold;
-        }
-
-.button-container a {
-    text-decoration: none;
 }
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-item {
+    background-color: #17a2b8;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    align-items: center; /* Vertikalt sentrerer både ikonet og teksten */
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease;
+    height: 60px; /* Fast høyde for konsistens */
+}
+
+.menu-item:hover {
+    background-color: #138496;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    flex-shrink: 0; /* Hindrer ikonet i å krympe */
+}
+
+.menu-item span {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.5; /* Justerer linjehøyden for bedre vertikal sentrering */
+    display: block;
+    flex-grow: 1; /* Fyller resten av plassen i flexboksen */
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Sentrerer innholdet i knappen */
+    width: 100%;
+    padding: 15px;
+    background-color: #17a2b8;
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+button:hover {
+    background-color: #138496;
+}
+
+.time-input {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+
+
+
+

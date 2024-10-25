@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innlogging</title>
+    <title>Registrering</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
+        <h2>Ny bruker</h2>
+        <form action="{{ url_for('main.register') }}" method="POST">
 
-        <h2>Innlogging</h2>
-
-        <!-- Innloggingsskjema -->
-        <form action="{{ url_for('main.login') }}" method="POST">
             <label for="username">Brukernavn:</label>
             <input type="text" id="username" name="username" placeholder="Brukernavn" required>
             
             <label for="password">Passord:</label>
             <input type="password" id="password" name="password" placeholder="Passord" required>
-        
-            <button type="submit">Logg inn</button>
+            
+            <button type="submit">Lag bruker</button>
         </form>
-
+        
         <div style="margin-top: 40px;">
-            <a href="{{ url_for('main.register') }}">
-                <button>Ny bruker</button>
+            <a href="{{ url_for('main.login') }}">
+                <button>Innlogging</button>
             </a>
         </div>
-
-    </div>
 </body>
 </html>
