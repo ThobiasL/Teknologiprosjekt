@@ -5,7 +5,7 @@ import json # Importerer json-modulen for lesing og skriving til låsens JSON-fi
 lock = Blueprint('lock', __name__)
 
 # Path til JSON-filen
-lock_path = 'instance/lock.json'
+lock_path = 'data/lock.json'
 
 # Funksjon for å lese data fra låsens JSON-fil
 def load_lock_data():

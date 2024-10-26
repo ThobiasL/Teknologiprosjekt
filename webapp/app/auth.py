@@ -4,7 +4,7 @@ import json
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 
-profiles_path = 'instance/profiles.json' # Path til profiles.json
+profiles_path = 'data/profiles.json' # Path til profiles.json
 
 # Funksjon for å lese fra profiles.json
 def load_profiles():

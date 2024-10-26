@@ -15,21 +15,21 @@ source .venv/bin/activate
 echo "Installerer avhengigheter fra requirements.txt..."
 pip install -r requirements.txt
 
-# Opprett instance-mappen hvis den ikke eksisterer
-if [ ! -d "instance" ]; then
-    mkdir instance
-    echo "Opprettet instance-mappen."
+# Opprett data-mappen hvis den ikke eksisterer
+if [ ! -d "data" ]; then
+    mkdir data
+    echo "Opprettet data-mappen."
 fi
 
 # Lager profiles.json med et tomt dictionary hvis den ikke eksisterer
-if [ ! -f "instance/profiles.json" ]; then
-    echo '{}' > instance/profiles.json
+if [ ! -f "data/profiles.json" ]; then
+    echo '{}' > data/profiles.json
     echo "Opprettet profiles.json."
 fi
 
 # Lager lock.json hvis den ikke eksisterer
-if [ ! -f "instance/lock.json" ]; then
-    echo '{"lock_status" : 0, "lock_time" : "00:00"}' > instance/lock.json
+if [ ! -f "data/lock.json" ]; then
+    echo '{"lock_status" : 0, "lock_time" : "00:00"}' > data/lock.json
     echo "Opprettet lock.json."
 fi
 
