@@ -8,8 +8,12 @@
 </head>
 <body>
     <div class="container">
-
         <h2>Innlogging</h2>
+
+        <!-- Viser feilmelding hvis en 'error' eksisterer -->
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
 
         <div class="menu">
         <!-- Innloggingsskjema -->

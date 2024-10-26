@@ -112,8 +112,10 @@ button:hover {
 
 }
 
-.bottom-btn {
-    margin-top: 40px;
+.error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
 

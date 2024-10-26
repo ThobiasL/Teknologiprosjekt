@@ -9,6 +9,12 @@
 <body>
     <div class="container">
         <h2>Ny bruker</h2>
+
+        <!-- Viser feilmelding hvis 'error' eksisterer -->
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
         <div class="menu">
             <form action="{{ url_for('auth.register') }}" method="POST">
 
@@ -22,10 +28,10 @@
             </form>
         </div>
         
-            <a href="{{ url_for('auth.login') }}">
-                <button>Innlogging</button>
-            </a>
-
+        <a href="{{ url_for('auth.login') }}">
+            <button>Innlogging</button>
+        </a>
     </div>
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, request, redirect, url_for, session, render_template # Importerer nødvendige funksjoner fra Flask
+from flask import Blueprint, request, redirect, url_for, session, render_template # Importerer nødvendige funksjoner fra Flask
 import json # Importerer json-modulen for lesing og skriving til låsens JSON-fil
 
 # Lager blueprint for 'lock'

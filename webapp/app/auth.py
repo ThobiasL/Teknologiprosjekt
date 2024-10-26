@@ -1,20 +1,21 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 
-profiles_path = 'instance/profiles.json'
+profiles_path = 'instance/profiles.json' # Path til profiles.json
 
 # Funksjon for å lese fra profiles.json
 def load_profiles():
     with open(profiles_path, 'r') as profiles_file:
         return json.load(profiles_file)
 
+# Registreringsside
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].lower() # Brukernavn lagres i små bokstaver for å gjøre det case-insensitive
         password = request.form['password']
         
         # Hasher og salter passordet
@@ -48,7 +49,7 @@ def register():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].lower() # Brukernavn lagres i små bokstaver for å gjøre det case-insensitive
         password = request.form['password']
 
         # Last inn brukere fra profiles.json
@@ -64,8 +65,8 @@ def login():
             return render_template('login.html', error=error)
     return render_template('login.html')
 
+# Utlogging
 @auth.route('/logout')
 def logout():
     session.pop('username', None)  # Fjerner brukeren fra sesjonen
-    flash('Du er nå logget ut.', 'info')
     return redirect(url_for('auth.login'))
