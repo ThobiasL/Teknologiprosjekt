@@ -1,4 +1,8 @@
+:: Dette skriptet starter flask-webappen enkelt
+
+:: Skjuler output fra kommandoer
 @echo off
+
 :: Bytter til webapp-mappen
 cd webapp
 
@@ -6,4 +10,4 @@ cd webapp
 call .venv\Scripts\activate
 
 :: Kjører flask sin run.py
-python run.py
+python app.py

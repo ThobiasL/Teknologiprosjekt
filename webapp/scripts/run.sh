@@ -1,3 +1,5 @@
+# Dette skriptet starter flask-webappen enkelt
+
 #!/bin/bash
 
 # Bytt til webapp-mappen

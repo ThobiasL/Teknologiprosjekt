@@ -1,3 +1,5 @@
+# Fil for oppsett av webapp på Linux
+
 #!/bin/bash
 
 # Bytt til webapp-mappen

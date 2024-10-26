@@ -1,5 +1,6 @@
-:: Setup-fil for Windows
+:: Fil for oppsett av webapp på Windows
 
+:: Skjuler output fra kommandoer
 @echo off
 
 :: Bytt til webapp-mappen
