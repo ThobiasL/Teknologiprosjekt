@@ -18,7 +18,11 @@ Dette vil installere alle nødvendige avhengigheter og konfigurere prosjektet.
 Dette starter Flask-appen i utviklingsmodus.
 
 ### 4. Åpne webappen i nettleseren
-Når serveren kjører, vil terminalen vise en liste over IP-adresser. Skriv inn en av disse i nettleseren din for å få tilgang til webappen.
+Når serveren kjører, skriv inn en av IP-adressene under i nettleseren din for å få tilgang til webappen.
+    
+    http://127.0.0.1:5000
+
+    http://10.0.0.3:5000
 
 <br>
 <br>
