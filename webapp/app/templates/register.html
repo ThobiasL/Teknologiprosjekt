@@ -9,21 +9,23 @@
 <body>
     <div class="container">
         <h2>Ny bruker</h2>
-        <form action="{{ url_for('main.register') }}" method="POST">
+        <div class="menu">
+            <form action="{{ url_for('auth.register') }}" method="POST">
 
-            <label for="username">Brukernavn:</label>
-            <input type="text" id="username" name="username" placeholder="Brukernavn" required>
-            
-            <label for="password">Passord:</label>
-            <input type="password" id="password" name="password" placeholder="Passord" required>
-            
-            <button type="submit">Lag bruker</button>
-        </form>
+                <label for="username">Brukernavn:</label>
+                <input type="text" id="username" name="username" placeholder="Brukernavn" required>
+                
+                <label for="password">Passord:</label>
+                <input type="password" id="password" name="password" placeholder="Passord" required>
+                
+                <button type="submit">Lag bruker</button>
+            </form>
+        </div>
         
-        <div style="margin-top: 40px;">
-            <a href="{{ url_for('main.login') }}">
+            <a href="{{ url_for('auth.login') }}">
                 <button>Innlogging</button>
             </a>
-        </div>
+
+    </div>
 </body>
 </html>

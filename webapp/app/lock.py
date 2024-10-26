@@ -1,5 +1,5 @@
-from flask import Blueprint, request, redirect, url_for, flash, render_template
-import json
+from flask import Blueprint, flash, request, redirect, url_for, session, render_template # Importerer nødvendige funksjoner fra Flask
+import json # Importerer json-modulen for lesing og skriving til låsens JSON-fil
 
 # Lager blueprint for 'lock'
 lock = Blueprint('lock', __name__)
@@ -7,13 +7,13 @@ lock = Blueprint('lock', __name__)
 # Path til JSON-filen
 lock_path = 'instance/lock.json'
 
-# Funksjon for å laste data fra JSON
+# Funksjon for å lese data fra låsens JSON-fil
 def load_lock_data():
     with open(lock_path, 'r') as lock_file:
         lock_data = json.load(lock_file)
         return lock_data
 
-# Funksjon for å lagre data til JSON
+# Funksjon for å lagre data til låsens JSON-fil
 def save_lock_data(lock_status, lock_time):
     with open(lock_path, 'w') as lock_file:
         lock_data = {'lock_status': lock_status, 'lock_time': lock_time}
@@ -22,8 +22,13 @@ def save_lock_data(lock_status, lock_time):
 # Funksjon for å vise låsesiden
 @lock.route('/lock')
 def show_lock_page():
+
+    # Sjekk om brukeren ikke er logget inn
+    if 'username' not in session:
+        return redirect(url_for('auth.login'))
+    # Hvis brukeren er logget inn, send til lock-siden
     lock_data = load_lock_data()
-    lock_time = lock_data.get('lock_time', '00:00')
+    lock_time = lock_data.get('lock_time')
     return render_template('lock.html', lock_time=lock_time)
 
 # Funksjon for å oppdatere låsetid

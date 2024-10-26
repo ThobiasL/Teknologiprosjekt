@@ -22,11 +22,6 @@ a {
     color: white;
 }
 
-h2 {
-    padding-top: 20px;
-    padding-bottom: 40px;
-}
-
 .container {
     border: 2px solid black;
     border-radius: 10px;
@@ -45,30 +40,12 @@ input {
     border: 1px solid #ccc;
 }
 
-.time-display {
-    width: 120px;
-    height: 50px;
-    margin: 20px auto;
-    border: 2px solid black;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-}
-
 .menu {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 .menu-item {
@@ -97,9 +74,9 @@ input {
 .menu-item span {
     font-size: 18px;
     font-weight: bold;
-    line-height: 1.5; /* Justerer linjehøyden for bedre vertikal sentrering */
+    line-height: 1.5;
     display: block;
-    flex-grow: 1; /* Fyller resten av plassen i flexboksen */
+    flex-grow: 1;
 }
 
 button {
@@ -111,12 +88,11 @@ button {
     background-color: #17a2b8;
     color: white;
     font-size: 18px;
+    font-weight: bold;
     text-decoration: none;
-    transition: background-color 0.3s ease;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 30px;
 }
 
 button:hover {
@@ -126,15 +102,19 @@ button:hover {
 .time-input {
     text-align: center;
     font-family: Arial, sans-serif;
-    font-size: 16px;
+    font-size: 24px;
     padding: 10px;
     border-radius: 5px;
     font-weight: bold;
     border: 1px solid #ccc;
     background-color: #333;
     color: #f0f0f0;
+
 }
 
+.bottom-btn {
+    margin-top: 40px;
+}
 
 
 
