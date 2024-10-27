@@ -22,11 +22,6 @@ def set_lock_data(lock_status, lock_time):
 # Funksjon for å vise låsesiden
 @lock.route('/lock')
 def show_lock_page():
-
-    # Sjekk om brukeren ikke er logget inn
-    if 'username' not in session:
-        return redirect(url_for('auth.login'))
-    # Hvis brukeren er logget inn, send til lock-siden
     lock_data = get_lock_data()
     lock_time = lock_data.get('lock_time')
     return render_template('lock.html', lock_time=lock_time)

@@ -1,1 +1,3 @@
-Lage funksjon for å sjekke autentisering for redirects: parametre: "side hvis auth", "side hvis ikke auth".
+Lage enkel autentiserings-funksjon, gjenbrukbar - gjort
+login -> signing, register -> signup
+Login-side: vurdere å legge til dropdown meny med eksisterende brukere

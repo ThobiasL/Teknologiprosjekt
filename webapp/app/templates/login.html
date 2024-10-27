@@ -18,13 +18,11 @@
         <div class="menu">
         <!-- Innloggingsskjema -->
             <form action="{{ url_for('auth.login') }}" method="POST">
-                <label for="username">Brukernavn:</label>
-                <input type="text" id="username" name="username" placeholder="Brukernavn" required>
+                <input type="text" class="menu-item" id="username" name="username" placeholder="Brukernavn" required>
                 
-                <label for="password">Passord:</label>
-                <input type="password" id="password" name="password" placeholder="Passord" required>
+                <input type="password" class="menu-item" id="password" name="password" placeholder="Passord" required>
             
-                <button type="submit">Logg inn</button>
+                <button type="submit" class="menu-item">Logg inn</button>
             </form>
         </div>
 

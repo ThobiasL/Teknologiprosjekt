@@ -10,12 +10,11 @@
     <div class="container">
         <h2>Låsetid</h2>
 
-        <!-- Start av meny-seksjonen -->
         <div class="menu">
 
-            <!-- Skjema for å oppdatere låsetid -->
+            <!-- Form for å oppdatere låsetid -->
             <form action="{{ url_for('lock.update_lock_time') }}" method="POST">
-                <input type="time" name="lock_time" class="menu-item time-input" value="{{ lock_time }}">
+                <input type="time" name="lock_time" class="menu-item" value="{{ lock_time }}">
                 <button type="submit" class="menu-item">Endre låsetid</button>
             </form>
         </div> 

@@ -70,3 +70,4 @@ def login():
 def logout():
     session.pop('username', None)  # Fjerner brukeren fra sesjonen
     return redirect(url_for('auth.login'))
+    

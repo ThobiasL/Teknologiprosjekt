@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session, request, redirect, url_for
 # Importerer blueprints fra deres respektive filer
 from .routes import main
 from .lock import lock
@@ -15,5 +15,13 @@ def create_app():
     app.register_blueprint(lock)
     app.register_blueprint(auth)
     app.register_blueprint(medication)
+
+    @app.before_request
+    def check_auth():
+        
+        exempt_routes = ['auth.login', 'auth.register', 'static']
+
+        if request.endpoint not in exempt_routes and 'username' not in session:
+            return redirect(url_for('auth.login'))
 
     return app
