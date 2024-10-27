@@ -16,7 +16,7 @@
                 <img src="{{ url_for('static', filename='img/door_icon.png') }}" alt="Dørlås" class="icon">
                 <span>Dørlås</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="{{ url_for('medication.show_medication_page') }}" class="menu-item">
                 <img src="{{ url_for('static', filename='img/med_icon.png') }}" alt="Medisiner" class="icon">
                 <span>Medisiner</span>
             </a>

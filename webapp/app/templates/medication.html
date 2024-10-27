@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dørlås</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Medisineringstid</h2>
+
+        <!-- Start av meny-seksjonen -->
+        <div class="menu">
+
+            <!-- Skjema for å oppdatere tidspunkt -->
+            <form action="{{ url_for('medication.update_medication_time') }}" method="POST">
+                <input type="time" name="medication_time" class="menu-item time-input" value="{{ medication_time }}">
+                <button type="submit" class="menu-item">Endre tidspunkt</button>
+            </form>
+        </div> 
+
+        <!-- Tilbake-knapp -->
+        <a href="{{ url_for('main.home') }}">
+            <button>Tilbake</button>
+        </a>
+    </div>
+</body>
+</html>

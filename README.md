@@ -3,7 +3,7 @@
 ## Instruksjoner:
 
 ### 1. Gå til webapp\scripts-mappen
-Naviger til scripts-mappen under webapp-katalogen for å finne installasjons- og kjøre-skriptene.
+Naviger til scripts-mappen for å finne installasjons- og kjøre-skriptene.
 
 ### 2. Kjør setup-skriptet som passer til ditt OS
 - For ***Windows:*** &nbsp;&nbsp; Kjør ***setup.bat***
@@ -16,6 +16,16 @@ Dette vil installere alle nødvendige avhengigheter og konfigurere prosjektet.
 - For ***Linux:*** &nbsp;&nbsp; Kjør ***run.sh***
 
 Dette starter Flask-appen i utviklingsmodus.
+
+<br>
+
+
+**Alternativt:**
+
+- For ***Windows:*** &nbsp;&nbsp; Kjør ***run_dev.bat***
+
+
+Dette start Flask-appen uten behov for autentisering, for enkel utvikling.
 
 ### 4. Åpne webappen i nettleseren
 Når serveren kjører, skriv inn en av IP-adressene under i nettleseren din for å få tilgang til webappen.

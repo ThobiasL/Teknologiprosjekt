@@ -1,7 +1,9 @@
 from flask import Flask
-from .routes import main # Importerer blueprint fra routes.py
-from .lock import lock # importerer blueprint fra lock.py
-from .auth import auth # Importerer blueprint fra auth.py
+# Importerer blueprints fra deres respektive filer
+from .routes import main
+from .lock import lock
+from .auth import auth
+from .medication import medication
 
 def create_app():
     app = Flask(__name__)
@@ -12,5 +14,6 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(lock)
     app.register_blueprint(auth)
+    app.register_blueprint(medication)
 
     return app

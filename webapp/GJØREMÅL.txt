@@ -1,0 +1,1 @@
+Lage funksjon for å sjekke autentisering for redirects: parametre: "side hvis auth", "side hvis ikke auth".

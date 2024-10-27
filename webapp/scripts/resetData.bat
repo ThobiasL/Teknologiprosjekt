@@ -15,3 +15,4 @@ if exist data (
 mkdir data
 echo {} > data\profiles.json
 echo {"lock_status" : 0, "lock_time" : "00:00"} > data\lock.json
+echo {"medication_time" : ""} > data\medication.json
