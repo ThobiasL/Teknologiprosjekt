@@ -1,5 +1,5 @@
 from SignalFraRaspberryIpTilArduino import sendSignalToArduino, clearLCD
-from
+from ReadSignalFromArduino import readSignal
 
 #Knappe variabler
 alarm_time = 0
