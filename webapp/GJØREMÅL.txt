@@ -1,3 +1,2 @@
-Lage enkel autentiserings-funksjon, gjenbrukbar - gjort
-login -> signing, register -> signup
 Login-side: vurdere å legge til dropdown meny med eksisterende brukere
+Sette opp på kryptert server

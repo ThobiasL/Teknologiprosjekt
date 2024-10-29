@@ -62,25 +62,16 @@ input {
     height: 60px;
 }
 
-input.menu-item  {
-    background-color: white;
-    color: black;
-    font-size: 24px;
-}
-
-input[type="time"] {
-    font-size: 34px;
-    font-weight: bolder;
-    letter-spacing: 5px;
-    text-align: center;
-}
-
-input.menu-item:hover {
-    background-color: #ffffff;
-}
-
 .menu-item:hover {
     background-color: #138496;
+}
+
+.menu-item span {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.5;
+    display: block;
+    flex-grow: 1;
 }
 
 .icon {
@@ -90,12 +81,21 @@ input.menu-item:hover {
     flex-shrink: 0; /* Hindrer ikonet i å krympe */
 }
 
-.menu-item span {
+input.menu-item  {
+    background-color: white;
+    color: black;
     font-size: 24px;
-    font-weight: bold;
-    line-height: 1.5;
-    display: block;
-    flex-grow: 1;
+}
+
+input.menu-item:hover {
+    background-color: #ffffff;
+}
+
+input[type="time"] {
+    font-size: 34px;
+    font-weight: bolder;
+    letter-spacing: 5px;
+    text-align: center;
 }
 
 button {

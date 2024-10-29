@@ -28,11 +28,8 @@ Dette starter Flask-appen i utviklingsmodus.
 Dette start Flask-appen uten behov for autentisering, for enkel utvikling.
 
 ### 4. Åpne webappen i nettleseren
-Når serveren kjører, skriv inn en av IP-adressene under i nettleseren din for å få tilgang til webappen.
-    
-    http://127.0.0.1:5000
+Når serveren kjører, skriv inn en av IP-adressene fra kjøreloggen i nettleseren din for å få tilgang til webappen.
 
-    http://10.0.0.3:5000
 
 <br>
 <br>

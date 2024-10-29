@@ -10,7 +10,7 @@ medication_path = 'data/medication.json'
 # Funksjon for å lese data fra pilleboksens JSON-fil
 def get_medication_time():
     with open(medication_path, 'r') as medication_file:
-        medication_time = json.load(medication_file).get('medication_time', '00:00')
+        medication_time = json.load(medication_file).get('medication_time')
         return medication_time
 
 # Funksjon for å lagre data til pilleboksens JSON-fil
@@ -22,10 +22,6 @@ def set_medication_time(medication_time):
 # Funksjon for å vise medisinsiden
 @medication.route('/medication')
 def show_medication_page():
-    # Sjekk om brukeren ikke er logget inn
-    if 'username' not in session:
-        return redirect(url_for('auth.login'))
-    # Hvis brukeren er logget inn, send til medication-siden
     medication_time = get_medication_time()
     return render_template('medication.html', medication_time=medication_time)
 
