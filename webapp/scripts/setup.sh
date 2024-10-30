@@ -35,5 +35,11 @@ if [ ! -f "data/lock.json" ]; then
     echo "Opprettet lock.json."
 fi
 
+# Lager medication.json hvis den ikke eksisterer
+if [ ! -f "data/medication.json" ]; then
+    echo '{"medication_time" : ""}' > data/medication.json
+    echo "Opprettet medication.json."
+fi
+
 # Fullført oppsett-melding
 echo "Oppsett ferdig. Husk å velge riktig tolk."

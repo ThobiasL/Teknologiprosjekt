@@ -32,11 +32,13 @@ if not exist data\profiles.json (
     echo Opprettet profiles.json
 )
 
-:: Opprett lock_status.json med lock_status lik 0 (ulåst) i data-mappen hvis den ikke eksisterer
+:: Opprett lock.json med lock_status lik 0 (ulåst) i data-mappen hvis den ikke eksisterer
 if not exist data\lock.json (
     echo {"lock_status" : 0, "lock_time" : "00:00"} > data\lock.json
     echo Opprettet lock.json med ulåst status.
 )
+
+:: Opprett 
 
 :: # Fullført oppsett-melding
 echo Oppsett ferdig. Husk å velge riktig tolk.

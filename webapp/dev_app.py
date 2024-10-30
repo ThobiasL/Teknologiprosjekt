@@ -1,9 +1,11 @@
 from app import create_app # Importerer create_app-funksjonen fra __init__.py
 from flask import session # Importerer session fra Flask
+from app.config import Config  # Importerer Config fra config.py
 
 # Funksjon for å lage en instans av appen uten autentisering
 def create_dev_app():
     app = create_app()  # Henter appen fra __init__.py
+    app.config.from_object(Config)  # Henter konfigurasjon fra config.py
     app.config['TESTING'] = True  # Setter appen i testmodus
     app.config['SKIP_AUTH'] = True  # Hopper over autentisering for utvikling
 
