@@ -16,8 +16,3 @@ def sendSignalToArduino(text, column, row):
 
     ser.write(b'\n')
     sleep(0.1)
-
-def clearLCD():
-    ser.write(b'C')
-    ser.write(b'\n')
-    sleep(0.1)
