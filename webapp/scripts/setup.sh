@@ -17,29 +17,8 @@ source .venv/bin/activate
 echo "Installerer avhengigheter fra requirements.txt..."
 pip install -r requirements.txt
 
-# Opprett data-mappen hvis den ikke eksisterer
-if [ ! -d "data" ]; then
-    mkdir data
-    echo "Opprettet data-mappen."
-fi
-
-# Lager profiles.json med et tomt dictionary hvis den ikke eksisterer
-if [ ! -f "data/profiles.json" ]; then
-    echo '{}' > data/profiles.json
-    echo "Opprettet profiles.json."
-fi
-
-# Lager lock.json hvis den ikke eksisterer
-if [ ! -f "data/lock.json" ]; then
-    echo '{"lock_status" : 0, "lock_time" : "00:00"}' > data/lock.json
-    echo "Opprettet lock.json."
-fi
-
-# Lager medication.json hvis den ikke eksisterer
-if [ ! -f "data/medication.json" ]; then
-    echo '{"medication_time" : ""}' > data/medication.json
-    echo "Opprettet medication.json."
-fi
+# Kjører setup_db.py for å sette opp databasen
+python3 setup_db.py
 
 # Fullført oppsett-melding
 echo "Oppsett ferdig. Husk å velge riktig tolk."
