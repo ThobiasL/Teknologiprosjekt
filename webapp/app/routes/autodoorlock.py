@@ -4,9 +4,17 @@ import json # Importerer json-modulen for lesing og skriving til låsens JSON-fi
 # Lager blueprint for 'lock'
 autodoorlock = Blueprint('autodoorlock', __name__)
 
-# Path til JSON-filen
-lock_path = 'data/lock.json'
+# Funksjon for å vise låsesiden
+@autodoorlock.route('/lock')
+def show_lock_page():
+    '''
+    lock_data = get_lock_data()
+    lock_time = lock_data.get('lock_time')
+    '''
+    lock_time = '22:55'
+    return render_template('lock.html', lock_time=lock_time)
 
+'''
 # Funksjon for å lese data fra låsens JSON-fil
 def get_lock_data():
     with open(lock_path, 'r') as lock_file:
@@ -19,12 +27,7 @@ def set_lock_data(lock_status, lock_time):
         lock_data = {'lock_status': lock_status, 'lock_time': lock_time}
         json.dump(lock_data, lock_file)
 
-# Funksjon for å vise låsesiden
-@autodoorlock.route('/lock')
-def show_lock_page():
-    lock_data = get_lock_data()
-    lock_time = lock_data.get('lock_time')
-    return render_template('lock.html', lock_time=lock_time)
+
 
 # Funksjon for å oppdatere låsetid
 @autodoorlock.route('/update_lock_time', methods=['POST'])
@@ -51,3 +54,5 @@ def unlock_door():
     lock_data['lock_status'] = 0
     set_lock_data(lock_data['lock_status'], lock_data['lock_time'])
     return redirect(url_for('lock.show_lock_page'))
+
+    '''

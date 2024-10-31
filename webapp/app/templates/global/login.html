@@ -10,26 +10,32 @@
     <div class="container">
         <h2>Innlogging</h2>
 
-        <!-- Viser feilmelding hvis en 'error' eksisterer -->
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
+        {% extends 'global/layout.html' %}
+        {% block body %}
 
         <div class="menu">
-        <!-- Innloggingsskjema -->
             <form action="{{ url_for('auth.login') }}" method="POST">
-                <input type="text" class="menu-item" id="username" name="username" placeholder="Brukernavn" required>
+                
+                <select class="menu-item" name="id" required>
+                    <option value="" disabled selected>Velg bruker</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.name }}</option>
+                    {% endfor %}
+                </select>
                 
                 <input type="password" class="menu-item" id="password" name="password" placeholder="Passord" required>
-            
+                
                 <button type="submit" class="menu-item">Logg inn</button>
             </form>
         </div>
 
             <a href="{{ url_for('auth.register') }}">
-                <button>Ny bruker</button>
+                <button>Lag passord</button>
             </a>
         
+        {% endblock %}
+
     </div>
+    
 </body>
 </html>

@@ -118,8 +118,23 @@ button:hover {
     background-color: #138496;
 }
 
-.error {
+select.menu-item {
+    width: 100%;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 24px;
+}
+
+select.menu-item:hover {
+    background-color: #ffffff;
+}
+
+.error
+{
     color: red;
+    font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
 }

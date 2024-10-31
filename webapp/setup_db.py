@@ -27,9 +27,9 @@ def initialize_database():
             
             default_password_hash = generate_password_hash(os.urandom(24).hex()) # Lager et sikkert, hashet defaultpassord til før brukerene er satt opp, konverterer til hex for å sikre databasekompatibilitet
 
-            user1 = User(username='bruker', password_hash=default_password_hash)
-            user2 = User(username='pårørende', password_hash=default_password_hash)
-            user3 = User(username='andre', password_hash=default_password_hash)
+            user1 = User(name='bruker', password_hash=default_password_hash)
+            user2 = User(name='pårørende', password_hash=default_password_hash)
+            user3 = User(name='andre', password_hash=default_password_hash)
 
             db.session.add(user1)
             db.session.add(user2)

@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.user import User
 from app.adapters.database import db
 
@@ -8,43 +7,39 @@ auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 # Registreringsside
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
+    users = User.query.all()
     if request.method == 'POST':
-        username = request.form['username'].lower() # Brukernavn lagres i små bokstaver for å gjøre det case-insensitive
-        password = request.form['password']
-        
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            error = 'Brukernavnet er allerede tatt.'
-            return render_template('register.html', error=error)
-        
-        new_user = User(username=username)
-        new_user.set_password(password)
+        selected_id = request.form.get('id')
+        password = request.form.get('password')
 
-        db.session.add(new_user)
-        db.session.commit()
+        id = int(selected_id)
+        user = User.query.get(id)
+        if user:
+            user.set_password(password)
+            flash('Passord endret', 'success')
+            return redirect(url_for('auth.register', users=users))
 
-        flash('Passord satt. Logg inn for å fortsette.')
-        return redirect(url_for('auth.login'))
-    
     # Vis registreringssiden
-    return render_template('register.html')
+    return render_template('global/register.html', users=users)
 
 # Innloggingsside
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    users = User.query.all()
     if request.method == 'POST':
-        username = request.form['username'].lower() # Brukernavn lagres i små bokstaver for å gjøre det case-insensitive
-        password = request.form['password']
+        selected_id = request.form.get('id')
+        password = request.form.get('password')
 
-        user = User.query.filter_by(username=username).first()
+        user = User.query.get(int(selected_id))
         if user and user.check_password(password):
-            session['username'] = username
+            session['username'] = user.name
+            flash('Logget inn', 'success')
             return redirect(url_for('main.home'))
         else:
-            error = 'Feil passord.'
-            return render_template('login.html', error=error)
+            flash('Feil passord', 'error')
+            return redirect(url_for('auth.login', users=users))
 
-    return render_template('login.html')
+    return render_template('global/login.html', users=users)
 
 # Utlogging
 @auth.route('/logout')
