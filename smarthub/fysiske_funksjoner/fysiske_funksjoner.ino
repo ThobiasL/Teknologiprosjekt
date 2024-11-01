@@ -1,167 +1,128 @@
 #include <LiquidCrystal.h>
 
 // Rotary encoder
-int pinA = 3; // Connected to CLK on KY-040
-int pinB = 4; // Connected to DT on KY-040
-int encoderPosCount = 0;
-int pinALast;
-int aVal;
-boolean bCW;
+const int pinA = 3;  // Connected to CLK on KY-040
+const int pinB = 4;  // Connected to DT on KY-040
+int encoderPosCount = 0, pinALast, aVal;
+bool bCW;
 
-// Knappe konfigurasjon
+// Knapp-konfigurasjon
 const int button_setAlarm = 14;
-const int button_visit = 15;
-const int button_editAlarm = 16;
+const int button_editAlarm = 15;
+const int button_visit = 16;
 
-// defienerer variabler som blir brukt i koden.
-// variabler til alarm
-int setAlarm = 0;
-int setAlarm_State = 0;
-
-// variabler til besok
-int visit = 0;
-int visit_State = 0;
-
-// variabler til edit
-int editAlarm = 0;
-int editAlarm_State = 0;
-
-// variabler til styring
+// Tilstandsvariabler for knapper
+int setAlarmState = 0;
+int editAlarmState = 0;
+int visitState = 0;
 int alarm_mode = 0;
-
-// variabler til styring
 int visit_mode = 0;
-
-// variabler til styring
 int editAlarm_mode = 0;
 
-// LCD-skjerm
-const int rs = 13;
-const int rw = 12;
-const int e = 11;
-const int d4 = 10;
-const int d5 = 9;
-const int d6 = 8;
-const int d7 = 7;
+// Maksverdi for rotary-encoderen
+int encoderMax = 100;  // Standard maksverdi
 
+// LCD-skjerm
+const int rs = 13, rw = 12, e = 11, d4 = 10, d5 = 9, d6 = 8, d7 = 7;
 LiquidCrystal lcd(rs, rw, e, d4, d5, d6, d7);
 
-int column = 0;
-int row = 0;
+int column = 0, row = 0;
 
 void setup() {
-  // Rotary encoder
-  pinMode (pinA,INPUT);
-  pinMode (pinB,INPUT);
-
+  pinMode(pinA, INPUT);
+  pinMode(pinB, INPUT);
   pinALast = digitalRead(pinA);
 
-  // Knapper
   pinMode(button_setAlarm, INPUT);
-  pinMode(button_visit, INPUT);
   pinMode(button_editAlarm, INPUT);
+  pinMode(button_visit, INPUT);
 
-  Serial.begin (9600);
-
-  // LCD-skjerm
+  Serial.begin(9600);
   lcd.begin(16, 2);
   lcd.clear();
 }
 
 void loop() {
+  // Oppdater maksimal verdi basert på editAlarm_mode
+  if (editAlarm_mode == 1) {
+    encoderMax = 23;
+  } else if (editAlarm_mode == 2) {
+    encoderMax = 59;
+  } else {
+    encoderMax = 100;
+  }
+
   // Avlesing av sensorer
-  aVal = digitalRead(pinA); // variabel for Rotary encoder
-  setAlarm = digitalRead(button_setAlarm); // variabel for knapper
-  visit = digitalRead(button_visit); // variabel for knapper
-  editAlarm = digitalRead(button_editAlarm); // variabel for knapper
+  aVal = digitalRead(pinA);
+  readEncoder();
+  readButton(button_setAlarm, setAlarmState, alarm_mode, "alarm_mode");
+  readButton(button_editAlarm, editAlarmState, editAlarm_mode, "editAlarm_mode");
+  readButton(button_visit, visitState, visit_mode, "visit_mode");
 
-  if (Serial.available() > 0) { 
-    char type = Serial.read(); // Les datatype som blir brukt som en indikator
+  if (Serial.available() > 0) {
+    handleSerialInput();
+  }
+}
 
-    // Rotary encoder
-    if (aVal != pinALast){ 
-      if (digitalRead(pinB) != aVal) {
-        encoderPosCount --;
-        bCW = true;
-      } 
-      else {
-        bCW = false;
-        encoderPosCount++;
-      }
+// Funksjon for avlesing og oppdatering av Rotary encoder
+void readEncoder() {
+  if (aVal != pinALast) {
+    bCW = (digitalRead(pinB) != aVal) ? true : false;
+    encoderPosCount += bCW ? -1 : 1;
+
+    // Begrens encoderPosCount til å være mellom 0 og encoderMax
+    if (encoderPosCount > encoderMax) {
+      encoderPosCount = encoderMax;
+    } else if (encoderPosCount < 0) {
+      encoderPosCount = 0;
+    }
 
     Serial.print("Encoder Position: ");
     Serial.println(encoderPosCount);
-
-    }
     pinALast = aVal;
+  }
+}
 
-    // Knapper
-    // hvis trykker på en kanpp skal den skru på eller av manuel mode.
-    if (setAlarm != setAlarm_State) {
-      if (setAlarm == 1) {
-        if (alarm_mode == 0){
-          alarm_mode = 1;
-          Serial.print("alarm_mode:");
-          Serial.println(alarm_mode);
-        }
-      }
-      else{
-        alarm_mode = 0;
-      }
-      setAlarm_State = setAlarm;
-      delay(100);
-      }
+void readButton(int buttonPin, int &currentState, int &currentMode, const char* modeName) {
+  int buttonReading = digitalRead(buttonPin);
 
-    // hvis trykker på en kanpp skal den skru på eller av manuel mode.
-    if (visit != visit_State) {
-      if (visit == 1) {
-        if (visit_mode == 0){
-          visit_mode = 1;
-          Serial.print("visit_mode:");
-          Serial.println(visit_mode);
-        }
+  if (buttonReading != currentState) {
+    if (buttonReading == HIGH) {
+      // Hvis knapp for visit_mode, så bruk 0, 1, 2-syklusen
+      if (strcmp(modeName, "editAlarm_mode") == 0) {
+        currentMode = (currentMode + 1) % 3;  // Veksle mellom 0, 1 og 2
+      } else {
+        currentMode = !currentMode;  // For andre, veksle mellom 0 og 1
       }
-      else{
-        visit_mode = 0;
-      }
-      visit_State = visit;
-      delay(100);
+      Serial.print(modeName);
+      Serial.print(": ");
+      Serial.println(currentMode);
     }
+    currentState = buttonReading;
+    delay(100);  // Debounce delay
+  }
+}
 
-    // hvis trykker på en kanpp skal den skru på eller av manuel mode.
-    if (editAlarm != editAlarm_State) {
-      if (editAlarm == 1) {
-        if (editAlarm_mode == 0){
-          editAlarm_mode = 1;
-          Serial.print("editAlarm_mode:");
-          Serial.println(editAlarm_mode);
-        }
-      }
-      else{
-        editAlarm_mode = 0;
-      }
-      editAlarm_State = editAlarm;
-      delay(100);
-    }
+// Funksjon for å håndtere Serial Input for LCD
+void handleSerialInput() {
+  char type = Serial.read();
+  String message;
 
-    // LCD-skjerm
-    if (type == 'K') {                  // indikator for kolonne
-      while (Serial.available() == 0);  // Vent til kolonneverdien er tilgjengelig
-        column = Serial.read();         // Les kolonneverdi
-    }
-    else if (type == 'R') {             // indikator for rad
-      while (Serial.available() == 0);  // Vent til kolonneverdien er tilgjengelig
-        row = Serial.read();            // Les radverdi
-    }
-    else if (type == 'T') {             // indikator for tekst
-      String message = Serial.readStringUntil('\n');  // Les tekst til newline
-      
-      // Sett markøren på ønsket posisjon og skriv meldingen
+  switch (type) {
+    case 'C':
+      while (Serial.available() == 0);
+      column = Serial.read();
+      break;
+
+    case 'R':
+      while (Serial.available() == 0);
+      row = Serial.read();
+      break;
+
+    case 'T':
+      message = Serial.readStringUntil('\n');
       lcd.setCursor(column, row);
       lcd.print(message);
-    }
-    else if (type == 'C') {          // indikator for å fjerne alt på skjermen (clear)
-      lcd.clear();
-    }
+      break;
   }
 }

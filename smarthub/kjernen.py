@@ -1,4 +1,4 @@
-from sendSignalToArduino import sendSignalToArduino, clearLCD
+from sendSignalToArduino import sendSignalToArduino
 from ReadSignalFromArduino import readSignalFromArduino
 from time import sleep, strftime
 
@@ -13,6 +13,7 @@ alarm_mode = 0
 alarm_state = f"{hours}:{minutes}"
 alarmTurnedOn = 0
 alarmTimer = 0
+prev_alarm_mode = -1
 
 editAlarm = 0
 editAlarm_mode = 0
@@ -26,19 +27,21 @@ def getTime():
     return strftime("%H:%M")
 
 def update_alarm(signal):
-    if editAlarm == 0:
-        hours = signal
-        if hours < 10:
-            hours = "0" + hours
-        time = f"{hours}:{minutes}"
-        sendSignalToArduino(time, 0, 1)
+    global hours, minutes
 
-    elif editAlarm == 1:
+    if editAlarm == 1:
+        if signal > 23:
+            signal = 23
+        hours = signal
+        hours = f"{int(hours):02}" # :02 gjør om tallet til to-siffra
+        sendSignalToArduino(hours, 0, 1)
+
+    elif editAlarm == 2:
+        if signal > 59:
+            signal = 59
         minutes = signal
-        if minutes < 10:
-            minutes = "0" + minutes
-        time = f"{hours}:{minutes}"
-        sendSignalToArduino(time, 0, 1)
+        minutes = f"{int(minutes):02}" # :02 gjør om tallet til to-siffra
+        sendSignalToArduino(minutes, 3, 1)
 
 def volume_control(signal):
     if volume >= 100:
@@ -53,6 +56,7 @@ def volume_control(signal):
 while True:
     sendSignalToArduino(getDateTime(), 0, 0)
 
+    alarm_state = f"{hours}:{minutes}"
     if alarm_state == getTime():
         alarmTurnedOn = 1
 
@@ -63,49 +67,62 @@ while True:
         if signal == "alarm_mode: 1":
             alarm_mode = 1
 
+        elif signal == "alarm_mode: 0":
+            alarm_mode = 0
+
         elif signal == "editAlarm_mode: 1":
             editAlarm_mode = 1
+
+        elif signal == "editAlarm_mode: 2":
+            editAlarm_mode = 2
+
+        elif signal == "editAlarm_mode: 0":
+            editAlarm_mode = 0
 
         elif signal == "visit_mode: 1":
             visit_mode = 1
 
-        elif alarm_time == 1:
+        elif signal == "visit_mode: 0":
+            visit_mode = 0
+
+        elif alarm_time == 1 and editAlarm_mode != 0:
             update_alarm(signal)
 
         else:
             volume_control(signal)
 
 
-    if alarm_mode == 1 & alarm_time == 0:
+    if alarm_mode == 1 and prev_alarm_mode != 1:
         sendSignalToArduino("00:00", 0, 1)
         alarm_time = 1
 
-    elif alarm_mode == 1 & alarm_time == 1:
+    elif alarm_mode == 0 and prev_alarm_mode != 0:
         sendSignalToArduino("     ", 0, 1)
         alarm_time = 0
+    prev_alarm_mode = alarm_mode
 
-    if editAlarm_mode == 1 & editAlarm == 0:
+    if editAlarm_mode == 1:
         editAlarm = 1
-
-    elif editAlarm_mode == 1 & editAlarm == 1:
+    elif editAlarm_mode == 2:
+        editAlarm = 2
+    elif editAlarm_mode == 0:
         editAlarm = 0
 
-    if visit_mode == 1 & visit_time == 0:
-        sendSignalToArduino("Besøks tid", 7, 1)
+    if visit_mode == 1:
+        sendSignalToArduino("Besøks tid", 6, 1)
         #sende info til database
         visit_time = 1
-
-    elif visit_mode == 1 & visit_time == 1:
+    elif visit_mode == 0 and visit_time == 1:
         #sende info til database
-        sendSignalToArduino("          ", 7, 1)
+        sendSignalToArduino("          ", 6, 1)
         visit_time = 0
 
-    if alarmTurnedOn == 1 & alarm_mode == 1:
+    if alarmTurnedOn == 1 and alarm_mode == 1:
         alarmTimer += 1
-        sendSignalToArduino("Alarm!", 7, 1)
+        sendSignalToArduino("Alarm!", 6, 1)
         # avspilling av alarm lyd
         if alarmTimer == 10:
-            sendSignalToArduino("      ", 7, 1)
+            sendSignalToArduino("      ", 6, 1)
             alarmTimer = 0
             alarmTurnedOn = 0
 

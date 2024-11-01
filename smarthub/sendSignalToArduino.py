@@ -5,7 +5,7 @@ ser = serial.Serial('/dev/ttyACM0', 9600)
 sleep(2)
 
 def sendSignalToArduino(text, column, row):
-    ser.write(b'K')
+    ser.write(b'C')
     ser.write(bytes([column]))
 
     ser.write(b'R')
