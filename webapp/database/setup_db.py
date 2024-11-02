@@ -1,8 +1,8 @@
 from app import create_app
-from app.models.user import User
-from app.models.autodoorlock import AutoDoorLock
-from app.models.autopilldispenser import AutoPillDispenser
-from app.adapters.database import db
+from core.models.user import User
+from core.models.autodoorlock import AutoDoorLock
+from core.models.autopilldispenser import AutoPillDispenser
+from adapters.database import db
 import os
 from werkzeug.security import generate_password_hash
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from app.models.user import User
-from app.adapters.database import db
+from core.models.user import User
+from adapters.database import db
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 

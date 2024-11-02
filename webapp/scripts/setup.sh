@@ -14,7 +14,9 @@ echo "Aktiverer virtuelt miljø..."
 source .venv/bin/activate
 
 # Installerer avhengigheter
-echo "Installerer avhengigheter fra requirements.txt..."
+echo "Installerer avhengigheter 
+
+fra requirements.txt..."
 pip install -r requirements.txt
 
 # Kjører setup_db.py for å sette opp databasen

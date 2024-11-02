@@ -1,4 +1,4 @@
-from app import create_app # Importerer create_app-funksjonen fra __init__.py
+from app import create_app
 
 app = create_app() # Oppretter en instans av create_app-funksjonen
 

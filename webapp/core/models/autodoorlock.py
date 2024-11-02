@@ -17,3 +17,5 @@ class AutoDoorLock(db.Model):
 
     def getLockTime(self):
         return self.lock_time
+    
+    

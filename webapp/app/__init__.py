@@ -2,12 +2,12 @@ from flask import Flask, session, request, redirect, url_for # Importerer nødve
 
 from .config import Config # Importerer konfigurasjon fra config.py
 
-from .adapters.database import db  # Importerer databasemodulen
+from adapters.database import db  # Importerer databasemodulen
 
 # Importerer modeller
-from .models.user import User
-from .models.autodoorlock import AutoDoorLock
-from .models.autopilldispenser import AutoPillDispenser
+from core.models.user import User
+from core.models.autodoorlock import AutoDoorLock
+from core.models.autopilldispenser import AutoPillDispenser
 
 # Importerer blueprints fra deres respektive filer
 from .routes.main import main
