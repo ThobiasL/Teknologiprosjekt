@@ -1,5 +1,6 @@
 from sendSignalToArduino import sendSignalToArduino
 from ReadSignalFromArduino import readSignalFromArduino
+from adjustingVolume import playSound, stopSound, setVolume
 from time import sleep, strftime
 
 #Knappe variabler
@@ -19,6 +20,7 @@ editAlarm = 0
 editAlarm_mode = 0
 
 visit_mode = 0
+prev_vivit_mode = -1
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
@@ -50,8 +52,10 @@ def volume_control(signal):
         volume_prosent = f" {signal}%"
     else:
         volume_prosent = f"  {signal}%"
-    sendSignalToArduino(volume_prosent, 12, 1)
 
+    vuolume = signal/100
+    setVolume(volume)
+    sendSignalToArduino(volume_prosent, 12, 1)
 
 while True:
     sendSignalToArduino(getDateTime(), 0, 0)
@@ -95,7 +99,6 @@ while True:
     if alarm_mode == 1 and prev_alarm_mode != 1:
         sendSignalToArduino("00:00", 0, 1)
         alarm_time = 1
-
     elif alarm_mode == 0 and prev_alarm_mode != 0:
         sendSignalToArduino("     ", 0, 1)
         alarm_time = 0
@@ -108,22 +111,44 @@ while True:
     elif editAlarm_mode == 0:
         editAlarm = 0
 
-    if visit_mode == 1:
-        sendSignalToArduino("Besøks tid", 6, 1)
+    if visit_mode == 1 and prev_vivit_mode != 1:
         #sende info til database
         visit_time = 1
-    elif visit_mode == 0 and visit_time == 1:
+    elif visit_mode == 0 and prev_vivit_mode != 0:
         #sende info til database
-        sendSignalToArduino("          ", 6, 1)
         visit_time = 0
+    prev_vivit_mode = visit_mode
+
+    if visit_mode == 1 and alarmTurnedOn == 0:
+        sendSignalToArduino("visit", 6, 1)
+    elif visit_mode == 0:
+        sendSignalToArduino("      ", 6, 1)
 
     if alarmTurnedOn == 1 and alarm_mode == 1:
+        if visit_mode == 1:
+            sendSignalToArduino("      ", 6, 1)
+
         alarmTimer += 1
         sendSignalToArduino("Alarm!", 6, 1)
-        # avspilling av alarm lyd
-        if alarmTimer == 10:
-            sendSignalToArduino("      ", 6, 1)
+        if alarmTimer == 1:
+            playSound("alarm")
+
+        if alarmTimer == 20 and visit_mode == 1:
+            sendSignalToArduino("visit ", 6, 1)
+            stopSound()     #skru av alarm lyd
             alarmTimer = 0
             alarmTurnedOn = 0
+
+        if alarmTimer == 20:
+            sendSignalToArduino("      ", 6, 1)
+            stopSound()     #skru av alarm lyd
+            alarmTimer = 0
+            alarmTurnedOn = 0
+
+    elif alarmTurnedOn == 1 and alarm_mode == 0:
+        alarmTimer = 0
+        alarmTurnedOn = 0
+        stopSound()         #skru av alarm lyd
+        sendSignalToArduino("      ", 6, 1)
 
     sleep(0.1)
