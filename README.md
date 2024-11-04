@@ -1,19 +1,18 @@
-# Webapp - Installasjons- og kjøreguide
+# Webapp - Installasjons- og kjøreguide - Pi OS / Linux
 
 ## Instruksjoner:
 
 ### 1. Gå til webapp\scripts-mappen
 Naviger til scripts-mappen for å finne installasjons- og kjøre-skriptene.
 
-### 2. Kjør setup-skriptet som passer til ditt OS
-- For ***Windows:*** &nbsp;&nbsp; Kjør ***setup.bat***
-- For ***Linux:*** &nbsp;&nbsp; Kjør ***setup.sh***
+### 2. Kjør setup-skriptet
+- Kjør ***setup.sh***
 
 Dette vil installere alle nødvendige avhengigheter og konfigurere prosjektet.
 
 ### 3. Kjør run-skriptet som passer til ditt OS
-- For ***Windows:*** &nbsp;&nbsp; Kjør ***run.bat***
-- For ***Linux:*** &nbsp;&nbsp; Kjør ***run.sh***
+
+- Kjør ***run.sh***
 
 Dette starter Flask-appen i utviklingsmodus.
 
@@ -36,4 +35,4 @@ Når serveren kjører, skriv inn en av IP-adressene fra kjøreloggen i nettleser
 
 **Merk:**
 
-*Disse instruksjonene er kun for et utviklingsmiljø, da de benytter Flask sin innebygde utviklingsserver. For produksjon anbefales en dedikert server, for å sikre bedre ytelse og sikkerhet.*
+*Disse instruksjonene er kun for et utviklingsmiljø, da de benytter Flask sin innebygde utviklingsserver, uten støtte for HTTPS. For produksjon anbefales en dedikert server, for å sikre bedre ytelse og sikkerhet.*

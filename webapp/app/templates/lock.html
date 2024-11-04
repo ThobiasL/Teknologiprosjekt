@@ -10,18 +10,21 @@
     <div class="container">
         <h2>Låsetid</h2>
 
+        {% extends 'global/layout.html' %}
+        {% block body %}
+
         <div class="menu">
 
             <!-- Form for å oppdatere låsetid -->
-            <form action="{{ url_for('lock.update_lock_time') }}" method="POST">
-                <input type="time" name="lock_time" class="menu-item" value="{{ lock_time }}">
+            <form action="{{ url_for('autodoorlock.update_lock_time') }}" method="POST">
+                <input type="time" name="time" class="menu-item" value="{{ time }}">
                 <button type="submit" class="menu-item">Endre låsetid</button>
             </form>
         </div> 
 
         <div class="menu">
             <!-- Lås dør knapp -->
-            <form action="{{ url_for('lock.lock_door') }}" method="POST">
+            <form action="{{ url_for('autodoorlock.lock_door') }}" method="POST">
                 <button type="submit" class="menu-item">
                     <img src="{{ url_for('static', filename='img/lockdoor_icon.png') }}" alt="Lås dør" class="icon">
                     <span>Lås dør</span>
@@ -29,7 +32,7 @@
             </form>
 
             <!-- Lås opp dør knapp -->
-            <form action="{{ url_for('lock.unlock_door') }}" method="POST">
+            <form action="{{ url_for('autodoorlock.unlock_door') }}" method="POST">
                 <button type="submit" class="menu-item">
                     <img src="{{ url_for('static', filename='img/unlockdoor_icon.png') }}" alt="Lås opp dør" class="icon">
                     <span>Lås opp dør</span>
@@ -41,6 +44,9 @@
         <a href="{{ url_for('main.home') }}">
             <button>Tilbake</button>
         </a>
+
+        {% endblock %}
+
     </div>
 </body>
 </html>

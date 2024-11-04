@@ -3,19 +3,15 @@ from app import db
 class AutoDoorLock(db.Model):
     __tablename__ = 'autodoorlock'
     id = db.Column(db.Integer, primary_key=True)
-    lock_status = db.Column(db.Boolean, nullable=False, default=False)
-    lock_time = db.Column(db.DateTime, nullable=True)
+    status = db.Column(db.Boolean, nullable=False, default=False)
+    time = db.Column(db.String, nullable=True, default=None)
 
-    def setLockStatus(self, status):
-        self.lock_status = status
+    def set_status(self, status):
+        self.status = status
+        db.session.commit()
 
-    def getLockStatus(self):
-        return self.lock_status
-    
-    def setLockTime(self, time):
-        self.lock_time = time
-
-    def getLockTime(self):
-        return self.lock_time
+    def set_time(self, time):
+        self.time = time
+        db.session.commit()
     
     

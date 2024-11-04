@@ -75,8 +75,8 @@ input {
 }
 
 .icon {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     margin-right: 15px;
     flex-shrink: 0; /* Hindrer ikonet i å krympe */
 }
@@ -131,10 +131,27 @@ select.menu-item:hover {
     background-color: #ffffff;
 }
 
+.message
+{
+    color: black;
+    font-size: 34px;
+    font-weight: bold;
+    margin-top: 10px;
+
+}
+
+.success
+{
+    color: green;
+    font-size: 34px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
 .error
 {
     color: red;
-    font-size: 20px;
+    font-size: 34px;
     font-weight: bold;
     margin-top: 10px;
 }

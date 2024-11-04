@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 # Funksjon for å initialisere databasen
 def initialize_database():
 
-    db_path = 'data/app_data.db' # Path til databasen
+    db_path = 'data/database.db' # Path til databasen
 
     # Sjekker om data-mappen eksisterer, og lager den hvis den ikke gjør det
     if not os.path.exists('data'):
@@ -40,7 +40,7 @@ def initialize_database():
         # Legger til autodoorlock i databasen
         existing_autodoorlock = AutoDoorLock.query.all()
         if not existing_autodoorlock:
-            autodoorlock = AutoDoorLock(lock_time=None, lock_status=False)
+            autodoorlock = AutoDoorLock(time=None, status=False)
 
             db.session.add(autodoorlock)
             db.session.commit()

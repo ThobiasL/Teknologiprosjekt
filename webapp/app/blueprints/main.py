@@ -1,4 +1,4 @@
-from flask import Blueprint, session, redirect, url_for, render_template # importerer nødvendige funksjoner fra Flask
+from flask import Blueprint, redirect, url_for, render_template # importerer nødvendige funksjoner fra Flask
 
 # Lager main-blueprint
 main = Blueprint('main', __name__)

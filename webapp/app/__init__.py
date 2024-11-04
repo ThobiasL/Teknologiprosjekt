@@ -1,4 +1,4 @@
-from flask import Flask, session, request, redirect, url_for # Importerer nødvendige funksjoner fra Flask
+from flask import Flask, session, request, redirect, url_for, flash, get_flashed_messages # Importerer nødvendige funksjoner fra Flask
 
 from .config import Config # Importerer konfigurasjon fra config.py
 
@@ -10,10 +10,10 @@ from core.models.autodoorlock import AutoDoorLock
 from core.models.autopilldispenser import AutoPillDispenser
 
 # Importerer blueprints fra deres respektive filer
-from .routes.main import main
-from .routes.autodoorlock import autodoorlock
-from .routes.auth import auth
-from .routes.medication import medication
+from .blueprints.main import main
+from .blueprints.autodoorlock import autodoorlock
+from .blueprints.auth import auth
+from .blueprints.medication import medication
 
 def create_app():
     app = Flask(__name__) # Lager en Flask-app
@@ -26,15 +26,23 @@ def create_app():
     app.register_blueprint(auth)
     app.register_blueprint(medication)
 
-    # Funksjon for å sjekke autentisering før hver request, ved å sjekke om brukernavn er i session
+    # Funksjon for å sjekke autentisering
     @app.before_request
     def check_auth():
-        
-        exempt_routes = ['auth.login', 'auth.register', 'static']
 
-        if 'username' not in session and request.endpoint not in exempt_routes:
+        # Sjekker om autentisering skal hoppes over
+        if app.config['SKIP_AUTH'] == True:
+            session['username'] = 'user'
+        
+        # Sender brukeren til innloggingssiden hvis de ikke er logget inn, og ikke er på en side som ikke krever innlogging
+        exempt_blueprints = ['auth.login', 'auth.register', 'static']
+
+        if 'username' not in session and request.endpoint not in exempt_blueprints:
             return redirect(url_for('auth.login'))
         
+    def clear_flashed_messages():
+        get_flashed_messages()
+    
     with app.app_context():
         db.create_all()  # Oppretter databasetabeller
 
