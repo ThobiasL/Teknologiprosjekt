@@ -1,15 +1,17 @@
 import pygame
 from pygame.locals import *
 
-pygame.mixer.init()
+class SoundPlayer:
+    def __init__(self): """Initialize the pygame mixer for audio playback."""
+        pygame.mixer.init()
 
-def playSound(soundFile):
-    pygame.mixer.music.load(soundFile)
-    pygame.mixer.music.play()
+    def play_sound(self, sound_file):   """Load and play a sound file."""
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
 
-def stopSound():
-    pygame.mixer.music.stop()
-    pygame.mixer.music.unload()
+    def stop_sound(self):   """Stop and unload the current sound."""
+        pygame.mixer.music.stop()
+        pygame.mixer.music.unload()
 
-def setVolume(volume):
-    pygame.mixer.music.set_volume(volume)
+    def set_volume(self, volume):   """Set the playback volume (0.0 to 1.0)."""
+        pygame.mixer.music.set_volume(volume)
