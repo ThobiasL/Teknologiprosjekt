@@ -6,7 +6,7 @@ class SoundPlayer:
         pygame.mixer.init()
 
     def play_sound(self, sound_file):   """Load and play a sound file."""
-        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.load(f"{sound_file}.mp3")
         pygame.mixer.music.play()
 
     def stop_sound(self):   """Stop and unload the current sound."""

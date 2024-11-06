@@ -1,3 +1,5 @@
+from kommunikasjonMedArduino import ArduinoSerial
+from adjustingVolume import SoundPlayer
 from time import sleep, strftime
 
 #Knappe variabler
@@ -48,15 +50,15 @@ def update_alarm(signal):
         arduino.send_signal(minutes, 3, 1)
 
 def volume_control(signal):
-    if volume >= 100:
+    if signal >= 100:
         volume_prosent = f"{signal}%"
     elif signal >= 10:
         volume_prosent = f" {signal}%"
     else:
         volume_prosent = f"  {signal}%"
 
-    vuolume = signal/100
-    setVolume(volume)
+    volume = signal/100
+    player.set_volume(volume)
     arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
