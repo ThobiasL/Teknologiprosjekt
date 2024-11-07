@@ -31,11 +31,12 @@ def runner(app):
 @pytest.fixture
 def init_data(app):
 
+    with app.app_context():
+        # Legger til testbrukere
+        user1 = User(name='test_user1', password_hash=generate_password_hash('password1'))
+        user2 = User(name='test_user2', password_hash=generate_password_hash('password2'))
 
-    # Legger til testbrukere
-    user1 = User(name='test_user1', password_hash=generate_password_hash('password1'))
-    user2 = User(name='test_user2', password_hash=generate_password_hash('password2'))
-    db.session.add_all([user1, user2])
-    db.session.commit()
+        db.session.add_all([user1, user2])
+        db.session.commit()
 
-    return user1, user2 # Returnerer brukerne for å kunne bruke de i testene
+        return user1.id, user2.id # Returnerer bruker-IDene til testbrukerne for bruk i testene

@@ -1,10 +1,10 @@
 import os
 from werkzeug.security import generate_password_hash
-from app import create_app
-from core.models.user import User
-from core.models.autodoorlock import AutoDoorLock
-from core.models.autopilldispenser import AutoPillDispenser
-from adapters.database import db
+from webapp.app import create_app
+from webapp.core.models.user import User
+from webapp.core.models.autodoorlock import AutoDoorLock
+from webapp.core.models.autopilldispenser import AutoPillDispenser
+from webapp.adapters.database import db
 
 # Funksjon for å initialisere databasen
 def initialize_database():
@@ -26,7 +26,7 @@ def initialize_database():
             print("Databasen ble opprettet.")
 
         # Legger til brukere i databasen om ingen brukere finnes
-        if not User.query.first():
+        if not db.session.query(User).first():
             default_password_hash = generate_password_hash(os.urandom(24).hex())  # Standard hashet passord
             users = [
                 User(name='bruker', password_hash=default_password_hash),
@@ -38,14 +38,14 @@ def initialize_database():
             print("Standard brukere lagt til i databasen med hashet standardpassord.")
 
         # Legger til AutoDoorLock-instans hvis ingen finnes
-        if not AutoDoorLock.query.first():
+        if not db.session.query(AutoDoorLock).first():
             autodoorlock = AutoDoorLock(time=None, status=False)
             db.session.add(autodoorlock)
             db.session.commit()
             print("Autodoorlock-instans lagt til i databasen.")
 
         # Legger til AutoPillDispenser-instans hvis ingen finnes
-        if not AutoPillDispenser.query.first():
+        if not db.session.query(AutoPillDispenser).first():
             autopilldispenser_time = AutoPillDispenser(autopilldispenser_time=None)
             db.session.add(autopilldispenser_time)
             db.session.commit()

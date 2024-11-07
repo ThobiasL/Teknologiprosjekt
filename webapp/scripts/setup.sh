@@ -19,8 +19,9 @@ echo "Installerer avhengigheter
 fra requirements.txt..."
 pip install -r requirements.txt
 
+cd ..
 # Kjører setup_db.py for å sette opp databasen
-python3 -m database.setup_db
+PYTHONPATH=. python3 -m webapp.database.setup_db
 # Fullført oppsett-melding
 echo "Oppsett ferdig. Husk å velge riktig tolk."
 

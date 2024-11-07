@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from webapp.core.models.user import User
+import webapp.adapters.database as db
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 
@@ -12,7 +13,7 @@ def register():
         password = request.form.get('password')
 
         id = int(selected_id) # Konverterer valgt ID til heltall, da det er en streng fra form
-        user = User.query.get(id)
+        user = User.query.filter_by(id=id).first() # Henter bruker fra databasen basert på ID
 
         # Sjekker om brukeren eksisterer og setter nytt passord med melding, for så å vise registreringssiden på nytt
         if user:
@@ -34,7 +35,7 @@ def login():
         selected_id = request.form.get('id') # Henter valgt ID fra form
         password = request.form.get('password') # Henter passord fra form
 
-        user = User.query.get(int(selected_id)) if selected_id else None 
+        user = User.query.filter_by(id=int(selected_id)).first() if selected_id else None
         # Sjekker om brukeren eksisterer og om passordet er riktig
         if user and user.check_password(password):
             session['username'] = user.name 
