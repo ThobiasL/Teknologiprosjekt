@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from core.models.user import User
+from webapp.core.models.user import User
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 
@@ -20,7 +20,7 @@ def register():
             flash('Passord endret', 'success')
             return redirect(url_for('auth.register', users=users))
 
-    # Vis registreringssiden
+    # Vis registreringssidena
     return render_template('global/register.html', users=users)
 
 # Innloggingsside
@@ -42,7 +42,6 @@ def login():
             return redirect(url_for('main.home'))
         else:
             flash('Feil passord', 'error') # Feilmelding ved feilet innlogging
-            # Returnerer både users og selected_id til malen ved feilet innlogging
             return render_template('global/login.html', users=users, selected_id=selected_id)
 
     return render_template('global/login.html', users=users, selected_id=selected_id)

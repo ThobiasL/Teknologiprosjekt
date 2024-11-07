@@ -1,4 +1,4 @@
-from app import db
+from webapp.app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Brukermodell for databasen

@@ -2,12 +2,12 @@ from flask import Flask, session, request, redirect, url_for, flash, get_flashed
 
 from .config import Config # Importerer konfigurasjon fra config.py
 
-from adapters.database import db  # Importerer databasemodulen
+from webapp.adapters.database import db  # Importerer databasemodulen
 
 # Importerer modeller
-from core.models.user import User
-from core.models.autodoorlock import AutoDoorLock
-from core.models.autopilldispenser import AutoPillDispenser
+from webapp.core.models.user import User
+from webapp.core.models.autodoorlock import AutoDoorLock
+from webapp.core.models.autopilldispenser import AutoPillDispenser
 
 # Importerer blueprints fra deres respektive filer
 from .blueprints.main import main
@@ -30,19 +30,21 @@ def create_app():
     @app.before_request
     def check_auth():
 
-        # Sjekker om autentisering skal hoppes over
-        if app.config['SKIP_AUTH'] == True:
-            session['username'] = 'user'
+        # Sjekker om autentisering skal hoppes over, med standardverdi False
+        if app.config.get('SKIP_AUTH', False):
+            session['username'] = 'test_user'
+            return
         
-        # Sender brukeren til innloggingssiden hvis de ikke er logget inn, og ikke er på en side som ikke krever innlogging
-        exempt_blueprints = ['auth.login', 'auth.register', 'static']
+        exempt_routes = ['auth.login', 'auth.register', 'static']
 
-        if 'username' not in session and request.endpoint not in exempt_blueprints:
+        # Sender brukeren til innloggingssiden hvis de ikke er logget inn, og ikke er på en side som ikke krever innlogging
+        if 'username' not in session and request.endpoint not in exempt_routes:
             return redirect(url_for('auth.login'))
         
+    # Funksjon for å cleare flash-meldinger
     def clear_flashed_messages():
         get_flashed_messages()
-    
+
     with app.app_context():
         db.create_all()  # Oppretter databasetabeller
 

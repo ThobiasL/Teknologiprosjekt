@@ -5,7 +5,7 @@ medication = Blueprint('medication', __name__)
 
 # Funksjon for å vise medisinsiden
 @medication.route('/medication')
-def show_medication_page():
+def show_page():
 
     return render_template('medication.html')
 
@@ -33,6 +33,6 @@ def update_medication_time():
     if new_medication_time:
         medication_time = new_medication_time
         set_medication_time(medication_time)
-    return redirect(url_for('medication.show_medication_page'))
+    return redirect(url_for('medication.show_page'))
 
 '''
