@@ -1,10 +1,10 @@
 import os
 import pytest
-from webapp.app import create_app
-from webapp.adapters.database import db
-from webapp.app.config import TestConfig
+from application import create_app
+from adapters.database import db
+from application.config import TestConfig
 from werkzeug.security import generate_password_hash
-from webapp.core.models.user import User
+from core.models.user import User
 
 @pytest.fixture
 def app():

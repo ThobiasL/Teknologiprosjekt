@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash # Importerer nødvendige funksjoner fra Flask
-from webapp.core.models.autodoorlock import AutoDoorLock
+from core.models.autodoorlock import AutoDoorLock
 
 # Lager blueprint for 'lock'
 autodoorlock = Blueprint('autodoorlock', __name__)

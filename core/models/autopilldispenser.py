@@ -1,4 +1,4 @@
-from webapp.app import db
+from application import db
 
 class AutoPillDispenser(db.Model):
     __tablename__ = 'autopilldispenser'

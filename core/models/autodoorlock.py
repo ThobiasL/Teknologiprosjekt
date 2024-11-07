@@ -1,4 +1,4 @@
-from webapp.app import db
+from application import db
 
 class AutoDoorLock(db.Model):
     __tablename__ = 'autodoorlock'

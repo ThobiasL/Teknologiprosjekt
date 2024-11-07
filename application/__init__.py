@@ -2,12 +2,12 @@ from flask import Flask, session, request, redirect, url_for, flash, get_flashed
 
 from .config import Config # Importerer konfigurasjon fra config.py
 
-from webapp.adapters.database import db  # Importerer databasemodulen
+from adapters.database import db  # Importerer databasemodulen
 
 # Importerer modeller
-from webapp.core.models.user import User
-from webapp.core.models.autodoorlock import AutoDoorLock
-from webapp.core.models.autopilldispenser import AutoPillDispenser
+from core.models.user import User
+from core.models.autodoorlock import AutoDoorLock
+from core.models.autopilldispenser import AutoPillDispenser
 
 # Importerer blueprints fra deres respektive filer
 from .blueprints.main import main

@@ -1,7 +1,7 @@
 import pytest
 from flask import session
-from webapp.adapters.database import db
-from webapp.core.models.user import User
+from adapters.database import db
+from core.models.user import User
 
 # Test for å sjekke at innlogging fungerer med riktig passord
 def test_login_success(client, init_data):

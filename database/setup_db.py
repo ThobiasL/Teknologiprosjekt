@@ -1,10 +1,10 @@
 import os
 from werkzeug.security import generate_password_hash
-from webapp.app import create_app
-from webapp.core.models.user import User
-from webapp.core.models.autodoorlock import AutoDoorLock
-from webapp.core.models.autopilldispenser import AutoPillDispenser
-from webapp.adapters.database import db
+from application import create_app
+from core.models.user import User
+from core.models.autodoorlock import AutoDoorLock
+from core.models.autopilldispenser import AutoPillDispenser
+from adapters.database import db
 
 # Funksjon for å initialisere databasen
 def initialize_database():

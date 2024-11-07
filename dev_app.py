@@ -1,4 +1,4 @@
-from app import create_app # Importerer create_app-funksjonen fra __init__.py
+from application import create_app # Importerer create_app-funksjonen fra __init__.py
 
 # Funksjon for å lage en instans av appen uten autentisering
 def create_dev_app():
