@@ -10,17 +10,20 @@
     <div class="container">
         <h2>Låsetid</h2>
 
-        {% extends 'global/layout.html' %}
+        {% extends 'layout.html' %}
         {% block body %}
 
-        <div class="menu">
+        {% if session['username'] != 'Gjest' %}
 
+        <div class="menu">
             <!-- Form for å oppdatere låsetid -->
             <form action="{{ url_for('autodoorlock.update_lock_time') }}" method="POST">
                 <input type="time" name="time" class="menu-item" value="{{ time }}">
                 <button type="submit" class="menu-item">Endre låsetid</button>
             </form>
         </div> 
+
+        {% endif %}
 
         <div class="menu">
             <!-- Lås dør knapp -->

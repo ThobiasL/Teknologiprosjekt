@@ -3,39 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innlogging</title>
+    <title>Lag passord</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h2>Innlogging</h2>
+        <h2>Lag passord</h2>
 
-        {% extends 'global/layout.html' %}
+        {% extends 'layout.html' %}
         {% block body %}
+        
 
         <div class="menu">
-            <form action="{{ url_for('auth.login') }}" method="POST">
+            <form action="{{ url_for('auth.register') }}" method="POST">
                 
                 <select class="menu-item" name="id" required>
-                    <option value="" disabled {% if not selected_id %}selected{% endif %}>Velg bruker</option>
+                    <option value="" disabled selected>Velg bruker</option>
                     {% for user in users %}
-                        <option value="{{ user.id }}" {% if selected_id == user.id|string %}selected{% endif %}>{{ user.name }}</option>
+                        <option value="{{ user.id }}">{{ user.name }}</option>
                     {% endfor %}
                 </select>
                 
                 <input type="password" class="menu-item" id="password" name="password" placeholder="Passord" required>
                 
-                <button type="submit" class="menu-item">Logg inn</button>
+                <button type="submit" class="menu-item">Lagre passord</button>
             </form>
         </div>
-
-        <a href="{{ url_for('auth.register') }}">
-            <button>Lag passord</button>
-        </a>
         
+        <a href="{{ url_for('auth.login') }}">
+            <button>Innlogging</button>
+        </a>
+
         {% endblock %}
 
     </div>
-    
+
 </body>
 </html>

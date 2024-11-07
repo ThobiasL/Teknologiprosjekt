@@ -3,7 +3,7 @@ from application import create_app # Importerer create_app-funksjonen fra __init
 # Funksjon for å lage en instans av appen uten autentisering
 def create_dev_app():
     app = create_app()  # Henter appen fra __init__.py
-    app.config['SKIP_AUTH'] = True  # Hopper over autentisering for utvikling
+    app.config.from_object('application.config.DevConfig')  # Setter konfigurasjon til DevConfig
 
     return app
 

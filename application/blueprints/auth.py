@@ -22,7 +22,7 @@ def register():
             return redirect(url_for('auth.register', users=users))
 
     # Vis registreringssidena
-    return render_template('global/register.html', users=users)
+    return render_template('register.html', users=users)
 
 # Innloggingsside
 @auth.route('/login', methods=['GET', 'POST'])
@@ -43,9 +43,9 @@ def login():
             return redirect(url_for('main.home'))
         else:
             flash('Feil passord', 'error') # Feilmelding ved feilet innlogging
-            return render_template('global/login.html', users=users, selected_id=selected_id)
+            return render_template('login.html', users=users, selected_id=selected_id)
 
-    return render_template('global/login.html', users=users, selected_id=selected_id)
+    return render_template('login.html', users=users, selected_id=selected_id)
 
 
 # Utlogging

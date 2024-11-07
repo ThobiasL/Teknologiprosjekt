@@ -7,13 +7,15 @@ from adapters.database import db  # Importerer databasemodulen
 # Importerer modeller
 from core.models.user import User
 from core.models.autodoorlock import AutoDoorLock
-from core.models.autopilldispenser import AutoPillDispenser
+from core.models.medication import Medication
+from core.models.task import Task
 
 # Importerer blueprints fra deres respektive filer
 from .blueprints.main import main
 from .blueprints.autodoorlock import autodoorlock
 from .blueprints.auth import auth
 from .blueprints.medication import medication
+from .blueprints.tasks import tasks
 
 def create_app():
     app = Flask(__name__) # Lager en Flask-app
@@ -25,14 +27,14 @@ def create_app():
     app.register_blueprint(autodoorlock)
     app.register_blueprint(auth)
     app.register_blueprint(medication)
+    app.register_blueprint(tasks)
 
     # Funksjon for å sjekke autentisering
     @app.before_request
     def check_auth():
-
         # Sjekker om autentisering skal hoppes over, med standardverdi False
         if app.config.get('SKIP_AUTH', False):
-            session['username'] = 'test_user'
+            session['username'] = 'Admin' # Setter brukernavn til Admin for å gi tilgang til alle sider
             return
         
         exempt_routes = ['auth.login', 'auth.register', 'static']

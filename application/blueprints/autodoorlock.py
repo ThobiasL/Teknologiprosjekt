@@ -5,7 +5,7 @@ from core.models.autodoorlock import AutoDoorLock
 autodoorlock = Blueprint('autodoorlock', __name__)
 
 # Funksjon for å vise låsesiden
-@autodoorlock.route('/lock')
+@autodoorlock.route('/lock_control')
 def show_page():
     time = AutoDoorLock.query.get(1).time
     

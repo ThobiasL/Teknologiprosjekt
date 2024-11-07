@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huskeliste</title>
+    <title>Kontrollpanel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -20,7 +20,7 @@
                 <img src="{{ url_for('static', filename='img/med_icon.png') }}" alt="Medisiner" class="icon">
                 <span>Medisiner</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="{{ url_for('tasks.show_page') }}" class="menu-item">
                 <img src="{{ url_for('static', filename='img/todo_icon.png') }}" alt="Huskeliste" class="icon">
                 <span>Huskeliste</span>
             </a>

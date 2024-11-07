@@ -3,18 +3,17 @@ from werkzeug.security import generate_password_hash
 from application import create_app
 from core.models.user import User
 from core.models.autodoorlock import AutoDoorLock
-from core.models.autopilldispenser import AutoPillDispenser
+from core.models.medication import Medication
+from core.models.task import Task
 from adapters.database import db
 
 # Funksjon for å initialisere databasen
 def initialize_database():
-    
     # Sjekker om mappen til databasen eksisterer, og oppretter den om den ikke gjør det
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    data_dir = os.path.join(basedir, '..', 'data')
+    data_dir = os.path.join(os.path.dirname(__file__), '../..', 'data')
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
-        print(f"Laget mappen {data_dir} for databaselagring.")
+        print(f"Laget data-mappen for databaselagring")
 
     # Sjekker om databasen eksisterer, og oppretter den om den ikke gjør det
     app = create_app()
@@ -27,15 +26,16 @@ def initialize_database():
 
         # Legger til brukere i databasen om ingen brukere finnes
         if not db.session.query(User).first():
-            default_password_hash = generate_password_hash(os.urandom(24).hex())  # Standard hashet passord
+            default_password_hash = generate_password_hash(os.urandom(24).hex())  # Standard hashet passord, skal ikke håndteres slik i produksjon
             users = [
-                User(name='bruker', password_hash=default_password_hash),
-                User(name='pårørende', password_hash=default_password_hash),
-                User(name='andre', password_hash=default_password_hash)
+                User(name='Primærbruker', password_hash=default_password_hash),
+                User(name='Pårørende', password_hash=default_password_hash),
+                User(name='Gjest', password_hash=default_password_hash),
+                User(name='Admin', password_hash=default_password_hash)
             ]
             db.session.add_all(users)
             db.session.commit()
-            print("Standard brukere lagt til i databasen med hashet standardpassord.")
+            print("Standard-brukere lagt til i databasen med hashet standardpassord.")
 
         # Legger til AutoDoorLock-instans hvis ingen finnes
         if not db.session.query(AutoDoorLock).first():
@@ -44,12 +44,25 @@ def initialize_database():
             db.session.commit()
             print("Autodoorlock-instans lagt til i databasen.")
 
-        # Legger til AutoPillDispenser-instans hvis ingen finnes
-        if not db.session.query(AutoPillDispenser).first():
-            autopilldispenser_time = AutoPillDispenser(autopilldispenser_time=None)
-            db.session.add(autopilldispenser_time)
+        # Legger til Medication-instans hvis ingen finnes
+        if not db.session.query(Medication).first():
+            time = Medication(time=None)
+            db.session.add(time)
             db.session.commit()
-            print("Autopilldispenser-instans lagt til i databasen.")
+            print("Medication-instans lagt til i databasen.")
+
+        # Legger til Task-instanser hvis ingen finnes
+        if not db.session.query(Task).first():
+            tasks = [
+                Task(name='Medisin', time=None, scheduled=False),
+                Task(name='Mat', time=None, scheduled=False),
+                Task(name='Luft', time=None, scheduled=False)
+            ]
+            db.session.add_all(tasks)
+            db.session.commit()
+            print("Standard-oppgaver til huskeliste lagt til i databasen.")        
+
+        
 
 # Kjører funksjonen for å initialisere databasen
 if __name__ == '__main__':
