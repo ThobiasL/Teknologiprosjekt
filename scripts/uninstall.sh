@@ -2,6 +2,8 @@
 
 #!/bin/bash
 
+bash "$(dirname "$0")/stop.sh"
+
 find . -type d -name "__pycache__" -exec rm -rf {} +
 find . -type f -name "*.pyc" -exec rm -f {} +
 find . -type d -name ".pytest_cache" -exec rm -rf {} +
@@ -12,6 +14,10 @@ fi
 
 if [ -d data ]; then
     rm -rf data
+fi
+
+if [ -f Caddyfile ]; then
+    rm Caddyfile
 fi
 
 echo "Avinstallering ferdig."

@@ -15,25 +15,27 @@ def toggle_schedule(task_id):
     """Toggler 'scheduled'-status for en oppgave."""
     task = Task.query.get(task_id)
     if not task:
-        flash("Oppgaven ble ikke funnet", "error")
         return redirect(url_for('tasks.show_page'))
     
-    # Toggler 'scheduled'-status
     task.scheduled = not task.scheduled
     db.session.commit()
-    flash(f"Oppgave '{task.name}' sin status ble endret.", "success")
-    return redirect(url_for('tasks.show_page'))
+    return redirect(url_for('tasks.task_detail', task_id=task_id))
 
 @tasks.route('/tasks/<int:task_id>/set_time', methods=['POST'])
 def set_time(task_id):
     """Setter tiden for en oppgave."""
     task = Task.query.get(task_id)
     if not task:
-        flash("Oppgaven ble ikke funnet", "error")
         return redirect(url_for('tasks.show_page'))
     
-    # Setter tid for oppgaven
     task.time = request.form.get('time')
     db.session.commit()
-    flash(f"Tidspunkt for oppgave '{task.name}' ble oppdatert.", "success")
-    return redirect(url_for('tasks.show_page'))
+    return redirect(url_for('tasks.task_detail', task_id=task_id))
+
+@tasks.route('/tasks/<int:task_id>', methods=['GET', 'POST'])
+def task_detail(task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        return redirect(url_for('tasks.show_page'))
+    
+    return render_template('task_detail.html', task=task)

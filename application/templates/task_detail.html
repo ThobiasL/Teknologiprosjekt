@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.name }} - Detaljer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>{{ task.name }}</h2>
+        
+        <div class="menu">
+            <!-- Form for å skru på/av oppgaven -->
+            <form action="{{ url_for('tasks.toggle_schedule', task_id=task.id) }}" method="post">
+                <button type="submit" class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">{{ "Aktivert" if task.scheduled else "Deaktivert" }}</button>
+            </form>
+
+        <!-- Form for å lese eller sette tid -->
+        <form action="{{ url_for('tasks.set_time', task_id=task.id) }}" method="post">
+            <input type="time" name="time" value="{{ task.time }}">
+            <button type="submit">Sett tid</button>
+        </form>
+
+    </div>
+        <!-- Tilbake til oppgaveliste -->
+        <a href="{{ url_for('tasks.show_page') }}">
+            <button class="back-btn">Tilbake</button>
+        </a>
+    
+</body>
+</html>

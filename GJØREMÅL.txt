@@ -1,4 +1,3 @@
 Sette opp på kryptert server
 Sette opp Gunicorn som systemd-tjeneste ved oppstart
 Oppdatere medicaiton til å ha flere tidspunkt
-Legge til huskeliste med lyd

@@ -8,25 +8,22 @@
 </head>
 <body>
     <div class="container">
-
         <h2>Huskeliste</h2>
-
         <div class="menu">
             {% for task in tasks %}
-                <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
-                        {{ task.name }}
-                </button>
+                    <!-- Lenke til detaljvisning for hver oppgave -->
+                    <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
+                        <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
+                            {{ task.name }}
+                        </button> 
+                    </a>
             {% endfor %}
         </div>
 
-
-
         <!-- Tilbake-knapp -->
         <a href="{{ url_for('main.home') }}">
-            <button>Tilbake</button>
+            <button class="task-btn">Tilbake</button>
         </a>
-
     </div>
-
 </body>
 </html>

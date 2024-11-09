@@ -2,8 +2,7 @@
 
 #!/bin/bash
 
-# Bytt til webapp-mappen
-cd webapp
+
 
 # Aktiver virtuelt miljø
 source .venv/bin/activate

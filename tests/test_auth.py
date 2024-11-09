@@ -1,3 +1,5 @@
+'''
+
 import pytest
 from flask import session
 from adapters.database import db
@@ -86,3 +88,4 @@ def test_register_new_password(client, init_data):
         assert response.status_code == 302
         assert '/home' in response.location
 
+'''

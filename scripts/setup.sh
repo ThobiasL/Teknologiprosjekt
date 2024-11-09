@@ -25,10 +25,25 @@ echo "Aktiverer virtuelt miljø..."
 source .venv/bin/activate
 
 # Installerer avhengigheter
-echo "Installerer avhengigheter 
-
-fra requirements.txt..."
+echo "Installerer avhengigheter fra requirements.txt..."
 pip install -r requirements.txt
+
+# Installerer Caddy for HTTPS hvis ikke allerede installert
+if ! command -v caddy &> /dev/null
+then
+    echo "Installerer Caddy..."
+    
+    # Legger til nødvendige pakker og nøkler for å installere Caddy
+    sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+    
+    # Oppdaterer pakkelisten og installerer Caddy
+    sudo apt update
+    sudo apt install caddy
+else
+    echo "Caddy er allerede installert."
+fi
 
 # Kjører setup_db.py for å sette opp databasen
 python3 -m adapters.database.setup_db
