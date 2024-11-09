@@ -2,19 +2,24 @@
 
 ## Instruksjoner:
 
-### 1. Gå til webapp\scripts-mappen
-Naviger til scripts-mappen for å finne installasjons- og kjøre-skriptene.
-
-### 2. Kjør setup-skriptet
-- Kjør ***setup.sh***
+### 1. Kjør setup-scriptet
+```
+bash scripts/setup.sh
+```
 
 Dette vil installere alle nødvendige avhengigheter og konfigurere prosjektet.
+Her vil du bli bedt om å skrive inn sudo-passord.
 
-### 3. Kjør run-skriptet
+### 2. Kjør run-scriptet
 
-- Kjør ***run.sh***
+```
+bash scripts/run.sh
+```
+
+Dette vil starte opp serverprosessene
 
 <br>
 
 ### 4. Åpne webappen i nettleseren
-Når serveren kjører, skriv inn en av IP-adressene fra kjøreloggen i nettleseren din for å få tilgang til webappen.
+
+Når serveren kjører, skriv inn IP-adressen fra kjøreloggen i nettleseren din for å få tilgang til webappen.
