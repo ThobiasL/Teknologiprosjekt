@@ -1,53 +1,127 @@
-'''
-
 import pytest
 from flask import session
 from adapters.database import db
 from core.models.autodoorlock import AutoDoorLock
+from core.models.user import User
 
-@pytest.fixture
-def init_data(app):
-    """Oppretter testdata i databasen"""
-    with app.app_context():
-        # Slett eventuelle eksisterende data
-        db.session.query(AutoDoorLock).delete()
 
-        # Legg til en ny AutoDoorLock-oppføring
-        autodoorlock = AutoDoorLock(time=None, status=False)
-        db.session.add(autodoorlock)
-        db.session.commit()
-        return autodoorlock.id
 
 # Test for å oppdatere låsetiden
-def test_update_lock_time(client, app, init_data):
-    with app.app_context():
-        # Send en POST-forespørsel for å sette låsetiden til '15:30'
-        response = client.post('/update_lock_time', data={'time': '15:30'})
-        assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
+def test_update_lock_time_with_login(client, app, login, init_data):
+    login('test_user1', 'password1')
+    
+    response = client.post('/update_lock_time', data={'time': '15:30'})
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
 
-        # Sjekker at låsetiden i databasen er oppdatert
-        updated_autodoorlock = db.session.get(AutoDoorLock, init_data)
+    with app.app_context():
+        updated_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         assert updated_autodoorlock.time == '15:30'
 
 # Test for å låse døren
-def test_lock_door(client, app, init_data):
-    with app.app_context():
-        # Send en POST-forespørsel for å låse døren
-        response = client.post('/lock_door')
-        assert response.status_code == 302  # Sjekker at vi blir omdirigert etter å ha låst døren
+def test_lock_door_with_login(client, app, login, init_data):
+    login('test_user1', 'password1')
 
-        # Sjekker at døren er satt til låst status i databasen
-        locked_autodoorlock = db.session.get(AutoDoorLock, init_data)
+    response = client.post('/lock_door')
+    assert response.status_code == 302
+
+    with app.app_context():
+ 
+        locked_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         assert locked_autodoorlock.status is True
 
-# Test for å låse opp døren
-def test_unlock_door(client, app, init_data):
-    with app.app_context():
-        # Send en POST-forespørsel for å låse opp døren
-        response = client.post('/unlock_door')
-        assert response.status_code == 302  # Sjekker at vi blir omdirigert etter å ha låst opp døren
+def test_update_door_empty_time(client, app, login, init_data):
+    login('test_user1', 'password1')
 
+    response = client.post('/update_lock_time', data={'time': ''})
+    assert response.status_code == 302  
+
+    with app.app_context():
+        updated_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert updated_autodoorlock.time != ''
+
+def test_update_door_invalid_time(client, app, login, init_data):
+    login('test_user1', 'password1')
+
+    response = client.post('/update_lock_time', data={'time': '25:00'})
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
+
+    with app.app_context():
+        updated_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert updated_autodoorlock.time != '25:00'
+
+def test_update_door_invalid_time2(client, app, login, init_data):
+    login('test_user1', 'password1')
+
+    response = client.post('/update_lock_time', data={'time': '12:60'})
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
+
+    with app.app_context():
+        updated_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert updated_autodoorlock.time != '12:60'
+
+# Test for å låse opp døren
+def test_unlock_door_with_login(client, app, login, init_data):
+    login('test_user1', 'password1')
+
+    with app.app_context():
+        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        autodoorlock.status = True
+        db.session.commit()
+        assert autodoorlock.status is True
+    
+    # Send en POST-forespørsel for å låse opp døren
+    response = client.post('/unlock_door')
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter å ha låst opp døren
+
+    with app.app_context():
         # Sjekker at døren er satt til ulåst status i databasen
-        unlocked_autodoorlock = db.session.get(AutoDoorLock, init_data)
+        unlocked_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         assert unlocked_autodoorlock.status is False
-'''
+
+# Test for å oppdatere låsetiden
+def test_update_lock_time_without_login(client, app, init_data):
+    with client.session_transaction() as session:
+        assert 'username' not in session
+
+    response = client.post('/update_lock_time', data={'time': '15:30'})
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
+    assert '/login' in response.location
+
+    with app.app_context():
+        updated_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert updated_autodoorlock.time != '15:30'
+
+# Test for å låse døren
+def test_lock_door_without_login(client, app, init_data):
+    with client.session_transaction() as session:
+        assert 'username' not in session
+
+    # Send en POST-forespørsel for å låse døren
+    response = client.post('/lock_door')
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter å ha låst døren
+    assert '/login' in response.location
+
+    with app.app_context():
+        # Sjekker at døren er satt til låst status i databasen
+        locked_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert locked_autodoorlock.status is False
+
+# Test for å låse opp døren
+def test_unlock_door_without_login(client, app, init_data):
+    with client.session_transaction() as session:
+        assert 'username' not in session
+
+    with app.app_context():
+        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        autodoorlock.status = True
+        db.session.commit()
+        assert autodoorlock.status is True
+
+    # Send en POST-forespørsel for å låse opp døren
+    response = client.post('/unlock_door')
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter å ha låst opp døren
+
+    with app.app_context():
+        # Sjekker at døren er satt til ulåst status i databasen
+        unlocked_autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+        assert unlocked_autodoorlock.status is True

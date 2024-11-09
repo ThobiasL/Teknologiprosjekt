@@ -5,17 +5,17 @@ from application.config import TestConfig
 from werkzeug.security import generate_password_hash
 from core.models.user import User
 from core.models.autodoorlock import AutoDoorLock
+from core.models.medication import Medication
 
 @pytest.fixture
 def app():
-    app = create_app()
-    app.config.from_object(TestConfig)
-
+    app = create_app(TestConfig)  # Opprett en testapp
     with app.app_context():
-        db.create_all() # Oppretter databasetabeller før testen starter
-        yield app # Leverer appen til testen
+        db.create_all()
+        yield app  # Leverer appen til testene
         db.session.remove()
-        db.drop_all() # Dropper databasetabeller etter testen er ferdig
+        db.drop_all()
+        db.session.close()
 
 # Fixture for å hente en testklient
 @pytest.fixture
@@ -27,21 +27,27 @@ def client(app):
 def runner(app):
     return app.test_cli_runner()
 
-# Legger til testdata til testene
+# Legger til testdata i memory-databasen til testene
 @pytest.fixture
 def init_data(app):
 
     with app.app_context():
-        # Legger til testbrukere
         user1 = User(name='test_user1', password_hash=generate_password_hash('password1'))
         user2 = User(name='test_user2', password_hash=generate_password_hash('password2'))
-
-        db.session.add_all([user1, user2])
-
         autodoorlock = AutoDoorLock(time=None, status=False)
-        
-        db.session.add(autodoorlock)
+        medication = Medication(time=None)
 
+        db.session.add_all([user1, user2, autodoorlock, medication])
         db.session.commit()
 
-        return user1.id, user2.id, autodoorlock.id
+# Login-funksjon for å logge inn brukere før testene
+@pytest.fixture
+def login(client, app):
+    def _login(name, password):
+        with app.app_context():
+            user = User.query.filter_by(name=name).first()
+        response = client.post('/login', data={'id': user.id, 'password': password})
+        assert response.status_code == 302
+        assert '/home' in response.location
+        return response
+    return _login

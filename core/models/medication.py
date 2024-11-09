@@ -1,13 +1,25 @@
 from application import db
+from core.models.base_model import BaseModel
 
-class Medication(db.Model):
+# Modell for Medication
+class Medication(BaseModel):
     __tablename__ = 'medication'
     id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.DateTime, nullable=True)
+    time = db.Column(db.String, nullable=True, default=None)
 
-    def set_time(self, time):
-        self.medication_time = time
     
-    def get_time(self):
-        return self.medication_time
+    def get(self, attribute):
+        if attribute == 'time':
+            return self.time
+        else:
+            raise ValueError('Ugyldig attributt')
+        
+    def set(self, attribute, value):
+        if attribute == 'time':
+            self.time = value
+        else:
+            raise ValueError('Ugyldig attributt')
+        
+        self.save()
+
     

@@ -1,8 +1,9 @@
 from application import create_app # Importerer create_app-funksjonen fra __init__.py
+from application.config import DevConfig
 
 # Funksjon for å lage en instans av appen uten autentisering
 def create_dev_app():
-    app = create_app()  # Henter appen fra __init__.py
+    app = create_app(DevConfig)  # Henter appen fra __init__.py
     app.config.from_object('application.config.DevConfig')  # Setter konfigurasjon til DevConfig
 
     return app

@@ -12,12 +12,12 @@ def register():
         selected_id = request.form.get('id')
         password = request.form.get('password')
 
-        id = int(selected_id) # Konverterer valgt ID til heltall, da det er en streng fra form
-        user = User.query.filter_by(id=id).first() # Henter bruker fra databasen basert på ID
+        user_id = int(selected_id) # Konverterer valgt ID til heltall, da det er en streng fra form
+        user = User.query.filter_by(id=user_id).first() # Henter bruker fra databasen basert på ID
 
         # Sjekker om brukeren eksisterer og setter nytt passord med melding, for så å vise registreringssiden på nytt
         if user:
-            user.set_password(password)
+            user.set('password', password)
             flash('Passord endret', 'success')
             return redirect(url_for('auth.register', users=users))
 
@@ -38,7 +38,7 @@ def login():
         user = User.query.filter_by(id=int(selected_id)).first() if selected_id else None
         # Sjekker om brukeren eksisterer og om passordet er riktig
         if user and user.check_password(password):
-            session['username'] = user.name 
+            session['username'] = user.get('name')  # Setter brukernavn i sesjonen
             flash('Logget inn', 'success') 
             return redirect(url_for('main.home'))
         else:

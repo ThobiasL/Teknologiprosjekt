@@ -1,8 +1,9 @@
 from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from core.models.base_model import BaseModel
 
 # Brukermodell for databasen
-class User(db.Model):
+class User(BaseModel):
     __tablename__ = 'users' # Tabellnavn i databasen
 
     # Kolonner i tabellen
@@ -10,10 +11,20 @@ class User(db.Model):
     name = db.Column(db.String(20), unique=True, nullable=False) # Brukernavn
     password_hash = db.Column(db.String(128), nullable=False) # Passord
 
-    # Metode for å sette passord, hasher passordet før det lagres i databasen
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-        db.session.commit()
+    # Implementerer getter for navn og setter for passord
+    def get(self, attribute):
+        if attribute == 'name':
+            return self.name
+        else:
+            raise ValueError('Ugyldig attributt')
+        
+    def set(self, attribute, value):
+        if attribute == 'password':
+            self.password_hash = generate_password_hash(value)
+        else:
+            raise ValueError('Ugyldig attributt')
+        
+        self.save()
 
     # Metode for å sjekke passord, sammenligner hashet passord med hashet passord i databasen
     def check_password(self, password):

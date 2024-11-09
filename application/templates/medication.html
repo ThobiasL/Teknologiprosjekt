@@ -14,7 +14,7 @@
 
             <!-- Form for å oppdatere tidspunkt -->
             <form action="{{ url_for('medication.update_medication_time') }}" method="POST">
-                <input type="time" name="medication_time" class="menu-item" value="{{ medication_time }}">
+                <input type="time" name="time" class="menu-item" value="{{ time }}">
                 <button type="submit" class="menu-item">Endre tidspunkt</button>
             </form>
         </div> 

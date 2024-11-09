@@ -1,20 +1,32 @@
 from application import db
+from core.models.base_model import BaseModel
 
-class Task(db.Model):
+# Modell for Task
+class Task(BaseModel):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     time = db.Column(db.String, nullable=True)
     scheduled = db.Column(db.Boolean, nullable=False, default=False)
 
-    def enable(self):
-        self.scheduled = True
-
-    def disable(self):
-        self.scheduled = False
-
-    def set_time(self, time):
-        self.time = time
+    # Implementer get-metode for å lese fra databasen
+    def get(self, attribute):
+        if attribute == 'name':
+            return self.name
+        elif attribute == 'time':
+            return self.time
+        elif attribute == 'scheduled':
+            return self.scheduled
+        else:
+            raise ValueError('Ugyldig attributt')
     
-    def get_time(self):
-        return self.time
+    # Implementer set-metode for å endre i databasen
+    def set(self, attribute, value):
+        if attribute == 'time':
+            self.time = value
+        elif attribute == 'scheduled':
+            self.scheduled = value
+        else:
+            raise ValueError('Ugyldig attributt')
+        
+        self.save()

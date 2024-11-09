@@ -17,9 +17,13 @@ from .blueprints.auth import auth
 from .blueprints.medication import medication
 from .blueprints.tasks import tasks
 
-def create_app():
+def create_app(config=None):
     app = Flask(__name__) # Lager en Flask-app
-    app.config.from_object(Config)  # Henter konfigurasjon fra config.py
+    
+    if config:
+        app.config.from_object(config)
+    else:
+        app.config.from_object(Config)
     
     db.init_app(app)  # Initialiserer databasen
     # Registrerer blueprints
