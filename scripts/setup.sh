@@ -45,6 +45,19 @@ else
     echo "Caddy er allerede installert."
 fi
 
+SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
+
+if [ ! -f .env ]; then
+    touch .env
+fi
+
+if grep -q "SECRET_KEY" .env; then
+    echo "SECRET_KEY finnes allerede i .env"
+else
+    echo "SECRET_KEY=$SECRET_KEY" >> .env
+    echo "SECRET_KEY lagt til i .env"
+fi
+
 # Kjører setup_db.py for å sette opp databasen
 python3 -m adapters.database.setup_db
 

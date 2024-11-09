@@ -20,4 +20,8 @@ if [ -f Caddyfile ]; then
     rm Caddyfile
 fi
 
+if [ -f .env ]; then
+    rm .env
+fi
+
 echo "Avinstallering ferdig."
