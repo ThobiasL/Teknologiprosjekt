@@ -1,8 +1,7 @@
 from flask import Flask, session, request, redirect, url_for, flash, get_flashed_messages # Importerer nødvendige funksjoner fra Flask
+from application.database import db # Importerer databasen
 
 from .config import Config # Importerer konfigurasjon fra config.py
-
-from adapters.database import db  # Importerer databasemodulen
 
 # Importerer modeller
 from core.models.user import User
@@ -11,11 +10,11 @@ from core.models.medication import Medication
 from core.models.task import Task
 
 # Importerer blueprints fra deres respektive filer
-from .blueprints.main import main
-from .blueprints.autodoorlock import autodoorlock
-from .blueprints.auth import auth
-from .blueprints.medication import medication
-from .blueprints.tasks import tasks
+from adapters.http.main import main
+from adapters.http.autodoorlock import autodoorlock
+from adapters.http.auth import auth
+from adapters.http.medication import medication
+from adapters.http.tasks import tasks
 
 def create_app(config=None):
     app = Flask(__name__) # Lager en Flask-app
