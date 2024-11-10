@@ -1,4 +1,4 @@
-from adapters.database import db
+from application.database import db
 
 # Base-model for alle modeller
 class BaseModel(db.Model):

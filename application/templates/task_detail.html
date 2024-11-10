@@ -9,6 +9,8 @@
 <body>
     <div class="container">
         <h2>{{ task.name }}</h2>
+
+        {% include 'flash_messages.html' %}
         
         <div class="menu">
             <!-- Form for å skru på/av oppgaven -->
@@ -23,10 +25,10 @@
         </form>
 
     </div>
-        <!-- Tilbake til oppgaveliste -->
-        <a href="{{ url_for('tasks.show_page') }}">
-            <button class="back-btn">Tilbake</button>
-        </a>
+
+    <a href="{{ url_for('tasks.show_page') }}">
+        <button class="back-btn">Tilbake</button>
+    </a>
     
 </body>
 </html>

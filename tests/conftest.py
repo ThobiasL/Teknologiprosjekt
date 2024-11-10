@@ -1,6 +1,6 @@
 import pytest
 from application import create_app
-from adapters.database import db
+from application.database import db
 from application.config import TestConfig
 from werkzeug.security import generate_password_hash
 from core.models.user import User

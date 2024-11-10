@@ -1,4 +1,4 @@
-from application import db
+from application.database import db
 from core.models.base_model import BaseModel
 
 # Modell for AutoDoorLock

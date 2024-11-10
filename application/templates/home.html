@@ -10,6 +10,8 @@
     <div class="container">
 
         <h2>Kontrollpanel</h2>
+        
+        {% include 'flash_messages.html' %}
 
         <div class="menu">
             <a href="{{ url_for('autodoorlock.show_page') }}" class="menu-item">
