@@ -9,6 +9,9 @@
 <body>
     <div class="container">
         <h2>Huskeliste</h2>
+
+        {% include 'flash_messages.html' %}
+
         <div class="menu">
             {% for task in tasks %}
                     <!-- Lenke til detaljvisning for hver oppgave -->
@@ -25,5 +28,6 @@
             <button class="task-btn">Tilbake</button>
         </a>
     </div>
+    
 </body>
 </html>
