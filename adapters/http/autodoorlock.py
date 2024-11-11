@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash # Importerer nødvendige funksjoner fra Flask
-from core.models.autodoorlock import AutoDoorLock
+from adapters.database.autodoorlock import AutoDoorLock
 from core.utils import is_valid_time
 
 # Lager blueprint for 'lock'

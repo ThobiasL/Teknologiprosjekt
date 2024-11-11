@@ -1,8 +1,8 @@
 from application.database import db
-from core.models.base_model import BaseModel
+from adapters.database.database_helper import DatabaseHelper
 
 # Modell for AutoDoorLock
-class AutoDoorLock(BaseModel):
+class AutoDoorLock(DatabaseHelper):
     __tablename__ = 'autodoorlock'
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Boolean, nullable=False, default=False)

@@ -1,8 +1,8 @@
 from application.database import db
-from core.models.base_model import BaseModel
+from adapters.database.database_helper import DatabaseHelper
 
 # Modell for Medication
-class Medication(BaseModel):
+class Medication(DatabaseHelper):
     __tablename__ = 'medication'
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.String, nullable=True, default=None)

@@ -1,8 +1,8 @@
 from application.database import db
-from core.models.base_model import BaseModel
+from adapters.database.database_helper import DatabaseHelper
 
 # Modell for Task
-class Task(BaseModel):
+class Task(DatabaseHelper):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)

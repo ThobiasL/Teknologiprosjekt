@@ -1,9 +1,9 @@
 from application.database import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from core.models.base_model import BaseModel
+from adapters.database.database_helper import DatabaseHelper
 
 # Brukermodell for databasen
-class User(BaseModel):
+class User(DatabaseHelper):
     __tablename__ = 'users' # Tabellnavn i databasen
 
     # Kolonner i tabellen

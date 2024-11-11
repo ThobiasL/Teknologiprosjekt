@@ -1,7 +1,7 @@
 from application.database import db
 
 # Base-model for alle modeller
-class BaseModel(db.Model):
+class DatabaseHelper(db.Model):
     __abstract__ = True # Gjør klassen abstrakt
 
     # Metode for å hente en modell fra databasen basert på id

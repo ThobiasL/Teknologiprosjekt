@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, request, redirect, url_for, render_template # Importerer nødvendige funksjoner fra Flask
-from core.models.medication import Medication
+from adapters.database.medication import Medication
 from core.utils import is_valid_time
 
 # Lager blueprint for 'medication'

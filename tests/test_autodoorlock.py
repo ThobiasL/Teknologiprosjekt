@@ -1,8 +1,8 @@
 import pytest
 from flask import session
 from application.database import db
-from core.models.autodoorlock import AutoDoorLock
-from core.models.user import User
+from adapters.database.autodoorlock import AutoDoorLock
+from adapters.database.user import User
 
 
 

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from core.models.task import Task
+from adapters.database.task import Task
 from core.utils import is_valid_time
 
 tasks = Blueprint('tasks', __name__)

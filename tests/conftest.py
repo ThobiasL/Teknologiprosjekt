@@ -3,9 +3,9 @@ from application import create_app
 from application.database import db
 from application.config import TestConfig
 from werkzeug.security import generate_password_hash
-from core.models.user import User
-from core.models.autodoorlock import AutoDoorLock
-from core.models.medication import Medication
+from adapters.database.user import User
+from adapters.database.autodoorlock import AutoDoorLock
+from adapters.database.medication import Medication
 
 @pytest.fixture
 def app():

@@ -79,7 +79,7 @@ void readEncoder() {
 
     Serial.print("Encoder Position: ");
     Serial.println(encoderPosCount);
-    pinALast = aVal;
+    pinALast = aVal;iki, docs & projects
   }
 }
 
