@@ -1,4 +1,7 @@
-from kommunikasjonMedArduino import ArduinoSerial
+from CommunicationWithExternalDevices import ExternalDevicesCommunication
+from CommunicationWithDatabase import DatabaseCommunication
+from CommunicationWithFrontend import FrontendCommunication
+from CommunicationWithArduino import ArduinoSerial
 from adjustingVolume import SoundPlayer
 from time import sleep, strftime
 
@@ -21,6 +24,12 @@ editAlarm_mode = 0
 visit_mode = 0
 prev_vivit_mode = -1
 
+#kaller på funksjonene fra klassen ExternalDevicesCommunication
+externalDevices = ExternalDevicesCommunication()
+#kaller på funksjonene fra klassen DatabaseCommunication
+database = DatabaseCommunication()
+#kaller på funksjonene fra klassen FrontendCommunication
+frontend = FrontendCommunication()
 #kaller på funksjonene fra klassen ArduinoSerial
 arduino = ArduinoSerial()
 #kaller på funksjonene fra klassen SoundPlayer
@@ -62,8 +71,22 @@ def volume_control(signal):
     arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
-    # Leser signal fra Arduino
-    signal = arduino.read_signal()
+    databaseInfo = database.readInfoFromDatabase()  # Leser signal fra database
+    if databaseInfo == 1:
+        visit_mode = 1
+        prev_vivit_mode = 0
+
+    FrontendSignal = frontend.getInfoFromFrontend()  #Leser signal fra frontend
+    if FrontendSignal is not None:
+        if "LockDoorTime:" in FrontendSignal:
+
+            externalDevices.lockdoor()
+        elif FrontendSignal == "UnlockDoor":
+            externalDevices.unlockdoor()
+        elif FrontendSignal == "Falling Alarm":
+            externalDevices.TurnOffFallingAlarm()
+
+    ArduinoSignal = arduino.read_signal()  #Leser signal fra Arduino
     arduino.send_signal(getDateTime(), 0, 0)
 
     alarm_state = f"{hours}:{minutes}"
@@ -71,33 +94,33 @@ while True:
         alarmTurnedOn = 1
 
 
-    if signal is not None:
-        if signal == "alarm_mode: 1":
+    if ArduinoSignal is not None:
+        if ArduinoSignal == "alarm_mode: 1":
             alarm_mode = 1
 
-        elif signal == "alarm_mode: 0":
+        elif ArduinoSignal == "alarm_mode: 0":
             alarm_mode = 0
 
-        elif signal == "editAlarm_mode: 1":
+        elif ArduinoSignal == "editAlarm_mode: 1":
             editAlarm_mode = 1
 
-        elif signal == "editAlarm_mode: 2":
+        elif ArduinoSignal == "editAlarm_mode: 2":
             editAlarm_mode = 2
 
-        elif signal == "editAlarm_mode: 0":
+        elif ArduinoSignal == "editAlarm_mode: 0":
             editAlarm_mode = 0
 
-        elif signal == "visit_mode: 1":
+        elif ArduinoSignal == "visit_mode: 1":
             visit_mode = 1
 
-        elif signal == "visit_mode: 0":
+        elif ArduinoSignal == "visit_mode: 0":
             visit_mode = 0
 
         elif alarm_time == 1 and editAlarm_mode != 0:
-            update_alarm(signal)
+            update_alarm(ArduinoSignal)
 
         else:
-            volume_control(signal)
+            volume_control(ArduinoSignal)
 
 
     if alarm_mode == 1 and prev_alarm_mode != 1:
@@ -116,10 +139,10 @@ while True:
         editAlarm = 0
 
     if visit_mode == 1 and prev_vivit_mode != 1:
-        #sende info til database
+        database.sendInfoToDatabase("visit: 1")   #sende info til database
         visit_time = 1
     elif visit_mode == 0 and prev_vivit_mode != 0:
-        #sende info til database
+        database.sendInfoToDatabase("visit: 0")   #sende info til database
         visit_time = 0
     prev_vivit_mode = visit_mode
 
