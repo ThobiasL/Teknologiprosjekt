@@ -44,12 +44,13 @@ def initialize_database():
             db.session.commit()
             print("Autodoorlock-instans lagt til i databasen.")
 
-        # Legger til Medication-instans hvis ingen finnes
+        # Legger til Medication-instanser for hver dag av uka hvis ingen finnes
         if not db.session.query(Medication).first():
-            time = Medication(time=None)
-            db.session.add(time)
+            days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
+            medication = [Medication(day=day, time=None, scheduled=False) for day in days]
+            db.session.add_all(medication)
             db.session.commit()
-            print("Medication-instans lagt til i databasen.")
+            print("Medication-instanser lagt til i databasen.")
 
         # Legger til Task-instanser hvis ingen finnes
         if not db.session.query(Task).first():

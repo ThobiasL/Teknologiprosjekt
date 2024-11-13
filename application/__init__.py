@@ -5,7 +5,7 @@ from .config import Config # Importerer konfigurasjon fra config.py
 
 # Importerer modeller
 from adapters.database.user import User
-from adapters.database adapters.database.autodoorlock import AutoDoorLock
+from adapters.database.autodoorlock import AutoDoorLock
 from adapters.database.medication import Medication
 from adapters.database.task import Task
 
@@ -36,8 +36,6 @@ def create_app(config=None):
     # Før hver request nullstilles flash-meldinger, og brukerautentisering sjekkes
     @app.before_request
     def before_request():
-
-
         exempt_routes = ['auth.login', 'auth.register', 'static']
         if 'username' not in session and request.endpoint not in exempt_routes:
             return redirect(url_for('auth.login'))

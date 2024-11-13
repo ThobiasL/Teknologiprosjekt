@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dørlås</title>
+    <title>Medisineringstid</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h2>Medisineringstid</h2>
+        <h2>Medisiner</h2>
 
         {% include 'flash_messages.html' %}
 
         <div class="menu">
-
-            <!-- Form for å oppdatere tidspunkt -->
-            <form action="{{ url_for('medication.update_medication_time') }}" method="POST">
-                <input type="time" name="time" class="menu-item" value="{{ time }}">
-                <button type="submit" class="menu-item">Endre tidspunkt</button>
-            </form>
-        </div> 
+            {% for day in days %}
+                <a href="{{ url_for('medication.medication_detail', medication_id=day.id) }}">
+                    <button class="menu-item {% if day.scheduled %}enabled{% else %}disabled{% endif %}">
+                        {{ day.day }}
+                    </button> 
+                </a>
+            {% endfor %}
+        </div>
 
         <!-- Tilbake-knapp -->
         <a href="{{ url_for('main.home') }}">
