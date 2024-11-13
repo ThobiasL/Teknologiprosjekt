@@ -20,8 +20,8 @@
 
         <!-- Form for å lese eller sette tid -->
         <form action="{{ url_for('tasks.set_time', task_id=task.id) }}" method="post">
-            <input type="time" name="time" value="{{ task.time }}">
-            <button type="submit">Sett tid</button>
+            <input type="time" class="menu-item" name="time" value="{{ task.time }}">
+            <button type="submit" class="menu-item">Sett tid</button>
         </form>
 
     </div>
