@@ -50,7 +50,9 @@ def medication_dose(medication_id, dose_id):
             current_status = medication.get(f'scheduled_{dose_id}')
             medication.set(f'scheduled_{dose_id}', not current_status)
             flash(f"Dose {dose_id} {'aktivert' if not current_status else 'deaktivert'}", 'message')
+
         medication.save()
+        return redirect(url_for('medication.medication_dose', medication_id=medication_id, dose_id=dose_id))
 
     # Hent oppdatert doseinformasjon for visning
     time = medication.get(f'dose_{dose_id}')

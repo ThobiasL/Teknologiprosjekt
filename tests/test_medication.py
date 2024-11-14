@@ -2,39 +2,31 @@ import pytest
 from flask import session
 from application.database import db
 from adapters.database.medication_db import Medication
-from adapters.database.user_db import User
 
-def login(client, app, user, password):
-    with app.app_context():
-        response = client.post('/login', data={'id': user.id, 'password': password})
-        assert response.status_code == 302
-        assert '/home' in response.location
-        
-    return response
-
-# Test for å oppdatere låsetiden
-def test_update_medication_time_with_login(client, app, init_data):
-    with app.app_context():
-        user = User.query.filter_by(name='test_user1').first()  # Henter testbruker 1 fra databasen
-    login(client, app, user, 'password1')
-
-    response = client.post('/update_medication_time', data={'time': '12:30'})
+# Test for å oppdatere en dosetid for medisinering når brukeren er logget inn
+def test_update_medication_dose_with_login(client, app, login, init_data):
+    login('test_user', 'password1')
+    
+    # Oppdater dosetid for dose 1 via `medication_dose`-ruten
+    response = client.post('/medication/1/1', data={'set_time': 'true', 'time': '12:30'})
     assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
 
+    # Verifiser at dosetiden er oppdatert
     with app.app_context():
-        updated_medication = db.session.query(Medication).first()
-        assert updated_medication.time == '12:30'
+        medication = Medication.get_by_id(Medication, 1)  # Henter første dose for dagen
+        assert medication.get('dose_1') == '12:30'
 
-# Test for å oppdatere låsetiden
-def test_update_medication_time_without_login(client, app, init_data):
+def test_update_medication_dose_without_login(client, app, init_data):
+    # Sjekk at brukeren ikke er logget inn
     with client.session_transaction() as session:
         assert 'username' not in session
 
-    response = client.post('/update_medication_time', data={'time': '12:30'})
-    assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
-    assert '/login' in response.location
+    # Prøv å oppdatere dosetid uten innlogging
+    response = client.post('/medication/1/1', data={'set_time': 'true', 'time': '12:30'})
+    assert response.status_code == 302  # Sjekker at vi blir omdirigert
+    assert '/login' in response.location  # Bekrefter at omdirigeringen er til login-siden
 
+    # Verifiser at dosetiden ikke er oppdatert
     with app.app_context():
-        updated_medication = db.session.query(Medication).first()
-        assert updated_medication.time != '12:30'
-
+        medication = Medication.get_by_id(Medication, 1)  # Henter første dose for dagen
+        assert medication.get('dose_1') != '12:30'

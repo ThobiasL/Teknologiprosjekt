@@ -8,7 +8,7 @@ from adapters.database.user_db import User
 
 # Test for å oppdatere låsetiden
 def test_update_lock_time_with_login(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
     
     response = client.post('/update_lock_time', data={'time': '15:30'})
     assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
@@ -19,7 +19,7 @@ def test_update_lock_time_with_login(client, app, login, init_data):
 
 # Test for å låse døren
 def test_lock_door_with_login(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
 
     response = client.post('/lock_door')
     assert response.status_code == 302
@@ -30,7 +30,7 @@ def test_lock_door_with_login(client, app, login, init_data):
         assert locked_autodoorlock.status is True
 
 def test_update_door_empty_time(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
 
     response = client.post('/update_lock_time', data={'time': ''})
     assert response.status_code == 302  
@@ -40,7 +40,7 @@ def test_update_door_empty_time(client, app, login, init_data):
         assert updated_autodoorlock.time != ''
 
 def test_update_door_invalid_time(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
 
     response = client.post('/update_lock_time', data={'time': '25:00'})
     assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
@@ -50,7 +50,7 @@ def test_update_door_invalid_time(client, app, login, init_data):
         assert updated_autodoorlock.time != '25:00'
 
 def test_update_door_invalid_time2(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
 
     response = client.post('/update_lock_time', data={'time': '12:60'})
     assert response.status_code == 302  # Sjekker at vi blir omdirigert etter oppdatering
@@ -61,7 +61,7 @@ def test_update_door_invalid_time2(client, app, login, init_data):
 
 # Test for å låse opp døren
 def test_unlock_door_with_login(client, app, login, init_data):
-    login('test_user1', 'password1')
+    login('test_user', 'password1')
 
     with app.app_context():
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)

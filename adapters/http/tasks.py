@@ -21,7 +21,7 @@ def task_detail(task_id):
         # Håndter toggling av schedule
         if 'toggle_schedule' in request.form:
             task.set('scheduled', not task.get('scheduled'))
-            flash("{'aktivert' if task.get('scheduled') else 'deaktivert'}", 'message')
+            flash(f"{'Aktivert' if task.get('scheduled') else 'Deaktivert'}", 'message')
         
         # Håndter setting av tid
         elif 'set_time' in request.form:
