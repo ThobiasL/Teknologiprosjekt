@@ -2,21 +2,19 @@ import pygame
 from pygame.locals import *
 
 class SoundPlayer:
-    # Initialiserer pygame mixer for lydavspilling
-    def __init__(self):
+    def __init__(self): """Initialize the pygame mixer for audio playback."""
         pygame.mixer.init()
 
-    # Laster og spiller av en lydfil
-    def play_sound(self, sound_file):
+    def play_sound(self, sound_file):   """Load and play a sound file."""
         pygame.mixer.music.load(f"{sound_file}.mp3")
         pygame.mixer.music.play()
 
-    # Stopper og fjerner lyden som spilles av
-    def stop_sound(self):
+    def stop_sound(self):   """Stop and unload the current sound."""
         pygame.mixer.music.stop()
         pygame.mixer.music.unload()
 
-    # Setter volumet til lyden som spilles av (0.0 til 1.0)
-    def set_volume(self, volume):
+    def set_volume(self, volume):   """Set the playback volume (0.0 to 1.0)."""
         pygame.mixer.music.set_volume(volume)
 
+    def pause_sound(self):   """Pause the current sound."""
+        pygame.mixer.music.pause()

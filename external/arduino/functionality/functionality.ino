@@ -94,8 +94,19 @@ void readButton(int buttonPin, int &currentState, int &currentMode, const char* 
       // Hvis knapp for visit_mode, så bruk 0, 1, 2-syklusen
       if (strcmp(modeName, "editAlarm_mode") == 0) {
         currentMode = (currentMode + 1) % 3;  // Veksle mellom 0, 1 og 2
-      } else {
+      } 
+      else {
         currentMode = !currentMode;  // For andre, veksle mellom 0 og 1
+      }
+      if (strcmp(modeName, "alarm_mode") == 0) {
+        Serial.print("editAlarm_mode");
+        Serial.print(": ");
+        Serial.println(0);
+      }
+      else if (strcmp(modeName, "alarm_mode") == 1) {
+        Serial.print("editAlarm_mode");
+        Serial.print(": ");
+        Serial.println(1);
       }
       Serial.print(modeName);
       Serial.print(": ");
