@@ -1,11 +1,11 @@
 import os
-from werkzeug.security import generate_password_hash
 from application import create_app
 from application.database import db
-from adapters.database.user import User
-from adapters.database.autodoorlock import AutoDoorLock
-from adapters.database.medication import Medication
-from adapters.database.task import Task
+from core.utils import hash_password
+from adapters.database.user_db import User
+from adapters.database.autodoorlock_db import AutoDoorLock
+from adapters.database.medication_db import Medication
+from adapters.database.task_db import Task
 
 # Funksjon for å initialisere databasen
 def initialize_database():
@@ -26,7 +26,7 @@ def initialize_database():
 
         # Legger til brukere i databasen om ingen brukere finnes
         if not db.session.query(User).first():
-            default_password_hash = generate_password_hash(os.urandom(24).hex())  # Standard hashet passord, skal ikke håndteres slik i produksjon
+            default_password_hash = hash_password(os.urandom(24).hex())  # Standard hashet passord, skal ikke håndteres slik i produksjon
             users = [
                 User(name='Primærbruker', password_hash=default_password_hash),
                 User(name='Pårørende', password_hash=default_password_hash),
@@ -47,7 +47,12 @@ def initialize_database():
         # Legger til Medication-instanser for hver dag av uka hvis ingen finnes
         if not db.session.query(Medication).first():
             days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
-            medication = [Medication(day=day, time=None, scheduled=False) for day in days]
+            medication = [
+                Medication(
+                    day=day, dose_1=None, dose_2=None, dose_3=None, dose_4=None,
+                    scheduled_1=False, scheduled_2=False, scheduled_3=False, scheduled_4=False
+                ) for day in days
+            ]
             db.session.add_all(medication)
             db.session.commit()
             print("Medication-instanser lagt til i databasen.")

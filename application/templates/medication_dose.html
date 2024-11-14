@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ medication.day }} - Dose {{ dose_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Dose {{ dose_id }}</h2>
+
+        {% include 'flash_messages.html' %}
+        
+        <div class="menu">
+            <!-- Form for å skru på/av dosen -->
+            <form method="post">
+                <button type="submit" name="toggle_schedule" value="true" class="menu-item {% if scheduled %}enabled{% else %}disabled{% endif %}">
+                    {{ "Aktivert" if scheduled else "Deaktivert" }}
+                </button>
+            </form>
+
+            <!-- Form for å lese eller sette tid for dosen -->
+            <form method="post">
+                <input type="time" class="menu-item" name="time" value="{{ time }}">
+                <button type="submit" name="set_time" value="true" class="menu-item">Sett tid</button>
+            </form>
+        </div>
+
+        <!-- Tilbake-knapp -->
+        <a href="{{ url_for('medication.medication_day', medication_id=medication.id) }}">
+            <button>Tilbake</button>
+        </a>
+    </div>
+</body>
+</html>

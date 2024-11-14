@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from adapters.database.user import User
-import adapters.database as db
+from adapters.database.user_db import User
+from core.utils import hash_password, verify_password
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
 
@@ -12,16 +12,16 @@ def register():
         selected_id = request.form.get('id')
         password = request.form.get('password')
 
-        user_id = int(selected_id) # Konverterer valgt ID til heltall, da det er en streng fra form
-        user = User.query.filter_by(id=user_id).first() # Henter bruker fra databasen basert på ID
-
+        user = User.query.filter_by(id=int(selected_id)).first()
+      
         # Sjekker om brukeren eksisterer og setter nytt passord med melding, for så å vise registreringssiden på nytt
         if user:
-            user.set('password', password)
+            user.password_hash = hash_password(password)
+            user.save()
             flash('Passord endret', 'success')
-            return redirect(url_for('auth.register', users=users))
+            return redirect(url_for('auth.register'))
 
-    # Vis registreringssidena
+    # Vis registreringssiden
     return render_template('register.html', users=users)
 
 # Innloggingsside
@@ -35,16 +35,17 @@ def login():
         selected_id = request.form.get('id') # Henter valgt ID fra form
         password = request.form.get('password') # Henter passord fra form
 
-        user = User.query.filter_by(id=int(selected_id)).first() if selected_id else None
+        user = User.query.filter_by(id=int(selected_id)).first()
         # Sjekker om brukeren eksisterer og om passordet er riktig
-        if user and user.check_password(password):
-            session['username'] = user.get('name')  # Setter brukernavn i sesjonen
+        if user and verify_password(user.password_hash, password):
+            session['username'] = user.name # Setter brukernavn i sessionen
             flash('Logget inn', 'success') 
             return redirect(url_for('main.home'))
         else:
-            flash('Feil passord', 'error') # Feilmelding ved feilet innlogging
+            flash('Feil passord', 'error') # Feilmelding ved feil passord
             return render_template('login.html', users=users, selected_id=selected_id)
 
+    # Viser innloggingssiden
     return render_template('login.html', users=users, selected_id=selected_id)
 
 

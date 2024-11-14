@@ -1,6 +1,8 @@
+from application.database import db
+from adapters.database.base import Base
 from time import sleep
 
-class DatabaseCommunication:
+class Headunit(Base):
     def __init__(self, signal):
         self.signal = signal
         self.ser =

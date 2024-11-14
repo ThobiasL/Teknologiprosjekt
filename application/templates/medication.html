@@ -14,8 +14,8 @@
 
         <div class="menu">
             {% for day in days %}
-                <a href="{{ url_for('medication.medication_detail', medication_id=day.id) }}">
-                    <button class="menu-item {% if day.scheduled %}enabled{% else %}disabled{% endif %}">
+                <a href="{{ url_for('medication.medication_day', medication_id=day.id) }}">
+                    <button class="menu-item">
                         {{ day.day }}
                     </button> 
                 </a>

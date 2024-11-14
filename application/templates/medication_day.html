@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huskeliste</title>
+    <title>Medisiner - {{ medication.day }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h2>Huskeliste</h2>
+        <h2>Medisiner - {{ medication.day }}</h2>
 
         {% include 'flash_messages.html' %}
 
         <div class="menu">
-            {% for task in tasks %}
-                <!-- Lenke til detaljvisning for hver oppgave -->
-                <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
-                    <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
-                        {{ task.name }}
+            {% for dose in doses %}
+                <a href="{{ url_for('medication.medication_dose', medication_id=medication.id, dose_id=dose.dose_id) }}">
+                    <button class="menu-item {% if dose.scheduled %}enabled{% else %}disabled{% endif %}">
+                        Dose {{ dose.dose_id }}: {{ dose.time or "Ikke satt" }}
                     </button> 
                 </a>
             {% endfor %}
         </div>
 
         <!-- Tilbake-knapp -->
-        <a href="{{ url_for('main.home') }}">
+        <a href="{{ url_for('medication.show_page', medication_id=medication.id) }}">
             <button>Tilbake</button>
         </a>
     </div>

@@ -1,7 +1,7 @@
 from application.database import db
 
-# Base-model for alle modeller
-class DatabaseHelper(db.Model):
+# Basisklasse for databasemodeller
+class Base(db.Model):
     __abstract__ = True # Gjør klassen abstrakt
 
     # Metode for å hente en modell fra databasen basert på id
@@ -11,11 +11,17 @@ class DatabaseHelper(db.Model):
 
     # Getter-metode
     def get(self, attribute):
-        raise NotImplementedError
+        if hasattr(self, attribute):
+            return getattr(self, attribute)
+        raise AttributeError('Ugyldig attributt')
 
     # Setter-metode
     def set(self, attribute, value):
-        raise NotImplementedError
+        if hasattr(self, attribute):
+            setattr(self, attribute, value)
+            self.save()
+        else:
+            raise AttributeError('Ugyldig attributt')
 
     # Metode for å lagre modellen i databasen
     def save(self):

@@ -1,8 +1,8 @@
 import pytest
 from flask import session
 from application.database import db
-from adapters.database.medication import Medication
-from adapters.database.user import User
+from adapters.database.medication_db import Medication
+from adapters.database.user_db import User
 
 def login(client, app, user, password):
     with app.app_context():
