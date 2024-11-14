@@ -15,9 +15,10 @@ const int button_visit = 16;
 int setAlarmState = 0;
 int editAlarmState = 0;
 int visitState = 0;
-int alarm_mode = 0;
-int visit_mode = 0;
-int editAlarm_mode = 0;
+
+int alarm_mode = 1;
+int visit_mode = 1;
+int editAlarm_mode = 2;
 
 // Maksverdi for rotary-encoderen
 int encoderMax = 100;  // Standard maksverdi
@@ -33,13 +34,15 @@ void setup() {
   pinMode(pinB, INPUT);
   pinALast = digitalRead(pinA);
 
-  pinMode(button_setAlarm, INPUT);
-  pinMode(button_editAlarm, INPUT);
-  pinMode(button_visit, INPUT);
+  pinMode(button_setAlarm, INPUT_PULLUP);
+  pinMode(button_editAlarm, INPUT_PULLUP);
+  pinMode(button_visit, INPUT_PULLUP);
 
   Serial.begin(9600);
   lcd.begin(16, 2);
   lcd.clear();
+
+  delay(500);  // Debounce delay
 }
 
 void loop() {
@@ -79,7 +82,7 @@ void readEncoder() {
 
     Serial.print("Encoder Position: ");
     Serial.println(encoderPosCount);
-    pinALast = aVal;iki, docs & projects
+    pinALast = aVal;
   }
 }
 
@@ -99,7 +102,7 @@ void readButton(int buttonPin, int &currentState, int &currentMode, const char* 
       Serial.println(currentMode);
     }
     currentState = buttonReading;
-    delay(100);  // Debounce delay
+    delay(50);  // Debounce delay
   }
 }
 
