@@ -14,12 +14,17 @@
 
         <div class="menu">
             {% for task in tasks %}
-                <!-- Lenke til detaljvisning for hver oppgave -->
-                <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
+                {% if session['user_id'] in [2, 4] %}
+                    <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
+                        <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
+                            {{ task.name }}: {{ task.time or "Ikke satt" }}
+                        </button> 
+                    </a>
+                {% else %}
                     <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
                         {{ task.name }}: {{ task.time or "Ikke satt" }}
-                    </button> 
-                </a>
+                    </button>
+                {% endif %}
             {% endfor %}
         </div>
 

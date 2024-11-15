@@ -18,7 +18,6 @@
                 <img src="{{ url_for('static', filename='img/door_icon.png') }}" alt="Dørlås" class="icon">
                 <span>Dørlås</span>
             </a>
-            {% if session['username'] != 'Gjest' %}
             <a href="{{ url_for('medication.show_page') }}" class="menu-item">
                 <img src="{{ url_for('static', filename='img/med_icon.png') }}" alt="Medisiner" class="icon">
                 <span>Medisiner</span>
@@ -27,7 +26,6 @@
                 <img src="{{ url_for('static', filename='img/todo_icon.png') }}" alt="Huskeliste" class="icon">
                 <span>Huskeliste</span>
             </a>
-            {% endif %}
             <a href="#" class="menu-item">
                 <img src="{{ url_for('static', filename='img/food_icon.png') }}" alt="Handleliste" class="icon">
                 <span>Handleliste</span>
