@@ -1,6 +1,9 @@
+asyncio==3.4.3
+bleak==0.22.3
 blinker==1.8.2
 click==8.1.7
 colorama==0.4.6
+dbus-fast==2.24.3
 Flask==3.0.3
 Flask-SQLAlchemy==3.1.1
 future==1.0.0
