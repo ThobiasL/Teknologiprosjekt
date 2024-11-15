@@ -37,7 +37,7 @@ def create_app(config=None):
     @app.before_request
     def before_request():
         exempt_routes = ['auth.login', 'auth.register', 'static']
-        if 'username' not in session and request.endpoint not in exempt_routes:
+        if 'user_id' not in session and request.endpoint not in exempt_routes:
             return redirect(url_for('auth.login'))
 
     with app.app_context():

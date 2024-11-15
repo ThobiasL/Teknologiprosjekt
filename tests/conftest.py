@@ -29,7 +29,8 @@ def runner(app):
 @pytest.fixture
 def init_data(app):
     with app.app_context():
-        user = User(name='test_user', password_hash=generate_password_hash('password1'))
+        user = User(name='test_user', password_hash=generate_password_hash('password'))
+        user2 = User(name='test_user2', password_hash=generate_password_hash('password2'))
         autodoorlock = AutoDoorLock(time=None, status=False)
         medication = Medication(
             day='Mandag', dose_1=None, dose_2=None, dose_3=None, dose_4=None,
@@ -37,7 +38,7 @@ def init_data(app):
         )
         task = Task(name='Medisin', time=None, scheduled=False)
 
-        db.session.add_all([user, autodoorlock, medication, task])
+        db.session.add_all([user, user2, autodoorlock, medication, task])
         db.session.commit()
 
 # Login-funksjon for å logge inn brukere før tester
@@ -46,9 +47,15 @@ def login(client, app):
     def _login(name, password):
         with app.app_context():
             user = User.query.filter_by(name=name).first()
+            assert user is not None, f"Bruker '{name}' finnes ikke i db."
+
         response = client.post('/login', data={'id': user.id, 'password': password})
-        assert response.status_code == 302
-        assert '/home' in response.location
+        assert response.status_code == 302, "Bruker ble ikke videresendt."
+        assert '/home' in response.location, "Bruker ble ikke videresendt til hjemmesiden."
+
+        with client.session_transaction() as session:
+            assert 'user_id' in session, "Bruker ble ikke lagt til i session."
+
         return response
     
     return _login
