@@ -8,17 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <h2>Medisiner - {{ medication.day }}</h2>
+        <h1>Medisiner - {{ medication.day }}</h1>
 
         {% include 'flash_messages.html' %}
 
         <div class="menu">
             {% for dose in doses %}
-                <a href="{{ url_for('medication.medication_dose', medication_id=medication.id, dose_id=dose.dose_id) }}">
+                {% if session['user_id'] in [2, 4] %}
+                    <a href="{{ url_for('medication.medication_dose', medication_id=medication.id, dose_id=dose.dose_id) }}">
+                        <button class="menu-item {% if dose.scheduled %}enabled{% else %}disabled{% endif %}">
+                            Dose {{ dose.dose_id }}: {{ dose.time or "Ikke satt" }}
+                        </button> 
+                    </a>
+                {% else %}
                     <button class="menu-item {% if dose.scheduled %}enabled{% else %}disabled{% endif %}">
                         Dose {{ dose.dose_id }}: {{ dose.time or "Ikke satt" }}
-                    </button> 
-                </a>
+                    </button>
+                {% endif %}
             {% endfor %}
         </div>
 

@@ -11,9 +11,10 @@ body {
     font-weight: bold;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    height: 95vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #CCE3DE;
+    overflow: hidden;
 }
 
 a {
@@ -25,6 +26,7 @@ a {
     border: 2px solid black;
     border-radius: 10px;
     padding: 20px;
+    max-height: 90vh;
     text-align: center;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -47,8 +49,8 @@ input {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .menu-item {
@@ -56,6 +58,7 @@ input {
     border-radius: 10px;
     padding: 10px;
     display: flex;
+    border: 2px solid black;
     align-items: center;
     text-decoration: none;
     color: black;
@@ -85,6 +88,7 @@ input.menu-item  {
     background-color: white;
     color: black;
     font-size: 24px;
+    border: 2px solid black;
 }
 
 input.menu-item:hover {
@@ -92,10 +96,20 @@ input.menu-item:hover {
 }
 
 input[type="time"] {
-    font-size: 34px;
+    font-size: 30px;
     font-weight: bolder;
     letter-spacing: 5px;
+    line-height: 1.2;
     text-align: center;
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    min-height: 60px;
+    height: 60px;
+
+
 }
 
 button {
@@ -104,12 +118,12 @@ button {
     justify-content: center; /* Sentrerer innholdet i knappen */
     width: 100%;
     padding: 15px;
-    background-color: #56D1FF;
+    background-color: #5CF64A;
     color: black;
     font-size: 24px;
     font-weight: bold;
     text-decoration: none;
-    border: none;
+    border: 2px solid black;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -163,3 +177,10 @@ select.menu-item:hover {
     font-weight: bold;
     margin-top: 10px;
 }
+
+@media (min-width: 1000px) and (min-height: 800px) {
+    .container {
+        transform: scale(1.2);
+    }
+}
+

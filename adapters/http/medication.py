@@ -36,26 +36,29 @@ def medication_dose(medication_id, dose_id):
     if not medication or dose_id not in range(1, 5):
         return redirect(url_for('medication.show_page'))
 
+    # Håndter POST-forespørsel
     if request.method == 'POST':
+        # Hvis brukeren vil sette tid for dosen
         if 'set_time' in request.form:
             time = request.form.get('time')
-            if not is_valid_time(time):
-                flash('Ugyldig tid', 'error')
-            else:
-                print(f'Setting time for dose {dose_id} to {time}')
+            if is_valid_time(time):
                 medication.set(f'dose_{dose_id}', time)
-                flash(f'Doseringstid endret', 'message')
-        
+                medication.set(f'scheduled_{dose_id}', True)
+                flash(f'Doseringstid endret', 'success')
+            else:
+                flash('Ugyldig tid', 'error')
+
+        # Hvis brukeren vil aktivere/deaktivere dosen
         elif 'toggle_schedule' in request.form:
             current_status = medication.get(f'scheduled_{dose_id}')
-            medication.set(f'scheduled_{dose_id}', not current_status)
-            flash(f"Dose {dose_id} {'aktivert' if not current_status else 'deaktivert'}", 'message')
+            medication.set(f'scheduled_{dose_id}', not current_status)  # Veksler status
+            flash(f"Dose {'aktivert' if not current_status else 'deaktivert'}", 'success')
 
+        # Lagre alle endringer
         medication.save()
         return redirect(url_for('medication.medication_dose', medication_id=medication_id, dose_id=dose_id))
 
-    # Hent oppdatert doseinformasjon for visning
+    # Hent oppdatert informasjon for visning
     time = medication.get(f'dose_{dose_id}')
     scheduled = medication.get(f'scheduled_{dose_id}')
-
     return render_template('medication_dose.html', medication=medication, dose_id=dose_id, time=time, scheduled=scheduled)

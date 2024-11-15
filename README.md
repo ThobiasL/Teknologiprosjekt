@@ -1,6 +1,9 @@
 # Webapp - Installasjons- og kjøreguide - Pi OS / Linux
 
-## 1. Kjør setup-scriptet
+## 1. Setup
+
+### Kjør setup-scriptet
+
 ```
 bash scripts/setup.sh
 ```
@@ -8,7 +11,9 @@ bash scripts/setup.sh
 Dette vil installere alle nødvendige avhengigheter og konfigurere prosjektet.
 Her vil du bli bedt om å skrive inn sudo-passord.
 
-## 2. Kjør run-scriptet
+## 2. Oppstart
+
+### For kjøring av webapp
 
 ```
 bash scripts/run.sh
@@ -17,6 +22,14 @@ bash scripts/run.sh
 Dette vil starte opp serverprosessene
 
 <br>
+
+### For kjøring av tester
+
+```
+bash scripts/test.sh
+```
+
+Dette vil kjøre alle de konfigurerte testene
 
 ## 3. Åpne webappen i nettleseren
 

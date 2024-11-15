@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>{{ task.name }}</h2>
+        <h1>{{ task.name }}</h1>
 
         {% include 'flash_messages.html' %}
         
@@ -24,8 +24,8 @@
             <!-- Form for å sette tid -->
             <form method="post">
                 <input type="hidden" name="set_time" value="true">
-                <input type="time" name="time" value="{{ task.time }}">
-                <button type="submit">Sett tid</button>
+                <input type="time" class="menu-item" name="time" value="{{ task.time }}">
+                <button type="submit" class="menu-item">Sett tid</button>
             </form>
         </div>
 
