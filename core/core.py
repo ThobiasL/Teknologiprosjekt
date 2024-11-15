@@ -1,6 +1,7 @@
-# from headunit_wireless_communication import autoDoorLock
-from kommunikasjonMedArduino import ArduinoSerial
-from adjustingVolume import SoundPlayer
+from adapters.headunit_wireless_communication import Wireless_communication
+from adapters.headunit_arduino import ArduinoSerial
+from adapters.database.headunit_db import Headunit
+from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
 
 # Knappe variabler
@@ -22,16 +23,24 @@ editAlarm_mode = 0
 visit_mode = 0
 prev_vivit_mode = -1
 
+# reminder variabler
+go_for_a_walk = ""
+pill_dispensation = ""
+eat_dinner = ""
+
 # kaller på funksjonene fra klassen ArduinoSerial
 arduino = ArduinoSerial()
 
 # kaller på funksjonene fra klassen Wireless_communication
-# Wireless = Wireless_communication()
+wireless = Wireless_communication()
 
 # kaller på funksjonene fra klassen SoundPlayer
 player = SoundPlayer()
+player.set_volume(0.0)
 player.play_sound("radio_simulering")
 
+# kaller på funksjonene fra klassen SoundPlayer
+db = Headunit()
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
@@ -71,8 +80,52 @@ def volume_control(signal):
     player.set_volume(volume)
     arduino.send_signal(volume_prosent, 12, 1)
 
+def reminder():
+    if pill_dispensationTime == getTime():
+        wireless.pillDispensation()
+    elif go_for_a_walk == getTime():
+        player.play_sound("go_for_a_walk")
+        db.updateReminder("go_for_a_walk")
+    elif eat_dinner == getTime():
+        player.play_sound("eat_dinner")
+        db.updateReminder("eat_dinner")
+
 
 while True:
+    # Leser fra database
+    visit_mode = db.readInfoFromDatabase("visit")
+    doorlock = db.readInfoFromDatabase("doorlock")
+    if doorlock == 1:
+        wireless.lockDoor()
+    elif doorlock == 0:
+        wireless.unlockDoor()
+    pillDispensation = db.readInfoFromDatabase("pillDispensation")
+    if pillDispensation == getTime():
+        wireless.pillDispensation()
+
+    if db.reminder()[pill_dispensation] != "":
+        pill_dispensationTime = db.reminder()[pill_dispensation]
+
+    if db.reminder()[go_for_a_walk] != "":
+        go_for_a_walk = db.reminder()[go_for_a_walk]
+
+    if db.reminder()[eat_dinner] != "":
+        eat_dinner = db.reminder()[eat_dinner]
+
+    if
+
+    # Leser signal fra ESP32 og sender til database
+    info = wireless.readSignalFromESP32()
+    if "door_is_locked" in info:
+        db.sendInfoToDatabase("doorlock", 1)
+    elif "door_is_unlocked" in info:
+        db.sendInfoToDatabase("doorlock", 0)
+    if "fall_detected" in info:
+        db.sendInfoToDatabase("fall_sensor", 1)
+    elif "false_alarm" in info:
+        db.sendInfoToDatabase("fall_sensor", 0)
+    if "pills_dispensed" in info:
+        db.sendPillsDropedToDatabase("pillDispensation", 1, getTime())
 
     # Leser signal fra Arduino
     signal = arduino.read_signal()
@@ -111,6 +164,18 @@ while True:
         else:
             volume_control(signal)
 
+    if go_for_a_walk == getTime():
+        player.play_sound("go_for_a_walk")
+        db.updateReminder("go_for_a_walk")
+
+    if pill_dispensation == getTime():
+        player.play_sound("pill_dispensation")
+        db.updateReminder("pill_dispensation")
+
+    if eat_dinner == getTime():
+        player.play_sound("eat_dinner")
+        db.updateReminder("eat_dinner")
+
     if alarm_mode == 1 and prev_alarm_mode != 1:
         arduino.send_signal("00:00", 0, 1)
         alarm_time = 1
@@ -128,10 +193,12 @@ while True:
 
     if visit_mode == 1 and prev_vivit_mode != 1:
         # sende info til database
+        db.sendInfoToDatabase("visit", 1)
         player.pause_sound()
         visit_time = 1
     elif visit_mode == 0 and prev_vivit_mode != 0:
         # sende info til database
+        db.sendInfoToDatabase("visit", 0)
         player.unpause_sound()
         visit_time = 0
     prev_vivit_mode = visit_mode
@@ -150,27 +217,28 @@ while True:
         arduino.send_signal("Alarm!", 6, 1)
         if alarmTimer == 1:
             player.pause_sound()
-            player.play_sound("alarm")
+            #player.play_sound("alarm")
+            player.play_alarm()
 
-        if alarmTimer == 12 and visit_mode == 1:
+        if alarmTimer == 5 and visit_mode == 1:
             arduino.send_signal("visit ", 6, 1)
-            player.stop_sound()  # skru av alarm lyd
+            player.stop_alarm()     # skru av alarm lyd
             player.unpause_sound()
             alarmTimer = 0
             alarmTurnedOn = 0
 
-        if alarmTimer == 12:
+        if alarmTimer == 5:
             arduino.send_signal("      ", 6, 1)
-            player.stop_sound()  # skru av alarm lyd
+            player.stop_alarm()    # skru av alarm lyd
             player.unpause_sound()
             alarmTimer = 0
             alarmTurnedOn = 0
 
     elif alarmTurnedOn == 1 and alarm_mode == 0:
+        arduino.send_signal("      ", 6, 1)
+        player.stop_alarm()  # skru av alarm lyd
+        player.unpause_sound()
         alarmTimer = 0
         alarmTurnedOn = 0
-        arduino.send_signal("      ", 6, 1)
-        player.stop_sound()  # skru av alarm lyd
-        player.unpause_sound()
 
     sleep(0.1)
