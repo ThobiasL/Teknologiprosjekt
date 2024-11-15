@@ -17,7 +17,7 @@
                 <!-- Lenke til detaljvisning for hver oppgave -->
                 <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
                     <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
-                        {{ task.name }}
+                        {{ task.name }}: {{ task.time or "Ikke satt" }}
                     </button> 
                 </a>
             {% endfor %}
