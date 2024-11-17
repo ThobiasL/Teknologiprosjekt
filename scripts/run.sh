@@ -40,6 +40,12 @@ caddy run --config "$ROOT/Caddyfile" --adapter caddyfile &
 # Kjører wsgi-serveren med gunicorn og flask
 gunicorn -c "$ROOT/server/gunicorn.config.py" server.wsgi:app &
 
+export PYTHONPATH=$(pwd) # Sett PYTHONPATH til root
+
+# Start Python skriptet
+python core/core.py
+
+
 # Printer ut adressen serveren kjører på for tilgang
 echo "Server starter på følgende adresse:"
 echo "https://$IP_ADDRESS:8443"
