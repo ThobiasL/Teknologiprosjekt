@@ -1,6 +1,6 @@
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
-from services.headunit import Headunit
+from services.headunit import HeadunitLogic
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
 
@@ -36,7 +36,7 @@ player.play_sound("radio_simulering")
 taskPlaying = False
 
 # kaller på funksjonene fra klassen SoundPlayer
-db = Headunit()
+db = HeadunitLogic()
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
