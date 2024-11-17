@@ -3,7 +3,7 @@ import os
 
 class SoundPlayer:
     def __init__(self):
-        self.root = os.path.dirname(os.path.asbath(__file__))
+        self.root = os.path.dirname(os.path.abspath(__file__))
         self.audio_dir = os.path.join(self.root, 'audio')
         """Initialiser pygame mixer for lydavspilling."""
         pygame.mixer.init()

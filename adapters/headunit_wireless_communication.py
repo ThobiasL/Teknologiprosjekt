@@ -17,6 +17,7 @@ class Wireless_communication:
 
         # Setup UDP socket for receiving confirmations and signals
         self.recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.recv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.recv_socket.bind(('', self.listen_port))  # Bind to all interfaces on listen_port
         self.recv_socket.settimeout(1)  # Non-blocking with timeout for the listener thread
 
