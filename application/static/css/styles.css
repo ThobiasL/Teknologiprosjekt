@@ -180,6 +180,7 @@ select.menu-item:hover {
 
 @media (min-width: 1000px) and (min-height: 800px) {
     .container {
+        max-width: 350px;
         transform: scale(1.2);
     }
 }
