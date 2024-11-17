@@ -17,7 +17,7 @@
             <!-- Form for å oppdatere låsetid -->
             <form action="{{ url_for('autodoorlock.update_lock_time') }}" method="POST">
                 <input type="time" name="time" class="menu-item" value="{{ time }}">
-                <button type="submit" class="menu-item">Endre låsetid</button>
+                <button type="submit" class="menu-item">Bekreft låsetid</button>
             </form>
         </div> 
         {% endif %}
@@ -27,7 +27,7 @@
             <form action="{{ url_for('autodoorlock.lock_door') }}" method="POST">
                 <button type="submit" class="menu-item">
                     <img src="{{ url_for('static', filename='img/lockdoor_icon.png') }}" alt="Lås dør" class="icon">
-                    <span>Lås dør</span>
+                    <span>Lås dør nå</span>
                 </button>
             </form>
 
@@ -35,7 +35,7 @@
             <form action="{{ url_for('autodoorlock.unlock_door') }}" method="POST">
                 <button type="submit" class="menu-item">
                     <img src="{{ url_for('static', filename='img/unlockdoor_icon.png') }}" alt="Lås opp dør" class="icon">
-                    <span>Lås opp dør</span>
+                    <span>Lås opp dør nå</span>
                 </button>
             </form>
         </div>
