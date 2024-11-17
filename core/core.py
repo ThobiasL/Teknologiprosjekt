@@ -83,7 +83,7 @@ while True:
     tasks = db.readTasksFromDatabase()
     if doorlock:
         wireless.lockDoor()
-    elif doorlock:
+    else:
         wireless.unlockDoor()
 
     # Leser signal fra ESP32 og sender til database
@@ -94,13 +94,11 @@ while True:
         db.sendAutoDoorLockTimeToDatabase(0)
     if "fall_detected" in wireless_info:
         print("Fall detected")
-        # 1 sende info til database
+        # sende at fall sensor har verdi 1 til database
     elif "false_alarm" in wireless_info:
         print("False alarm")
-        # 0 sende info til database
-    if "Pills_Dispens" in wireless_info:
-        print("Pills_Dispens")
-        #db.sendMedicationDosesStatusToDatabase()
+        # sende at fall sensor har verdi 0 til database
+
 
     Today = strftime("%A")  # sjekker hvilken ukedag det er i dag
     Doses = db.readMedicationDosesFromDatabase(Today)
@@ -109,6 +107,10 @@ while True:
             wireless.pillDispensation()
             #player.pause_sound()
             #player.play_sound("pill_dispensation")   # planlagt vidre utvikling
+
+        if "Pills_Dispens" in wireless_info:
+            print("Pills_Dispens")
+            #db.sendMedicationDosesStatusToDatabase(Doses[f"dose_{i}"], )
 
     tasksTime = tasks["time"] + ":00"
     if tasksTime == getTime():
