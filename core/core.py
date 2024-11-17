@@ -23,11 +23,6 @@ editAlarm_mode = 0
 visit_mode = 0
 prev_vivit_mode = -1
 
-# reminder variabler
-go_for_a_walk = ""
-pill_dispensation = ""
-eat_dinner = ""
-
 # kaller på funksjonene fra klassen ArduinoSerial
 arduino = ArduinoSerial()
 
@@ -38,6 +33,7 @@ wireless = Wireless_communication()
 player = SoundPlayer()
 player.set_volume(0.1)
 player.play_sound("radio_simulering")
+taskPlaying = False
 
 # kaller på funksjonene fra klassen SoundPlayer
 db = Headunit()
@@ -110,16 +106,28 @@ while True:
     for i in range(1, 5):
         if Doses[f"time_{i}"] == getTime():
             wireless.pillDispensation()
-            # player.play_sound("pill_dispensation")   # planlagt vidre utvikling
+            #player.pause_sound()
+            #player.play_sound("pill_dispensation")   # planlagt vidre utvikling
 
     tasksTime = tasks["time"] + ":00"
     if tasksTime == getTime():
         if tasks["name"] == "go_for_a_walk":
-            player.play_sound("go_for_a_walk")
+            player.pause_sound()
+            player.play_go_for_a_walk()
             db.taskDone("go_for_a_walk", tasks["time"])
         elif tasks["name"] == "eat_dinner":
-            player.play_sound("eat_dinner")
+            player.pause_sound()
+            player.play_eat_dinner()
             db.taskDone("eat_dinner", tasks["time"])
+        taskPlaying = True
+        x = 0
+    if taskPlaying:
+        x += 1
+        if x == 5:
+            player.stop_eat_dinner()
+            player.stop_go_for_a_walk()
+            player.unpause_sound()
+            taskPlaying = False
 
     # Leser signal fra Arduino
     signal = arduino.read_signal()
