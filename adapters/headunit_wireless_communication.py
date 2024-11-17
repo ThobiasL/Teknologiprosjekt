@@ -1,10 +1,8 @@
 import socket
 import threading
-import time
-
 
 class Wireless_communication:
-    def __init__(self, esp32_ip="192.168.1.79", esp32_port=12345, listen_port=54321, timeout=5, max_retries=3):
+    def __init__(self, esp32_ip="", esp32_port=12345, listen_port=54321, timeout=5, max_retries=3):
         self.esp32_ip = esp32_ip
         self.esp32_port = esp32_port
         self.listen_port = listen_port
@@ -28,12 +26,15 @@ class Wireless_communication:
             "door_is_unlocked",
             "fall_detected",
             "false_alarm",
-            "pills_dispensed"
+            "Pills_Dispens"
         )
 
         # For correlating commands and confirmations
         self.command_lock = threading.Lock()
         self.pending_commands = {}
+
+        # Store the last receiveed message
+        self.last_received_message = "0"
 
         # Start the listening thread
         self.listening = True
@@ -46,35 +47,49 @@ class Wireless_communication:
             try:
                 data, addr = self.recv_socket.recvfrom(self.buffer_size)
                 message = data.decode('utf-8').strip()
-                print(f"Received message:{message} from {addr}")
+                # print(f"Received message:{message} from {addr}")
 
                 if message in self.accepted_signals:
                     # self.process_signal(message, addr)
                     # elif message in ["Door locked via UDP command", "Door unlocked via UDP command",
                     # "Door locked via button press", "Door unlocked via button press"]:
                     # self.process_confirmation(message)
-                    print("")
+                    # print(f"Received_message:{message} from {addr}")
+                    # self.last_received_message = f"Received_message:{message} from {addr}"
+                    print("message in self.last_received_message")
+                    #self.last_received_message = message
+                # return self.last_received_message
                 else:
                     print(f"Unrecognized message: '{message}' from {addr}")
+                    message = None
+                self.last_received_message = message
 
             except socket.timeout:
                 continue  # No data received, continue listening
             except Exception as e:
                 print(f"Error receiving message: {e}")
 
-    def sendSignalToESP32(self, esp32_ip, message):
+    def getMessage(self):
+        # return self.last_received_message
+        if self.last_received_message in self.accepted_signals:
+            message = self.last_received_message
+            self.last_received_message = ""
+            return message
+        else:
+            return ""
+
+    def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
         try:
-            sock.sendto(message, (esp32_ip, esp32_port))
+            self.send_socket.sendto(message, (esp32_ip, esp32_port))
             print(f"Message sent to ESP32 at {esp32_ip}:{esp32_port}")
         finally:
-            sock.close()
+            self.send_socket.close()
 
     def lockDoor(self):
-        sendSignalToESP32("192.168.1.79", b"lock door")
+        self.sendSignalToESP32("192.168.1.79", b"lock door")
 
     def unlockDoor(self):
-        sendSignalToESP32("192.168.1.79", b"unlock door")
+        self.sendSignalToESP32("192.168.1.79", b"unlock door")
 
     def pillDispensation(self):
-        sendSignalToESP32("192.168.1.", b"")
-
+        self.sendSignalToESP32("192.168.1.240", b"Dispens Pills")

@@ -12,7 +12,7 @@ visit_time = 0
 hours = "00"
 minutes = "00"
 alarm_mode = 0
-alarm_state = f"{hours}:{minutes}"
+alarm_state = f"{hours}:{minutes}:00"
 alarmTurnedOn = 0
 alarmTimer = 0
 prev_alarm_mode = -1
@@ -36,7 +36,7 @@ wireless = Wireless_communication()
 
 # kaller på funksjonene fra klassen SoundPlayer
 player = SoundPlayer()
-player.set_volume(0.0)
+player.set_volume(0.1)
 player.play_sound("radio_simulering")
 
 # kaller på funksjonene fra klassen SoundPlayer
@@ -47,7 +47,7 @@ def getDateTime():
 
 
 def getTime():
-    return strftime("%H:%M")
+    return strftime("%H:%M:%S")
 
 
 def update_alarm(signal):
@@ -80,63 +80,41 @@ def volume_control(signal):
     player.set_volume(volume)
     arduino.send_signal(volume_prosent, 12, 1)
 
-def reminder():
-    if pill_dispensationTime == getTime():
-        wireless.pillDispensation()
-    elif go_for_a_walk == getTime():
-        player.play_sound("go_for_a_walk")
-        db.updateReminder("go_for_a_walk")
-    elif eat_dinner == getTime():
-        player.play_sound("eat_dinner")
-        db.updateReminder("eat_dinner")
-
-
 while True:
     # Leser fra database
-    visit_mode = db.readInfoFromDatabase("visit")
-    doorlock = db.readInfoFromDatabase("doorlock")
-    if doorlock == 1:
+    visit_mode = db.readVisteStatusFromDatabase()
+    doorlock = db.readVariableStatusFromDatabase()
+    if doorlock:
         wireless.lockDoor()
-    elif doorlock == 0:
+    elif doorlock:
         wireless.unlockDoor()
-    pillDispensation = db.readInfoFromDatabase("pillDispensation")
-    if pillDispensation == getTime():
-        wireless.pillDispensation()
-
-    if db.reminder()[pill_dispensation] != "":
-        pill_dispensationTime = db.reminder()[pill_dispensation]
-
-    if db.reminder()[go_for_a_walk] != "":
-        go_for_a_walk = db.reminder()[go_for_a_walk]
-
-    if db.reminder()[eat_dinner] != "":
-        eat_dinner = db.reminder()[eat_dinner]
-
-    if
 
     # Leser signal fra ESP32 og sender til database
-    info = wireless.readSignalFromESP32()
-    if "door_is_locked" in info:
-        db.sendInfoToDatabase("doorlock", 1)
-    elif "door_is_unlocked" in info:
-        db.sendInfoToDatabase("doorlock", 0)
-    if "fall_detected" in info:
-        db.sendInfoToDatabase("fall_sensor", 1)
-    elif "false_alarm" in info:
-        db.sendInfoToDatabase("fall_sensor", 0)
-    if "pills_dispensed" in info:
-        db.sendPillsDropedToDatabase("pillDispensation", 1, getTime())
+    wireless_info = wireless.readSignalFromESP32()
+    if "door_is_locked" in wireless_info:
+        db.sendAutoDoorLockTimeToDatabase(1)
+    elif "door_is_unlocked" in wireless_info:
+        db.sendAutoDoorLockTimeToDatabase(0)
+    if "fall_detected" in wireless_info:
+        print("Fall detected")
+        # 1 sende info til database
+    elif "false_alarm" in wireless_info:
+        print("False alarm")
+        # 0 sende info til database
+    if "Pills_Dispens" in wireless_info:
+        db.sendPillsDropedToDatabase("pillDispensation", getTime())
 
     # Leser signal fra Arduino
     signal = arduino.read_signal()
     arduino.send_signal(getDateTime(), 0, 0)
 
-    alarm_state = f"{hours}:{minutes}"
+    alarm_state = f"{hours}:{minutes}:00"
     if alarm_state == getTime() and editAlarm_mode == 0:
         alarmTurnedOn = 1
-    print(signal)
+
 
     if signal is not None:
+        print(signal)
         if signal == "alarm_mode: 1":
             alarm_mode = 1
 
@@ -164,17 +142,21 @@ while True:
         else:
             volume_control(signal)
 
-    if go_for_a_walk == getTime():
+
+    Today = strftime("%A")
+    Doses = db.readMedicationDosesFromDatabase(Today)
+    if Doses["time"] == getTime():
+        wireless.pillDispensation()
+        #player.play_sound("pill_dispensation")
+
+    readGoForAWalk = db.readGoForAWalk() + ":00"
+    if readGoForAWalk == getTime():
         player.play_sound("go_for_a_walk")
-        db.updateReminder("go_for_a_walk")
 
-    if pill_dispensation == getTime():
-        player.play_sound("pill_dispensation")
-        db.updateReminder("pill_dispensation")
-
-    if eat_dinner == getTime():
+    readEatDinner = db.readEatDinner() + ":00"
+    if db.readEatDinner() == getTime():
         player.play_sound("eat_dinner")
-        db.updateReminder("eat_dinner")
+
 
     if alarm_mode == 1 and prev_alarm_mode != 1:
         arduino.send_signal("00:00", 0, 1)
@@ -193,15 +175,14 @@ while True:
 
     if visit_mode == 1 and prev_vivit_mode != 1:
         # sende info til database
-        db.sendInfoToDatabase("visit", 1)
-        player.pause_sound()
+        db.sendVisteStatusToDatabase(True)
         visit_time = 1
     elif visit_mode == 0 and prev_vivit_mode != 0:
         # sende info til database
-        db.sendInfoToDatabase("visit", 0)
-        player.unpause_sound()
+        db.sendVisteStatusToDatabase(False)
         visit_time = 0
     prev_vivit_mode = visit_mode
+
 
     if visit_mode == 1 and alarmTurnedOn == 0:
         arduino.send_signal("visit", 6, 1)
