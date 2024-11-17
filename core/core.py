@@ -99,7 +99,8 @@ while True:
         print("False alarm")
         # 0 sende info til database
     if "Pills_Dispens" in wireless_info:
-        db.sendPillsDropedToDatabase("pillDispensation", getTime())
+        print("Pills_Dispens")
+        #db.sendMedicationDosesStatusToDatabase()
 
     Today = strftime("%A")  # sjekker hvilken ukedag det er i dag
     Doses = db.readMedicationDosesFromDatabase(Today)
