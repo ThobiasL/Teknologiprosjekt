@@ -64,6 +64,6 @@ def login():
 @auth.route('/logout')
 def logout():
     session.pop('user_id', None)  # Fjerner brukeren fra sesjonen
-    flash('Logget ut')
+    flash('Logget ut', 'success')
     return redirect(url_for('auth.login'))
     
