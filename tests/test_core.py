@@ -1,5 +1,6 @@
 # Enhets- og integrasjonstester for kjernefunksjonalitet
 
+import pytest
 import unittest
 from application.database import db
 from core.utils import verify_password, hash_password, is_valid_time
@@ -11,6 +12,24 @@ from adapters.database.user_db import User
 def test_hash_verify_password():
     hashed = hash_password("testpassword")
     assert verify_password(hashed, "testpassword") is True
+    assert verify_password(hashed, "wrongpassword") is False
+
+# Test for hashing og verifisering av passord med tom streng
+def test_hash_verify_password_empty():
+    hashed = hash_password("")
+    assert verify_password(hashed, "") is True
+    assert verify_password(hashed, "wrongpassword") is False
+
+# Test for hashing og verifisering av passord med spesialtegn
+def test_hash_verify_password_special_chars():
+    hashed = hash_password("testpassword!@#")
+    assert verify_password(hashed, "testpassword!@#") is True
+    assert verify_password(hashed, "wrongpassword") is False
+
+# Test for hashing og verifisering av passord med norske bokstaver
+def test_hash_verify_password_norwegian_chars():
+    hashed = hash_password("testpasswordæøå")
+    assert verify_password(hashed, "testpasswordæøå") is True
     assert verify_password(hashed, "wrongpassword") is False
 
 # Test for is_valid_time med diverse tidspunkter
