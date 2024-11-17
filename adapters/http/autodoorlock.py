@@ -25,7 +25,7 @@ def update_lock_time():
         return redirect(url_for('autodoorlock.show_page'))
     
     autodoorlock.set('time', time)
-    flash('Låsetid endret', 'message')
+    flash('Låsetid endret', 'success')
     return redirect(url_for('autodoorlock.show_page'))
 
 # Funksjon for å låse døren

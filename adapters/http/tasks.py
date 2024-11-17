@@ -30,7 +30,7 @@ def task_detail(task_id):
                 flash('Ugyldig tid', 'error')
             else:
                 task.set('time', time)
-                flash('Tid endret', 'message')
+                flash('Tid endret', 'success')
         
         task.save()
 
