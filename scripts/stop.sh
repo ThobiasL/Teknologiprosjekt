@@ -16,4 +16,12 @@ else
     echo "Gunicorn kjører ikke."
 fi
 
-echo "Server stoppet."
+# Stopper Python-prosessen hvis den kjører (passer på å stoppe core.py)
+if pgrep -f core/core.py > /dev/null; then
+    echo "Stopper Python (core.py)..."
+    pkill -f core/core.py
+else
+    echo "Python (core.py) kjører ikke."
+fi
+
+echo "Program stoppet."

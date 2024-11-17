@@ -17,12 +17,12 @@
                 {% if session['user_id'] in [2, 4] %}
                     <a href="{{ url_for('medication.medication_dose', medication_id=medication.id, dose_id=dose.dose_id) }}">
                         <button class="menu-item {% if dose.scheduled %}enabled{% else %}disabled{% endif %}">
-                            Dose {{ dose.dose_id }}: {{ dose.time or "Ikke satt" }}
+                            Dose {{ dose.dose_id }}: {{ dose.time or "Tid ikke satt" }}
                         </button> 
                     </a>
                 {% else %}
                     <button class="menu-item {% if dose.scheduled %}enabled{% else %}disabled{% endif %}">
-                        Dose {{ dose.dose_id }}: {{ dose.time or "Ikke satt" }}
+                        Dose {{ dose.dose_id }}: {{ dose.time or "Tid ikke satt" }}
                     </button>
                 {% endif %}
             {% endfor %}

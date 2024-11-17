@@ -17,12 +17,12 @@
                 {% if session['user_id'] in [2, 4] %}
                     <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
                         <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
-                            {{ task.name }}: {{ task.time or "Ikke satt" }}
+                            {{ task.name }}: {{ task.time or "Tid ikke satt" }}
                         </button> 
                     </a>
                 {% else %}
                     <button class="menu-item {% if task.scheduled %}enabled{% else %}disabled{% endif %}">
-                        {{ task.name }}: {{ task.time or "Ikke satt" }}
+                        {{ task.name }}: {{ task.time or "Tid ikke satt" }}
                     </button>
                 {% endif %}
             {% endfor %}

@@ -1,6 +1,6 @@
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
-from adapters.database.headunit_db import Headunit
+from services.headunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
 
@@ -82,7 +82,7 @@ def volume_control(signal):
 
 while True:
     # Leser fra database
-    visit_mode = db.readVisteStatusFromDatabase()
+    #visit_mode = db.readVisteStatusFromDatabase()
     doorlock = db.readVariableStatusFromDatabase()
     tasks = db.readTasksFromDatabase()
     if doorlock:
@@ -177,11 +177,11 @@ while True:
 
     if visit_mode == 1 and prev_vivit_mode != 1:
         # sende info til database
-        db.sendVisteStatusToDatabase(True)
+        #db.sendVisteStatusToDatabase(True)
         visit_time = 1
     elif visit_mode == 0 and prev_vivit_mode != 0:
         # sende info til database
-        db.sendVisteStatusToDatabase(False)
+        #db.sendVisteStatusToDatabase(False)
         visit_time = 0
     prev_vivit_mode = visit_mode
 
