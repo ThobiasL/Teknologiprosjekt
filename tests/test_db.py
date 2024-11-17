@@ -35,14 +35,14 @@ def test_update_password(app, create_user):
 def medication_crud_operations(app):
     with app.app_context():
         # Lager medication-objekt
-        medication = Medication(day='Mandag')
+        medication = Medication(day='Monday')
         db.session.add(medication)
         db.session.commit()
 
         # Leser medication-objekt fra db
         medication_entry = Medication.get_by_id(Medication, medication.id)
         assert medication_entry is not None, "medication ble ikke lagt til i db."
-        assert medication_entry.day == 'Mandag', "Feil dag"
+        assert medication_entry.day == 'Monday', "Feil dag"
         assert medication_entry.dose_1 is None, "Feil tidspunkt"
 
         # Oppdaterer medication-objekt

@@ -33,7 +33,7 @@ def init_data(app):
         user2 = User(name='test_user2', password_hash=generate_password_hash('password2'))
         autodoorlock = AutoDoorLock(time=None, status=False)
         medication = Medication(
-            day='Mandag', dose_1=None, dose_2=None, dose_3=None, dose_4=None,
+            day='Monday', dose_1=None, dose_2=None, dose_3=None, dose_4=None,
             scheduled_1=False, scheduled_2=False, scheduled_3=False, scheduled_4=False
         )
         task = Task(name='Medisin', time=None, scheduled=False)

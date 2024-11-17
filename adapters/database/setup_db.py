@@ -46,7 +46,7 @@ def initialize_database():
 
         # Legger til Medication-instanser for hver dag av uka hvis ingen finnes
         if not db.session.query(Medication).first():
-            days = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
+            days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
             medication = [
                 Medication(
                     day=day, dose_1=None, dose_2=None, dose_3=None, dose_4=None,
