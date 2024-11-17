@@ -41,7 +41,6 @@ class SoundPlayer:
     def set_volume(self, volume):
         """Sett avspillingsvolumet (0.0 til 1.0)."""
         pygame.mixer.music.set_volume(volume)
-        print(f"Volum satt til {volume}")
 
     def pause_sound(self):
         """Pausér den nåværende musikken ved å stoppe og lagre posisjonen."""

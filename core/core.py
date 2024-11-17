@@ -84,6 +84,7 @@ while True:
     # Leser fra database
     visit_mode = db.readVisteStatusFromDatabase()
     doorlock = db.readVariableStatusFromDatabase()
+    tasks = db.readTasksFromDatabase()
     if doorlock:
         wireless.lockDoor()
     elif doorlock:
@@ -103,6 +104,22 @@ while True:
         # 0 sende info til database
     if "Pills_Dispens" in wireless_info:
         db.sendPillsDropedToDatabase("pillDispensation", getTime())
+
+    Today = strftime("%A")  # sjekker hvilken ukedag det er i dag
+    Doses = db.readMedicationDosesFromDatabase(Today)
+    for i in range(1, 5):
+        if Doses[f"time_{i}"] == getTime():
+            wireless.pillDispensation()
+            # player.play_sound("pill_dispensation")   # planlagt vidre utvikling
+
+    tasksTime = tasks["time"] + ":00"
+    if tasksTime == getTime():
+        if tasks["name"] == "go_for_a_walk":
+            player.play_sound("go_for_a_walk")
+            db.taskDone("go_for_a_walk", tasks["time"])
+        elif tasks["name"] == "eat_dinner":
+            player.play_sound("eat_dinner")
+            db.taskDone("eat_dinner", tasks["time"])
 
     # Leser signal fra Arduino
     signal = arduino.read_signal()
@@ -141,21 +158,6 @@ while True:
 
         else:
             volume_control(signal)
-
-
-    Today = strftime("%A")
-    Doses = db.readMedicationDosesFromDatabase(Today)
-    if Doses["time"] == getTime():
-        wireless.pillDispensation()
-        #player.play_sound("pill_dispensation")
-
-    readGoForAWalk = db.readGoForAWalk() + ":00"
-    if readGoForAWalk == getTime():
-        player.play_sound("go_for_a_walk")
-
-    readEatDinner = db.readEatDinner() + ":00"
-    if db.readEatDinner() == getTime():
-        player.play_sound("eat_dinner")
 
 
     if alarm_mode == 1 and prev_alarm_mode != 1:
