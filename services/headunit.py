@@ -1,3 +1,31 @@
+# services/headunit.py
+
+from services.database_operations import DatabaseOperations
+
+class Headunit:
+    def __init__(self):
+        self.db_ops = DatabaseOperations()
+
+    def readVariableStatusFromDatabase(self):
+        return self.db_ops.get_auto_door_lock_status()
+
+    def sendAutoDoorLockTimeToDatabase(self, status):
+        self.db_ops.set_auto_door_lock_status(status)
+
+    def readMedicationDosesFromDatabase(self, day):
+        return self.db_ops.get_medication_doses(day)
+
+    def sendMedicationDosesStatusToDatabase(self, medication_id, dose_id):
+        self.db_ops.set_medication_dose_status(medication_id, dose_id)
+
+    def readTasksFromDatabase(self):
+        return self.db_ops.get_all_tasks()
+
+    def taskDone(self, name, time):
+        self.db_ops.mark_task_done(name, time)
+
+
+'''
 class Headunit:
     def __init__(self):
         pass
@@ -52,7 +80,7 @@ class Headunit:
         tasks = Task.query.all()
         if tasks.get('name') == name and tasks.get('time') == time:
             tasks.set('scheduled', False)
-'''
+
     def readVisteStatusFromDatabase(self):
         from adapters.database.autodoorlock_db import AutoDoorLock
         variable = AutoDoorLock.get_by_id(AutoDoorLock, 1)
@@ -63,4 +91,5 @@ class Headunit:
         from adapters.database.autodoorlock_db import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         autodoorlock.set('status', status)
+
 '''
