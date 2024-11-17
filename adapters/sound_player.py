@@ -1,7 +1,10 @@
 import pygame
+import os
 
 class SoundPlayer:
     def __init__(self):
+        self.root = os.path.dirname(os.path.asbath(__file__))
+        self.audio_dir = os.path.join(self.root, 'audio')
         """Initialiser pygame mixer for lydavspilling."""
         pygame.mixer.init()
         self.current_sound = None
@@ -11,9 +14,9 @@ class SoundPlayer:
 
         # Last inn alarmlyden separat
         try:
-            self.alarm_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/alarm.mp3")
-            self.go_for_a_walk_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/go_for_a_walk.mp3")
-            self.eat_dinner_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/eat_dinner.mp3")
+            self.alarm_sound = pygame.mixer.Sound("audio/alarm.mp3")
+            self.go_for_a_walk_sound = pygame.mixer.Sound("audio/go_for_a_walk.mp3")
+            self.eat_dinner_sound = pygame.mixer.Sound("audio/eat_dinner.mp3")
             print("Lyden lastet inn.")
         except pygame.error as e:
             print(f"Feil ved lasting av alarm.mp3: {e}")
@@ -27,7 +30,7 @@ class SoundPlayer:
     def play_sound(self, sound_file, start=0.0):
         """Last inn og spill av en lydfil ved bruk av pygame.mixer.music."""
         try:
-            pygame.mixer.music.load(f"/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/{sound_file}.mp3")
+            pygame.mixer.music.load(f"audio/{sound_file}.mp3")
             pygame.mixer.music.play(start=start)
             self.current_sound = sound_file
             self.is_playing = True
@@ -65,8 +68,8 @@ class SoundPlayer:
         """Gjenoppta den pauserte musikken ved å laste og spille fra posisjonen."""
         if self.current_sound is not None:
             try:
-                #pygame.mixer.music.unload("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/alarm.mp3")
-               # pygame.mixer.music.load("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/radio_simulering.mp3")
+                #pygame.mixer.music.unload("audio/alarm.mp3")
+               # pygame.mixer.music.load("audio/radio_simulering.mp3")
                # pygame.mixer.music.play(start=self.last_time_rec)
                 pygame.mixer.music.unpause()
                 self.is_playing = True
@@ -104,7 +107,7 @@ class SoundPlayer:
             self.alarm_channel.stop()
             self.alarm_sound = None
             self.alarm_channel = None
-            #pygame.mixer.sound.unload("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/alarm.mp3")
+            #pygame.mixer.sound.unload("audio/alarm.mp3")
             #self.alarm_channel.unload()
             #self.alarm_sound.unload()
             #pygame.mixer.Sound.unload()
