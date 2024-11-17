@@ -12,11 +12,17 @@ class SoundPlayer:
         # Last inn alarmlyden separat
         try:
             self.alarm_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/alarm.mp3")
-            print("Alarm lyden lastet inn.")
+            self.go_for_a_walk_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/go_for_a_walk.mp3")
+            self.eat_dinner_sound = pygame.mixer.Sound("/home/teknologi-prosjekt/mp3 filer til Teknologi prosjekt/eat_dinner.mp3")
+            print("Lyden lastet inn.")
         except pygame.error as e:
             print(f"Feil ved lasting av alarm.mp3: {e}")
             self.alarm_sound = None
+            self.go_for_a_walk_sound = None
+            self.eat_dinner_sound = None
         self.alarm_channel = None
+        self.go_for_a_walk_channel = None
+        self.eat_dinner_channel = None
 
     def play_sound(self, sound_file, start=0.0):
         """Last inn og spill av en lydfil ved bruk av pygame.mixer.music."""
@@ -103,3 +109,35 @@ class SoundPlayer:
             #self.alarm_sound.unload()
             #pygame.mixer.Sound.unload()
             print("Alarm lyden stoppet.")
+
+    def play_go_for_a_walk(self):
+        """Spill av alarmlyden."""
+        if self.go_for_a_walk_sound:
+            if self.go_for_a_walk_channel is None or not self.go_for_a_walk_channel.get_busy():
+                self.go_for_a_walk_channel = self.go_for_a_walk_sound.play()
+                print("Alarm lyden spilles av.")
+            else:
+                print("Alarm lyden spiller allerede.")
+
+    def stop_go_for_a_walk(self):
+        """Stopp alarmlyden."""
+        if self.go_for_a_walk_channel:
+            self.go_for_a_walk_channel.stop()
+            self.go_for_a_walk_sound = None
+            self.go_for_a_walk_channel = None
+
+    def play_eat_dinner(self):
+        """Spill av alarmlyden."""
+        if self.alarm_sound:
+            if self.alarm_channel is None or not self.alarm_channel.get_busy():
+                self.alarm_channel = self.alarm_sound.play()
+                print("Alarm lyden spilles av.")
+            else:
+                print("Alarm lyden spiller allerede.")
+
+    def stop_eat_dinner(self):
+        """Stopp alarmlyden."""
+        if self.eat_dinner_channel:
+            self.eat_dinner_channel.stop()
+            self.eat_dinner_sound = None
+            self.eat_dinner_channel = None
