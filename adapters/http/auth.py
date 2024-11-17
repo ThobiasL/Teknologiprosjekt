@@ -15,11 +15,13 @@ def register():
         user = User.query.filter_by(id=int(selected_id)).first()
       
         # Sjekker om brukeren eksisterer og setter nytt passord med melding, for så å vise registreringssiden på nytt
-        if user:
+        if user and password != '':
             user.password_hash = hash_password(password)
             user.save()
             flash('Passord endret', 'success')
             return redirect(url_for('auth.register'))
+        else:
+            flash('Bruker eller passord-feltet er tomt', 'error')
 
     # Vis registreringssiden
     return render_template('register.html', users=users)

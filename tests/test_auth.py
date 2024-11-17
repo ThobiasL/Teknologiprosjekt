@@ -87,6 +87,46 @@ def test_register_new_password(client, app, login, init_data):
     with client.session_transaction() as session:
         assert 'user_id' in session, "Bruker ble ikke lagt til i session."
 
+# Test for å sikre at passord ikke kan endres til tomt felt
+def test_register_empty_password(client, app, login, init_data):
+    with app.app_context():
+        user = User.query.filter_by(name='test_user').first()
+        assert user is not None, "Bruker {user.name} ble ikke funnet i db."
+        
+    response = client.post('/register', data={'id': user.id, 'password': ''})
+    assert response.status_code == 200
+    assert b'Bruker eller passord-feltet er tomt' in response.data, "Bruker endret passord til tomt felt."
+
+# Test for å verifisere at passord med spesialtegn kan settes
+def test_register_new_password_special_chars(client, app, login, init_data):
+    with app.app_context():
+        user = User.query.filter_by(name='test_user').first()
+        assert user is not None, "Bruker {user.name} ble ikke funnet i db."
+        
+    response = client.post('/register', data={'id': user.id, 'password': 'new_password!@#'})
+    assert response.status_code == 302, "Bruker ble ikke videresendt."
+    assert '/register' in response.location, "Bruker ble ikke videresendt til register-siden."
+
+    login(user.name, 'new_password!@#')
+
+    with client.session_transaction() as session:
+        assert 'user_id' in session, "Bruker ble ikke lagt til i session."
+
+# Test for å verifisere at passord med norske bokstaver kan settes
+def test_register_new_password_norwegian_chars(client, app, login, init_data):
+    with app.app_context():
+        user = User.query.filter_by(name='test_user').first()
+        assert user is not None, "Bruker {user.name} ble ikke funnet i db."
+        
+    response = client.post('/register', data={'id': user.id, 'password': 'new_passwordæøå'})
+    assert response.status_code == 302, "Bruker ble ikke videresendt."
+    assert '/register' in response.location, "Bruker ble ikke videresendt til register-siden."
+
+    login(user.name, 'new_passwordæøå')
+
+    with client.session_transaction() as session:
+        assert 'user_id' in session, "Bruker ble ikke lagt til i session."
+
 # Test for innlogging uten data
 def test_login_without_data(client):
     response = client.post('/login', data={})

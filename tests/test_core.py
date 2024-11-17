@@ -40,6 +40,8 @@ def test_is_valid_time():
     assert is_valid_time("abc") is False
     assert is_valid_time("") is False
 
+# Integrasjonstester
+
 # Test for get_by_id-metode med gyldig bruker-id
 def test_get_by_id_valid(app):
     with app.app_context():
