@@ -1,5 +1,4 @@
 # services/headunit.py
-
 from services.database_operations import DatabaseOperations
 
 class Headunit:
@@ -25,7 +24,7 @@ class Headunit:
         self.db_ops.mark_task_done(name, time)
 
 
-'''
+
 class Headunit:
     def __init__(self):
         pass
@@ -80,7 +79,7 @@ class Headunit:
         tasks = Task.query.all()
         if tasks.get('name') == name and tasks.get('time') == time:
             tasks.set('scheduled', False)
-
+'''
     def readVisteStatusFromDatabase(self):
         from adapters.database.autodoorlock_db import AutoDoorLock
         variable = AutoDoorLock.get_by_id(AutoDoorLock, 1)
