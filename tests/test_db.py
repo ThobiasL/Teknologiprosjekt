@@ -4,7 +4,7 @@ import pytest
 from application.database import db
 from adapters.database.user_db import User
 from adapters.database.medication_db import Medication
-from adapters.database.autodoorlock_db import AutoDoorLock
+from adapters.database.models.autodoorlock_db import AutoDoorLock
 
 # Fixture for å opprette en bruker i testdatabasen
 @pytest.fixture

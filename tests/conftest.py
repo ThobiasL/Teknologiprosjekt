@@ -4,7 +4,7 @@ from application.database import db
 from application.config import TestConfig
 from werkzeug.security import generate_password_hash
 from adapters.database.user_db import User
-from adapters.database.autodoorlock_db import AutoDoorLock
+from adapters.database.models.autodoorlock_db import AutoDoorLock
 from adapters.database.medication_db import Medication
 from adapters.database.task_db import Task
 

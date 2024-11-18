@@ -14,5 +14,3 @@ SessionLocal = scoped_session(sessionmaker(bind=engine))
 # Funksjon for å opprette tabeller (brukes i standalone-kontekst)
 def init_db():
     Base.metadata.create_all(bind=engine)
-
-

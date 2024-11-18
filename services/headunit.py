@@ -3,19 +3,19 @@ class Headunit:
         pass
 
     def readVariableStatusFromDatabase(self):
-        from adapters.database.autodoorlock_db import AutoDoorLock
+        from adapters.database.models.autodoorlock_db import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         status = autodoorlock.get('status')
         return status
 
     def readAutoDoorLockTimeFromDatabase(self):
-        from adapters.database.autodoorlock_db import AutoDoorLock
+        from adapters.database.models.autodoorlock_db import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         time = autodoorlock.get('time')
         return time
 
     def sendAutoDoorLockTimeToDatabase(self, status):
-        from adapters.database.autodoorlock_db import AutoDoorLock
+        from adapters.database.models.autodoorlock_db import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         if status == 1:
             autodoorlock.set('status', True)

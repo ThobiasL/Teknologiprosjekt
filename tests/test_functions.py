@@ -5,7 +5,7 @@ import pytest
 from flask import session
 from application.database import db
 from adapters.database.medication_db import Medication
-from adapters.database.autodoorlock_db import AutoDoorLock
+from adapters.database.models.autodoorlock_db import AutoDoorLock
 
 def test_lock_door_with_login(client, app, login, init_data):
     login('test_user', 'password')

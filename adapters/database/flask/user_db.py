@@ -3,7 +3,7 @@ from adapters.database.base_flask import Base, BaseMixin
 from core.utils import hash_password, verify_password
 
 # Brukeradapter for databasen
-class User(Base):
+class User(Base, BaseMixin):
     __tablename__ = 'users' # Tabellnavn i databasen
 
     # Kolonner i tabellen

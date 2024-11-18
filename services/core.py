@@ -1,5 +1,5 @@
 from application.database_core import init_db, SessionLocal
-from adapters.database.autodoorlock_db import AutoDoorLock
+from adapters.database.models.autodoorlock_db import AutoDoorLock
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
 #from services.fullheadunit import Headunit
@@ -84,7 +84,7 @@ def volume_control(signal):
     #arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
-    autodoorlock = AutoDoorLock.get_by_id(db_session, AutoDoorLock, 1)
+    autodoorlock = AutoDoorLock.get_by_id(db_session, 1)
 
     status = autodoorlock.get('status')
     # Leser fra database

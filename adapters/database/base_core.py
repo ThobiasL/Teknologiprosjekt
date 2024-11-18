@@ -4,9 +4,9 @@ Base = declarative_base()  # Ren SQLAlchemy Base
 
 # Hjelpeklasse for generiske metoder
 class BaseMixin:
-    @staticmethod
-    def get_by_id(session, model, id):
-        return session.query(model).get(id)
+    @classmethod
+    def get_by_id(cls, session, id):
+        return session.query(cls).get(id)
 
     def get(self, attribute):
         if hasattr(self, attribute):
