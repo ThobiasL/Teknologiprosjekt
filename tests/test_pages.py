@@ -26,7 +26,7 @@ def test_autodoorlock_page(client, login, init_data):
     response = client.get('/lock_control')
     assert response.status_code == 200, "Siden ble ikke vist."
     page_content = response.data.decode('utf-8')
-    assert 'Endre låsetid' in page_content, "Siden ble ikke vist riktig."
+    assert 'Bekreft låsetid' in page_content, "Siden ble ikke vist riktig."
 
 # Test for Medication-side
 def test_medication_page(client, login, init_data):
