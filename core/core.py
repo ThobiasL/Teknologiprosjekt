@@ -89,6 +89,7 @@ while True:
     message = wireless.getMessage()
     print(message)
     print(wireless_info)
+    print("hei")
 
     if doorlock:
         wireless.lockDoor()
