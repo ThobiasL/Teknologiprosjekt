@@ -1,3 +1,5 @@
+from application.database_core import init_db, SessionLocal
+from adapters.database.autodoorlock_db import AutoDoorLock
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
 #from services.fullheadunit import Headunit
@@ -5,6 +7,9 @@ from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
 
 
+init_db()
+
+db_session = SessionLocal()
 
 # Knappe variabler
 alarm_time = 0
@@ -26,7 +31,7 @@ visit_mode = 0
 prev_vivit_mode = -1
 
 # kaller på funksjonene fra klassen ArduinoSerial
-arduino = ArduinoSerial()
+#arduino = ArduinoSerial()
 
 # kaller på funksjonene fra klassen Wireless_communication
 wireless = Wireless_communication()
@@ -56,14 +61,14 @@ def update_alarm(signal):
             signal = 23
         hours = signal
         hours = f"{int(hours):02}"  # :02 gjør om tallet til to-siffra
-        arduino.send_signal(hours, 0, 1)
+        #arduino.send_signal(hours, 0, 1)
 
     elif editAlarm == 2:
         if signal > 59:
             signal = 59
         minutes = signal
         minutes = f"{int(minutes):02}"  # :02 gjør om tallet til to-siffra
-        arduino.send_signal(minutes, 3, 1)
+        #arduino.send_signal(minutes, 3, 1)
 
 
 def volume_control(signal):
@@ -76,12 +81,11 @@ def volume_control(signal):
 
     volume = signal / 100
     player.set_volume(volume)
-    arduino.send_signal(volume_prosent, 12, 1)
+    #arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
-    from adapters.database.autodoorlock_db import AutoDoorLock
+    autodoorlock = AutoDoorLock.get_by_id(db_session, AutoDoorLock, 1)
 
-    autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
     status = autodoorlock.get('status')
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
@@ -91,7 +95,7 @@ while True:
         wireless.lockDoor()
     elif status == False:
         wireless.unlockDoor()
-
+    
     # Leser signal fra ESP32 og sender til database
     wireless_info = wireless.readSignalFromESP32()
     if "door_is_locked" in wireless_info:
@@ -135,7 +139,7 @@ while True:
             player.stop_go_for_a_walk()
             player.unpause_sound()
             taskPlaying = False
-    '''
+    
     # Leser signal fra Arduino
     signal = arduino.read_signal()
     arduino.send_signal(getDateTime(), 0, 0)
@@ -174,7 +178,7 @@ while True:
         else:
             volume_control(signal)
 
-
+    
     if alarm_mode == 1 and prev_alarm_mode != 1:
         arduino.send_signal("00:00", 0, 1)
         alarm_time = 1
@@ -200,7 +204,7 @@ while True:
         visit_time = 0
     prev_vivit_mode = visit_mode
 
-
+    
     if visit_mode == 1 and alarmTurnedOn == 0:
         arduino.send_signal("visit", 6, 1)
 
@@ -238,5 +242,6 @@ while True:
         player.unpause_sound()
         alarmTimer = 0
         alarmTurnedOn = 0
+    '''
 
     sleep(0.1)

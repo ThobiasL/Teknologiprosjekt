@@ -1,11 +1,9 @@
-from application.database import db
-from adapters.database.base import Base
+from sqlalchemy import Column, Integer, Boolean, String
+from adapters.database.base import Base, BaseMixin
 
-# Autodoorlock-adapter for databasen
-class AutoDoorLock(Base):
+class AutoDoorLock(Base, BaseMixin):
     __tablename__ = 'autodoorlock'
-    id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.Boolean, nullable=False, default=False)
-    time = db.Column(db.String, nullable=True, default=None)
-    
-    
+
+    id = Column(Integer, primary_key=True)
+    status = Column(Boolean, nullable=False, default=False)
+    time = Column(String, nullable=True, default=None)

@@ -1,7 +1,10 @@
 from flask import Flask, session, request, redirect, url_for # Importerer nødvendige funksjoner fra Flask
-from application.database import db # Importerer databasen
+from flask_sqlalchemy import SQLAlchemy # Importerer SQLAlchemy
+from adapters.database.base import Base  # Base-klassen for modellene
 
 from .config import Config # Importerer konfigurasjon fra config.py
+
+db = SQLAlchemy()  # Lager et SQLAlchemy-objekt
 
 # Importerer modeller
 from adapters.database.user_db import User
@@ -41,6 +44,6 @@ def create_app(config=None):
             return redirect(url_for('auth.login'))
 
     with app.app_context():
-        db.create_all()  # Oppretter databasetabeller
+        Base.metadata.create_all(bind=db.engine)
 
     return app

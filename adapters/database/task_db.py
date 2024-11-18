@@ -1,10 +1,10 @@
-from application.database import db
-from adapters.database.base import Base
+from sqlalchemy import Column, Integer, String, Boolean
+from adapters.database.base import Base, BaseMixin
 
 # Task-adapter for databasen
-class Task(Base):
+class Task(Base, BaseMixin):
     __tablename__ = 'tasks'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    time = db.Column(db.String, nullable=True)
-    scheduled = db.Column(db.Boolean, nullable=False, default=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    time = Column(String, nullable=True)
+    scheduled = Column(Boolean, nullable=False, default=False)

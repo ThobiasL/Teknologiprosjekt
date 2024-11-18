@@ -1,29 +1,25 @@
-from application.database import db
+from sqlalchemy.ext.declarative import declarative_base
 
-# Basisklasse for databasemodeller
-class Base(db.Model):
-    __abstract__ = True # Gjør klassen abstrakt
+Base = declarative_base()  # Ren SQLAlchemy Base
 
-    # Metode for å hente en modell fra databasen basert på id
+# Hjelpeklasse for generiske metoder
+class BaseMixin:
     @staticmethod
-    def get_by_id(model, id):
-        return db.session.get(model, id)
+    def get_by_id(session, model, id):
+        return session.query(model).get(id)
 
-    # Getter-metode
     def get(self, attribute):
         if hasattr(self, attribute):
             return getattr(self, attribute)
         raise AttributeError('Ugyldig attributt')
 
-    # Setter-metode
-    def set(self, attribute, value):
+    def set(self, session, attribute, value):
         if hasattr(self, attribute):
             setattr(self, attribute, value)
-            self.save()
+            self.save(session)
         else:
             raise AttributeError('Ugyldig attributt')
 
-    # Metode for å lagre modellen i databasen
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
+    def save(self, session):
+        session.add(self)
+        session.commit()

@@ -1,16 +1,16 @@
-from application.database import db
-from adapters.database.base import Base
+from sqlalchemy import Column, Integer, String, Boolean
+from adapters.database.base import Base, BaseMixin
 
 # Medication-modell for databasen
-class Medication(Base):
+class Medication(Base, BaseMixin):
     __tablename__ = 'medication'
-    id = db.Column(db.Integer, primary_key=True)
-    day = db.Column(db.String, nullable=False)
-    dose_1 = db.Column(db.String, nullable=True, default=None)
-    dose_2 = db.Column(db.String, nullable=True, default=None)
-    dose_3 = db.Column(db.String, nullable=True, default=None)
-    dose_4 = db.Column(db.String, nullable=True, default=None)
-    scheduled_1 = db.Column(db.Boolean, nullable=False, default=False)
-    scheduled_2 = db.Column(db.Boolean, nullable=False, default=False)
-    scheduled_3 = db.Column(db.Boolean, nullable=False, default=False)
-    scheduled_4 = db.Column(db.Boolean, nullable=False, default=False)
+    id = Column(Integer, primary_key=True)
+    day = Column(String, nullable=False)
+    dose_1 = Column(String, nullable=True, default=None)
+    dose_2 = Column(String, nullable=True, default=None)
+    dose_3 = Column(String, nullable=True, default=None)
+    dose_4 = Column(String, nullable=True, default=None)
+    scheduled_1 = Column(Boolean, nullable=False, default=False)
+    scheduled_2 = Column(Boolean, nullable=False, default=False)
+    scheduled_3 = Column(Boolean, nullable=False, default=False)
+    scheduled_4 = Column(Boolean, nullable=False, default=False)
