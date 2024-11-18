@@ -49,44 +49,25 @@ class Wireless_communication:
             try:
                 data, addr = self.recv_socket.recvfrom(self.buffer_size)
                 message = data.decode('utf-8').strip()
-                # print(f"Received message:{message} from {addr}")
-
                 if message not in self.accepted_signals:
                     print(f"Unrecognized message: '{message}' from {addr}")
                     message = None
                 if message in self.accepted_signals:
                     self.last_received_message = message
-                    
-                #if message in self.accepted_signals:
-                    # self.process_signal(message, addr)
-                    # elif message in ["Door locked via UDP command", "Door unlocked via UDP command",
-                    # "Door locked via button press", "Door unlocked via button press"]:
-                    # self.process_confirmation(message)
-                    # print(f"Received_message:{message} from {addr}")
-                    # self.last_received_message = f"Received_message:{message} from {addr}"
-                print("message in self.last_received_message")
-                    
-                    #self.last_received_message = message
-                return self.last_received_message
-                #else:
-                    #print(f"Unrecognized message: '{message}' from {addr}")
-                    #message = None
-
             except socket.timeout:
                 continue  # No data received, continue listening
             except Exception as e:
                 print(f"Error receiving message: {e}")
 
+
     def getMessage(self):
-        #self.readSignalFromESP32()
-        #return self.last_received_message
-        #if self.last_received_message in self.accepted_signals:
         if self.last_received_message:
             message = self.last_received_message
-            self.last_received_message = None
+            self.last_received_message = None  # Nullstill etter å ha hentet meldingen
             print(message)
             return message
         return ""
+
         
 
     def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
