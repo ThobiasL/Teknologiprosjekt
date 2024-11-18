@@ -1,6 +1,6 @@
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
-from services.fullheadunit import Headunit
+from services.headunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
 
