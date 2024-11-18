@@ -1,5 +1,5 @@
 from application.database_core import init_db, SessionLocal
-from adapters.database.models.autodoorlock_db import AutoDoorLock
+from adapters.database.autodoorlock_core import AutoDoorLock
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
 #from services.fullheadunit import Headunit

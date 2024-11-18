@@ -1,16 +1,13 @@
 from flask import Flask, session, request, redirect, url_for # Importerer nødvendige funksjoner fra Flask
-from flask_sqlalchemy import SQLAlchemy # Importerer SQLAlchemy
-from adapters.database.base_flask import Base  # Base-klassen for modellene
+from application.database import db # Importerer databasen
 
 from .config import Config # Importerer konfigurasjon fra config.py
 
-db = SQLAlchemy()  # Lager et SQLAlchemy-objekt
-
 # Importerer modeller
-from adapters.database.user_db import User
-from adapters.database.models.autodoorlock_db import AutoDoorLock
-from adapters.database.medication_db import Medication
-from adapters.database.task_db import Task
+from adapters.database.user_flask import User
+from adapters.database.autodoorlock_flask import AutoDoorLock
+from adapters.database.medication_flask import Medication
+from adapters.database.task_flask import Task
 
 # Importerer blueprints
 from adapters.http.main import main
@@ -44,6 +41,6 @@ def create_app(config=None):
             return redirect(url_for('auth.login'))
 
     with app.app_context():
-        Base.metadata.create_all(bind=db.engine)
+        db.create_all()  # Oppretter tabeller i databasen
 
     return app

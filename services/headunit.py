@@ -3,19 +3,19 @@ class Headunit:
         pass
 
     def readVariableStatusFromDatabase(self):
-        from adapters.database.models.autodoorlock_db import AutoDoorLock
+        from adapters.database.autodoorlock_core import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         status = autodoorlock.get('status')
         return status
 
     def readAutoDoorLockTimeFromDatabase(self):
-        from adapters.database.models.autodoorlock_db import AutoDoorLock
+        from adapters.database.autodoorlock_core import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         time = autodoorlock.get('time')
         return time
 
     def sendAutoDoorLockTimeToDatabase(self, status):
-        from adapters.database.models.autodoorlock_db import AutoDoorLock
+        from adapters.database.autodoorlock_core import AutoDoorLock
         autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
         if status == 1:
             autodoorlock.set('status', True)
@@ -23,7 +23,7 @@ class Headunit:
             autodoorlock.set('status', False)
 
     def readMedicationDosesFromDatabase(self, toDay):
-        from adapters.database.medication_db import Medication
+        from adapters.database.medication_flask import Medication
         medication = Medication.get_by_id(Medication, toDay)
         doses = {}
         for i in medication:
@@ -33,12 +33,12 @@ class Headunit:
         return doses
 
     def sendMedicationDosesStatusToDatabase(self,medication_id, dose_id, ):
-        from adapters.database.medication_db import Medication
+        from adapters.database.medication_flask import Medication
         medication = Medication.get_by_id(Medication, medication_id)
         medication.set(f'scheduled_{dose_id}', False)
 
     def readTasksFromDatabase(self):
-        from adapters.database.task_db import Task
+        from adapters.database.task_flask import Task
         allTasks = Task.query.all()
         tasks = {}
         for i in allTasks:
@@ -48,7 +48,7 @@ class Headunit:
         return tasks
 
     def taskDone(self, name, time):
-        from adapters.database.task_db import Task
+        from adapters.database.task_flask import Task
         tasks = Task.query.all()
         if tasks.get('name') == name and tasks.get('time') == time:
             tasks.set('scheduled', False)

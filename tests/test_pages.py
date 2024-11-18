@@ -3,7 +3,7 @@
 import pytest
 from flask import session
 from application.database import db
-from adapters.database.user_db import User
+from adapters.database.user_flask import User
 
 # Test for root-rute med innlogging
 def test_root_route_with_login(client, login, init_data):

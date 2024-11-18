@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from adapters.database.base_flask import Base, BaseMixin
+from application.database import db
+from adapters.database.base_flask import Base
 from core.utils import hash_password, verify_password
 
 # Brukeradapter for databasen
@@ -7,9 +7,9 @@ class User(Base):
     __tablename__ = 'users' # Tabellnavn i databasen
 
     # Kolonner i tabellen
-    id = Column(Integer, primary_key=True) # Primærnøkkel
-    name = Column(String(20), unique=True, nullable=False) # Brukernavn
-    password_hash = Column(String(128), nullable=False) # Passord
+    id = db.Column(db.Integer, primary_key=True) # Primærnøkkel
+    name = db.Column(db.String(20), unique=True, nullable=False) # Brukernavn
+    password_hash = db.Column(db.String(128), nullable=False) # Passord
 
     # Setter passordet til brukeren, hashet
     def set_password(self, password):

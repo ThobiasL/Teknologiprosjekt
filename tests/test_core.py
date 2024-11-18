@@ -4,7 +4,7 @@ import pytest
 import unittest
 from application.database import db
 from core.utils import verify_password, hash_password, is_valid_time
-from adapters.database.user_db import User
+from adapters.database.user_flask import User
 
 # Enhetstester
 

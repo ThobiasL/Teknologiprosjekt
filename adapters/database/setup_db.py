@@ -1,10 +1,10 @@
 import os
 from application.database_core import init_db, SessionLocal  # Ren SQLAlchemy-konfigurasjon
 from core.utils import hash_password
-from adapters.database.user_db import User
-from adapters.database.models.autodoorlock_db import AutoDoorLock
-from adapters.database.medication_db import Medication
-from adapters.database.task_db import Task
+from adapters.database.user_core import User
+from adapters.database.autodoorlock_core import AutoDoorLock
+from adapters.database.medication_core import Medication
+from adapters.database.task_core import Task    
 
 def initialize_database():
     # Sjekk og opprett databasekatalogen

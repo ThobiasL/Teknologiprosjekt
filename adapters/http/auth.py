@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from adapters.database.user_db import User
+from adapters.database.user_flask import User
 from core.utils import hash_password, verify_password
 
 auth = Blueprint('auth', __name__) # Lager blueprint for 'auth'
