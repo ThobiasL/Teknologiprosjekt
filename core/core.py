@@ -78,7 +78,7 @@ def volume_control(signal):
     player.set_volume(volume)
     arduino.send_signal(volume_prosent, 12, 1)
 
-
+wireless.pillDispensation()
 while True:
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()

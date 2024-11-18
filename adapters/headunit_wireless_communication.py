@@ -31,11 +31,12 @@ class Wireless_communication:
         )
 
         # For correlating commands and confirmations
-        self.command_lock = threading.Lock()
-        self.pending_commands = {}
+        #self.command_lock = threading.Lock()
+        #self.pending_commands = {}
 
         # Store the last receiveed message
-        self.last_received_message = "0"
+        self.last_received_message = None
+        #self.message_event = threading.Event()
 
         # Start the listening thread
         self.listening = True
@@ -53,7 +54,9 @@ class Wireless_communication:
                 if message not in self.accepted_signals:
                     print(f"Unrecognized message: '{message}' from {addr}")
                     message = None
-                self.last_received_message = message
+                if message in self.accepted_signals:
+                    self.last_received_message = message
+                    
                 #if message in self.accepted_signals:
                     # self.process_signal(message, addr)
                     # elif message in ["Door locked via UDP command", "Door unlocked via UDP command",
@@ -61,7 +64,7 @@ class Wireless_communication:
                     # self.process_confirmation(message)
                     # print(f"Received_message:{message} from {addr}")
                     # self.last_received_message = f"Received_message:{message} from {addr}"
-                #print("message in self.last_received_message")
+                print("message in self.last_received_message")
                     
                     #self.last_received_message = message
                 return self.last_received_message
@@ -77,13 +80,13 @@ class Wireless_communication:
     def getMessage(self):
         #self.readSignalFromESP32()
         #return self.last_received_message
-        if self.last_received_message in self.accepted_signals:
+        #if self.last_received_message in self.accepted_signals:
+        if self.last_received_message:
             message = self.last_received_message
-            self.last_received_message = ""
+            self.last_received_message = None
             print(message)
             return message
-        else:
-            return ""
+        return ""
         
 
     def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
