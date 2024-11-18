@@ -3,6 +3,7 @@ from adapters.headunit_arduino import ArduinoSerial
 from services.headunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
+from application.database_core import SessionLocal
 
 # Knappe variabler
 alarm_time = 0
@@ -35,8 +36,9 @@ player.set_volume(0.1)
 player.play_sound("radio_simulering")
 taskPlaying = False
 
-# kaller på funksjonene fra klassen SoundPlayer
-db = Headunit()
+db_session = SessionLocal()
+
+db = Headunit(db_session)
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
@@ -76,21 +78,29 @@ def volume_control(signal):
     player.set_volume(volume)
     arduino.send_signal(volume_prosent, 12, 1)
 
+
 while True:
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
     doorlock = db.readVariableStatusFromDatabase()
     tasks = db.readTasksFromDatabase()
+    wireless_info = wireless.readSignalFromESP32()
+
+    message = wireless.getMessage()
+    print(message)
+    print(wireless_info)
+
     if doorlock:
         wireless.lockDoor()
     elif doorlock:
         wireless.unlockDoor()
 
     # Leser signal fra ESP32 og sender til database
-    wireless_info = wireless.readSignalFromESP32()
-    if "door_is_locked" in wireless_info:
+    #wireless_info = wireless.readSignalFromESP32()
+    
+    if "door_is_locked" in message:
         db.sendAutoDoorLockTimeToDatabase(1)
-    elif "door_is_unlocked" in wireless_info:
+    elif "door_is_unlocked" in message:
         db.sendAutoDoorLockTimeToDatabase(0)
     if "fall_detected" in wireless_info:
         print("Fall detected")

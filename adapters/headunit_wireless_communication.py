@@ -50,20 +50,25 @@ class Wireless_communication:
                 message = data.decode('utf-8').strip()
                 # print(f"Received message:{message} from {addr}")
 
-                if message in self.accepted_signals:
+                if message not in self.accepted_signals:
+                    print(f"Unrecognized message: '{message}' from {addr}")
+                    message = None
+                
+                self.last_received_message = message
+                #if message in self.accepted_signals:
                     # self.process_signal(message, addr)
                     # elif message in ["Door locked via UDP command", "Door unlocked via UDP command",
                     # "Door locked via button press", "Door unlocked via button press"]:
                     # self.process_confirmation(message)
                     # print(f"Received_message:{message} from {addr}")
                     # self.last_received_message = f"Received_message:{message} from {addr}"
-                    print("message in self.last_received_message")
+                    #print("message in self.last_received_message")
+                    
                     #self.last_received_message = message
                 # return self.last_received_message
-                else:
-                    print(f"Unrecognized message: '{message}' from {addr}")
-                    message = None
-                self.last_received_message = message
+                #else:
+                    #print(f"Unrecognized message: '{message}' from {addr}")
+                    #message = None
 
             except socket.timeout:
                 continue  # No data received, continue listening
@@ -71,10 +76,11 @@ class Wireless_communication:
                 print(f"Error receiving message: {e}")
 
     def getMessage(self):
-        # return self.last_received_message
+        #return self.last_received_message
         if self.last_received_message in self.accepted_signals:
             message = self.last_received_message
             self.last_received_message = ""
+            print(message)
             return message
         else:
             return ""

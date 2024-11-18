@@ -98,7 +98,7 @@ while True:
     # Leser signal fra ESP32 og sender til database
     wireless_info = wireless.readSignalFromESP32()
     message = wireless.getMessage()
-
+    print(message)
     if message is not None:
         print(message)
     
