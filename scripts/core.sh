@@ -6,7 +6,15 @@ ROOT="$(dirname "$0")/.."
 # Aktiver virtuelt miljø
 source "$ROOT/.venv/bin/activate"
 
-export PYTHONPATH=$(pwd) # Sett PYTHONPATH til root
+# Naviger til prosjektets rotmappe for å unngå relative sti-problemer
+cd "$ROOT" || exit
 
-# Start Python skriptet
+# Sett PYTHONPATH til prosjektets rotmappe
+export PYTHONPATH=$(pwd)
+
+# Kontroller at miljøet er riktig konfigurert
+echo "PYTHONPATH: $PYTHONPATH"
+echo "Python versjon: $(python --version)"
+
+# Start Python-skriptet
 python core/core.py
