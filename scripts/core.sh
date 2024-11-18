@@ -9,4 +9,4 @@ source "$ROOT/.venv/bin/activate"
 export PYTHONPATH=$(pwd) # Sett PYTHONPATH til root
 
 # Start Python skriptet
-python core/test.py
+python core/core.py

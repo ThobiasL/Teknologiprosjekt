@@ -1,4 +1,3 @@
-from application.database import db
 from adapters.database.base import Base
 
 # Autodoorlock-adapter for databasen
