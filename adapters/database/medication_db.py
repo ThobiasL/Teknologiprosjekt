@@ -1,10 +1,10 @@
+from application.database import db
 from adapters.database.base import Base
 
 # Medication-modell for databasen
 class Medication(Base):
     __tablename__ = 'medication'
 
-    db = Base.get_db()
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.String, nullable=False)
     dose_1 = db.Column(db.String, nullable=True, default=None)
