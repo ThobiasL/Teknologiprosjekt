@@ -1,8 +1,10 @@
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
-from services.headunit import Headunit
+#from services.fullheadunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
+
+
 
 # Knappe variabler
 alarm_time = 0
@@ -36,7 +38,7 @@ player.play_sound("radio_simulering")
 taskPlaying = False
 
 # kaller på funksjonene fra klassen SoundPlayer
-db = Headunit()
+#db = Headunit()
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
@@ -77,21 +79,25 @@ def volume_control(signal):
     arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
+    from adapters.database.autodoorlock_db import AutoDoorLock
+
+    autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
+    status = autodoorlock.get('status')
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
-    doorlock = db.readVariableStatusFromDatabase()
-    tasks = db.readTasksFromDatabase()
-    if doorlock:
+    #doorlock = db.readVariableStatusFromDatabase()
+    #tasks = db.readTasksFromDatabase()
+    if status == True:
         wireless.lockDoor()
-    elif doorlock:
+    elif status == False:
         wireless.unlockDoor()
 
     # Leser signal fra ESP32 og sender til database
     wireless_info = wireless.readSignalFromESP32()
     if "door_is_locked" in wireless_info:
-        db.sendAutoDoorLockTimeToDatabase(1)
+        autodoorlock.set('status', True)
     elif "door_is_unlocked" in wireless_info:
-        db.sendAutoDoorLockTimeToDatabase(0)
+        autodoorlock.set('status', False)
     if "fall_detected" in wireless_info:
         print("Fall detected")
         # 1 sende info til database
@@ -101,7 +107,7 @@ while True:
     if "Pills_Dispens" in wireless_info:
         print("Pills_Dispens")
         #db.sendMedicationDosesStatusToDatabase()
-
+    '''
     Today = strftime("%A")  # sjekker hvilken ukedag det er i dag
     Doses = db.readMedicationDosesFromDatabase(Today)
     for i in range(1, 5):
@@ -129,7 +135,7 @@ while True:
             player.stop_go_for_a_walk()
             player.unpause_sound()
             taskPlaying = False
-
+    '''
     # Leser signal fra Arduino
     signal = arduino.read_signal()
     arduino.send_signal(getDateTime(), 0, 0)
