@@ -84,23 +84,28 @@ def volume_control(signal):
     #arduino.send_signal(volume_prosent, 12, 1)
 
 while True:
-    autodoorlock = AutoDoorLock.get_by_id(db_session, 1)
+    lock_status = AutoDoorLock.get_by_id(db_session, 1).get('status')
 
-    status = autodoorlock.get('status')
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
     #doorlock = db.readVariableStatusFromDatabase()
     #tasks = db.readTasksFromDatabase()
-    if status == True:
+    if lock_status == True:
         wireless.lockDoor()
-    elif status == False:
+    elif elif_status == False:
         wireless.unlockDoor()
     
     # Leser signal fra ESP32 og sender til database
     wireless_info = wireless.readSignalFromESP32()
-    if "door_is_locked" in wireless_info:
+    message = wireless.getMessage()
+
+    if message is not None:
+        print(message)
+    
+
+    if "door_is_locked" in message:
         autodoorlock.set('status', True)
-    elif "door_is_unlocked" in wireless_info:
+    elif "door_is_unlocked" in message:
         autodoorlock.set('status', False)
     if "fall_detected" in wireless_info:
         print("Fall detected")
