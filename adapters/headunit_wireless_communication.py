@@ -19,7 +19,7 @@ class Wireless_communication:
         self.recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.recv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.recv_socket.bind(('', self.listen_port))  # Bind to all interfaces on listen_port
-        self.recv_socket.settimeout(10)  # Non-blocking with timeout for the listener thread
+        self.recv_socket.settimeout(1)  # Non-blocking with timeout for the listener thread
 
         # To handle received signals
         self.accepted_signals = (
@@ -53,7 +53,6 @@ class Wireless_communication:
                 if message not in self.accepted_signals:
                     print(f"Unrecognized message: '{message}' from {addr}")
                     message = None
-                
                 self.last_received_message = message
                 #if message in self.accepted_signals:
                     # self.process_signal(message, addr)
@@ -62,10 +61,10 @@ class Wireless_communication:
                     # self.process_confirmation(message)
                     # print(f"Received_message:{message} from {addr}")
                     # self.last_received_message = f"Received_message:{message} from {addr}"
-                    #print("message in self.last_received_message")
+                #print("message in self.last_received_message")
                     
                     #self.last_received_message = message
-                # return self.last_received_message
+                return self.last_received_message
                 #else:
                     #print(f"Unrecognized message: '{message}' from {addr}")
                     #message = None
@@ -76,6 +75,7 @@ class Wireless_communication:
                 print(f"Error receiving message: {e}")
 
     def getMessage(self):
+        #self.readSignalFromESP32()
         #return self.last_received_message
         if self.last_received_message in self.accepted_signals:
             message = self.last_received_message
@@ -84,6 +84,7 @@ class Wireless_communication:
             return message
         else:
             return ""
+        
 
     def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
         try:

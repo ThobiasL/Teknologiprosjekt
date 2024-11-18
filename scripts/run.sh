@@ -44,7 +44,7 @@ gunicorn -c "$ROOT/server/gunicorn.config.py" server.wsgi:app &
 export PYTHONPATH=$(pwd) # Sett PYTHONPATH til root
 
 # Start Python skriptet
-python services/core.py
+python core/core.py
 
 # Printer ut adressen serveren kjører på for tilgang
 echo "Server starter på følgende adresse:"

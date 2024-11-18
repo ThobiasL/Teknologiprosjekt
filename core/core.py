@@ -83,41 +83,42 @@ while True:
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
     doorlock = db.readVariableStatusFromDatabase()
+    doorlockTime = db.readAutoDoorLockTimeFromDatabase()
     tasks = db.readTasksFromDatabase()
-    wireless_info = wireless.readSignalFromESP32()
-
-    message = wireless.getMessage()
-    print(message)
-    print(wireless_info)
-    print("hei")
-
-    if doorlock:
-        wireless.lockDoor()
-    elif doorlock:
-        wireless.unlockDoor()
-
-    # Leser signal fra ESP32 og sender til database
-    #wireless_info = wireless.readSignalFromESP32()
+    #wireless.readSignalFromESP32()
     
-    if "door_is_locked" in message:
-        db.sendAutoDoorLockTimeToDatabase(1)
-    elif "door_is_unlocked" in message:
-        db.sendAutoDoorLockTimeToDatabase(0)
-    if "fall_detected" in wireless_info:
-        print("Fall detected")
-        # 1 sende info til database
-    elif "false_alarm" in wireless_info:
-        print("False alarm")
-        # 0 sende info til database
-    if "Pills_Dispens" in wireless_info:
-        print("Pills_Dispens")
-        #db.sendMedicationDosesStatusToDatabase()
+    
+    # Leser signal fra ESP32 og sender til database
+    wireless_info = wireless.getMessage()
+    
+    if wireless_info is not None:
+        if "door_is_locked" in wireless_info:
+            db.sendAutoDoorLockTimeToDatabase(1)
+        if "door_is_unlocked" in wireless_info:
+            db.sendAutoDoorLockTimeToDatabase(0)
+        if "fall_detected" in wireless_info:
+            print("Fall detected")
+            # 1 sende info til database
+        if "false_alarm" in wireless_info:
+            print("False alarm")
+            # 0 sende info til database
+        if "Pills_Dispens" in wireless_info:
+            print("Pills_Dispens")
+            #db.sendMedicationDosesStatusToDatabase()
 
+    doorlockTime = str(doorlockTime) + ":00"
+    if doorlockTime == getTime():
+        if doorlock:
+            wireless.lockDoor()
+        if doorlock:
+            wireless.unlockDoor()
+
+    '''
     Today = strftime("%A")  # sjekker hvilken ukedag det er i dag
     Doses = db.readMedicationDosesFromDatabase(Today)
-    for i in range(1, 5):
-        if Doses[f"time_{i}"] == getTime():
-            wireless.pillDispensation()
+    #for i in range(1, 5):
+        #if Doses[f"time_{i}"] == getTime():
+            #wireless.pillDispensation()
             #player.pause_sound()
             #player.play_sound("pill_dispensation")   # planlagt vidre utvikling
 
@@ -140,6 +141,7 @@ while True:
             player.stop_go_for_a_walk()
             player.unpause_sound()
             taskPlaying = False
+    '''
 
     # Leser signal fra Arduino
     signal = arduino.read_signal()
@@ -179,7 +181,7 @@ while True:
         else:
             volume_control(signal)
 
-
+    
     if alarm_mode == 1 and prev_alarm_mode != 1:
         arduino.send_signal("00:00", 0, 1)
         alarm_time = 1
