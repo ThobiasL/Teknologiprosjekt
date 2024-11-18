@@ -1,4 +1,3 @@
-from application.database import db
 from adapters.database.base import Base
 from core.utils import hash_password, verify_password
 
@@ -6,6 +5,7 @@ from core.utils import hash_password, verify_password
 class User(Base):
     __tablename__ = 'users' # Tabellnavn i databasen
 
+    db = Base.get_db()
     # Kolonner i tabellen
     id = db.Column(db.Integer, primary_key=True) # Primærnøkkel
     name = db.Column(db.String(20), unique=True, nullable=False) # Brukernavn

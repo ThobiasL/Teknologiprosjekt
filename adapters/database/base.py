@@ -1,12 +1,17 @@
-from application.database import db
-
 # Basisklasse for databasemodeller
-class Base(db.Model):
+class Base:
     __abstract__ = True # Gjør klassen abstrakt
+
+    @staticmethod
+    def get_db():
+        from application.database import db
+        return db
+
 
     # Metode for å hente en modell fra databasen basert på id
     @staticmethod
     def get_by_id(model, id):
+        db = Base.get_db()
         return db.session.get(model, id)
 
     # Getter-metode
@@ -25,5 +30,6 @@ class Base(db.Model):
 
     # Metode for å lagre modellen i databasen
     def save(self):
+        db = Base.get_db()
         db.session.add(self)
         db.session.commit()

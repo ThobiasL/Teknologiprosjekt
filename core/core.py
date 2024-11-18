@@ -1,10 +1,8 @@
 from adapters.headunit_wireless_communication import Wireless_communication
 from adapters.headunit_arduino import ArduinoSerial
-#from services.headunit import Headunit
+from services.headunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
-
-from adapters.database.autodoorlock_db import AutoDoorLock
 
 # Knappe variabler
 alarm_time = 0
@@ -38,7 +36,7 @@ player.play_sound("radio_simulering")
 taskPlaying = False
 
 # kaller på funksjonene fra klassen SoundPlayer
-#db = Headunit()
+db = Headunit()
 
 def getDateTime():
     return strftime("%d.%m.%Y %H:%M")
@@ -82,11 +80,8 @@ while True:
     # Leser fra database
     #visit_mode = db.readVisteStatusFromDatabase()
     
-    #doorlock = db.readVariableStatusFromDatabase()
-    #tasks = db.readTasksFromDatabase()
-
-    doorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1).get('time')
-
+    doorlock = db.readVariableStatusFromDatabase()
+    tasks = db.readTasksFromDatabase()
     if doorlock:
         wireless.lockDoor()
     else:
