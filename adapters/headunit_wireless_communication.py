@@ -9,6 +9,7 @@ class Wireless_communication:
         self.timeout = timeout  # Seconds to wait for confirmation
         self.max_retries = max_retries
         self.buffer_size = 1024
+        self.lock = threading.Lock()
         # self.listen_for_confirmations_and_signals = listen_for_confirmations_and_signals
         # self.sock= sock
 
@@ -71,11 +72,15 @@ class Wireless_communication:
         
 
     def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
-        try:
-            self.send_socket.sendto(message, (esp32_ip, esp32_port))
-            print(f"Message sent to ESP32 at {esp32_ip}:{esp32_port}")
-        finally:
-            self.send_socket.close()
+        with self.lock:
+            if self.send_socket.fileno() == -1:
+                print("[ERROR] Send socket is closed or invalid.")
+                return
+            try:
+                self.send_socket.sendto(message, (esp32_ip, esp32_port))
+                print(f"Message sent to ESP32 at {esp32_ip}:{esp32_port}")
+            except Exception as e:
+                print(f"[ERROR] Error sending message to ESP32: {e}")
 
     def lockDoor(self):
         self.sendSignalToESP32("192.168.1.79", b"lock door")
@@ -85,3 +90,11 @@ class Wireless_communication:
 
     def pillDispensation(self):
         self.sendSignalToESP32("192.168.1.240", b"Dispens Pills")
+
+    def close_sockets(self):
+        if self.recv_socket:
+            self.recv_socket.close()
+            print("Recv socket closed.")
+        if self.send_socket:
+            self.send_socket.close()
+            print("Send socket closed.")
