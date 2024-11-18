@@ -1,66 +1,70 @@
+from sqlalchemy.orm import Session
+from adapters.database.autodoorlock_core import AutoDoorLock
+from adapters.database.medication_core import Medication
+from adapters.database.task_core import Task
+
 class Headunit:
-    def __init__(self):
-        pass
+    def __init__(self, db_session: Session):
+        self.db_session = db_session
 
     def readVariableStatusFromDatabase(self):
-        from adapters.database.autodoorlock_core import AutoDoorLock
-        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
-        status = autodoorlock.get('status')
-        return status
+        autodoorlock = self.db_session.query(AutoDoorLock).get(1)
+        if autodoorlock:
+            return autodoorlock.status
+        return None
 
     def readAutoDoorLockTimeFromDatabase(self):
-        from adapters.database.autodoorlock_core import AutoDoorLock
-        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
-        time = autodoorlock.get('time')
-        return time
+        autodoorlock = self.db_session.query(AutoDoorLock).get(1)
+        if autodoorlock:
+            return autodoorlock.time
+        return None
 
-    def sendAutoDoorLockTimeToDatabase(self, status):
-        from adapters.database.autodoorlock_core import AutoDoorLock
-        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
-        if status == 1:
-            autodoorlock.set('status', True)
-        elif status == 0:
-            autodoorlock.set('status', False)
+    def sendAutoDoorLockTimeToDatabase(self, status: int):
+        autodoorlock = self.db_session.query(AutoDoorLock).get(1)
+        if autodoorlock:
+            autodoorlock.status = bool(status)
+            self.db_session.commit()
 
-    def readMedicationDosesFromDatabase(self, toDay):
-        from adapters.database.medication_flask import Medication
-        medication = Medication.get_by_id(Medication, toDay)
-        doses = {}
-        for i in medication:
-            day = medication.get('day')
-            if day == toDay:
-                doses.update({f"dose_{i}": medication.get(f"dose_{i}"), f"scheduled_{i}": medication.get(f"scheduled_{i}")})
-        return doses
+    def readMedicationDosesFromDatabase(self, day: str):
+        medication = self.db_session.query(Medication).filter_by(day=day).first()
+        if medication:
+            doses = {
+                f"dose_{i}": getattr(medication, f"dose_{i}") for i in range(1, 5)
+            }
+            doses.update({
+                f"scheduled_{i}": getattr(medication, f"scheduled_{i}") for i in range(1, 5)
+            })
+            return doses
+        return {}
 
-    def sendMedicationDosesStatusToDatabase(self,medication_id, dose_id, ):
-        from adapters.database.medication_flask import Medication
-        medication = Medication.get_by_id(Medication, medication_id)
-        medication.set(f'scheduled_{dose_id}', False)
+    def sendMedicationDosesStatusToDatabase(self, medication_id: int, dose_id: int):
+        medication = self.db_session.query(Medication).get(medication_id)
+        if medication:
+            setattr(medication, f'scheduled_{dose_id}', False)
+            self.db_session.commit()
 
     def readTasksFromDatabase(self):
-        from adapters.database.task_flask import Task
-        allTasks = Task.query.all()
-        tasks = {}
-        for i in allTasks:
-            scheduled = allTasks.get('scheduled')
-            if scheduled:
-                tasks.update({"name" : allTasks.get('name'), "time": allTasks.get('time')})
+        all_tasks = self.db_session.query(Task).filter_by(scheduled=True).all()
+        tasks = []
+        for task in all_tasks:
+            tasks.append({"name": task.name, "time": task.time})
         return tasks
 
-    def taskDone(self, name, time):
-        from adapters.database.task_flask import Task
-        tasks = Task.query.all()
-        if tasks.get('name') == name and tasks.get('time') == time:
-            tasks.set('scheduled', False)
-'''
-    def readVisteStatusFromDatabase(self):
-        from adapters.database.autodoorlock_db import AutoDoorLock
-        variable = AutoDoorLock.get_by_id(AutoDoorLock, 1)
-        status = variable.get('status')
-        return status
+    def taskDone(self, name: str, time: str):
+        task = self.db_session.query(Task).filter_by(name=name, time=time).first()
+        if task:
+            task.scheduled = False
+            self.db_session.commit()
 
-    def sendVisteStatusToDatabase(self, status):
-        from adapters.database.autodoorlock_db import AutoDoorLock
-        autodoorlock = AutoDoorLock.get_by_id(AutoDoorLock, 1)
-        autodoorlock.set('status', status)
-'''
+    # Ekstra funksjoner for eventuelle Viste-statusoperasjoner
+    def readVisteStatusFromDatabase(self):
+        autodoorlock = self.db_session.query(AutoDoorLock).get(1)
+        if autodoorlock:
+            return autodoorlock.status
+        return None
+
+    def sendVisteStatusToDatabase(self, status: bool):
+        autodoorlock = self.db_session.query(AutoDoorLock).get(1)
+        if autodoorlock:
+            autodoorlock.status = status
+            self.db_session.commit()
