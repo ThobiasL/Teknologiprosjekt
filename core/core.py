@@ -23,7 +23,10 @@ editAlarm = 0
 editAlarm_mode = 0
 
 visit_mode = 0
-prev_vivit_mode = -1
+prev_visit_mode = -1
+
+# Pille dispenser variabler
+
 
 # Kall på funksjonene fra ArduinoSerial
 arduino = ArduinoSerial()
@@ -99,17 +102,55 @@ try:
             elif "Pills_Dispens" in wireless_info:
                 print("Pills_Dispens")
 
-        # Håndtere dør-lås basert på databaseverdier
-        doorlock = db.readVariableStatusFromDatabase()
+        # Håndtere dør-lås basert på databaseverdier        
+            
+        #doorlock = db.readVariableStatusFromDatabase()
         doorlockTime = db.readAutoDoorLockTimeFromDatabase()
         doorlockTime = f"{doorlockTime}:00"
 
         if doorlockTime == getTime():
-            if doorlock:
-                wireless.lockDoor()
-            else:
-                wireless.unlockDoor()
+            wireless.lockDoor()
+    
+        # Håndtere medisinering
+        # Hent dagens navn
+        today = strftime("%A")
+        
+        # Hent medisin-doser fra databasen
+        doses = db.readMedicationDosesFromDatabase(today)
 
+        if not doses:
+            print(f"Ingen doser planlagt for {today}.")      
+
+
+        # Gå gjennom dosene for å håndtere doser som skal gis
+        for dose_key, is_scheduled in doses.items():
+            if is_scheduled and dose_key.startswith("scheduled"):
+                dose_id = int(dose_key.split("_")[-1])
+                scheduled_time = doses.get(f"dose_{dose_id}")
+                scheduled_time = str(scheduled_time) + ":00"
+
+                # Sjekk om tidspunktet matcher nåværende tid
+                if scheduled_time == getTime():
+                    wireless.pillDispensation()
+                    print(f"Dose {dose_id} sendt til pille-dispenseren.")
+                    # player.pause_sound()
+                    # player.play_sound("medication")
+
+        # Håndtere signalet for å markere dosen som tatt
+        if wireless_info == "Pills_Dispens":
+            for dose_key, is_scheduled in doses.items():
+                if is_scheduled and dose_key.startswith("scheduled"):
+                    dose_id = int(dose_key.split("_")[-1])
+                    medication_id = doses.get("medication_id")
+
+                    try:
+                        #db.sendMedicationDosesStatusToDatabase(medication_id, dose_id)
+                        print(f"Medisin-dose {dose_id} markert som tatt!")
+                    except Exception as e:
+                        print(f"Feil under oppdatering av status for dose {dose_id}: {e}")
+
+            
+        
         # Håndtere oppgaver
         tasks = db.readTasksFromDatabase()
         for task in tasks:
@@ -128,8 +169,105 @@ try:
         signal = arduino.read_signal()
         arduino.send_signal(getDateTime(), 0, 0)
 
+        alarm_state = f"{hours}:{minutes}:00"
+        if alarm_state == getTime() and editAlarm_mode == 0:
+            alarmTurnedOn = 1
+
         if signal is not None:
-            print(signal)
+            if signal == "alarm_mode: 1":
+                alarm_mode = 1
+
+            elif signal == "alarm_mode: 0":
+                alarm_mode = 0
+
+            elif signal == "editAlarm_mode: 1":
+                editAlarm_mode = 1
+
+            elif signal == "editAlarm_mode: 2":
+                editAlarm_mode = 2
+
+            elif signal == "editAlarm_mode: 0":
+                editAlarm_mode = 0
+
+            elif signal == "visit_mode: 1":
+                visit_mode = 1
+
+            elif signal == "visit_mode: 0":
+                visit_mode = 0
+
+            elif alarm_time == 1 and editAlarm_mode != 0:
+                update_alarm(signal)
+
+            else:
+                volume_control(signal)
+
+
+        if alarm_mode == 1 and prev_alarm_mode != 1:
+            arduino.send_signal("00:00", 0, 1)
+            alarm_time = 1
+        elif alarm_mode == 0 and prev_alarm_mode != 0:
+            arduino.send_signal("     ", 0, 1)
+            alarm_time = 0
+        prev_alarm_mode = alarm_mode
+
+        if editAlarm_mode == 1:
+            editAlarm = 1
+        elif editAlarm_mode == 2:
+            editAlarm = 2
+        elif editAlarm_mode == 0:
+            editAlarm = 0
+
+        if visit_mode == 1 and prev_visit_mode != 1:
+            #sende info til database
+            visit_time = 1
+        elif visit_mode == 0 and prev_visit_mode != 0:
+            #sende info til database
+            visit_time = 0
+        prev_visit_mode = visit_mode
+
+        if visit_mode == 1 and alarmTurnedOn == 0:
+            arduino.send_signal("visit", 6, 1)
+
+        elif visit_mode == 0:
+            arduino.send_signal("      ", 6, 1)
+
+        if alarmTurnedOn == 1 and alarm_mode == 1:
+            if visit_mode == 1:
+                arduino.send_signal("      ", 6, 1)
+
+            alarmTimer += 1
+            arduino.send_signal("Alarm!", 6, 1)
+            if alarmTimer == 1:
+                player.pause_sound()
+                #player.play_sound("alarm")
+                player.play_alarm()
+                
+
+            if alarmTimer == 12 and visit_mode == 1:
+                arduino.send_signal("visit ", 6, 1)
+                player.stop_alarm()   #skru av alarm lyd
+            #   sleep(0.5)
+                player.unpause_sound()
+                alarmTimer = 0
+                alarmTurnedOn = 0
+
+            if alarmTimer == 12:
+                arduino.send_signal("      ", 6, 1)
+                player.stop_alarm()   #skru av alarm lyd
+                #sleep(0.5)
+                player.unpause_sound()
+                alarmTimer = 0
+                alarmTurnedOn = 0
+
+        elif alarmTurnedOn == 1 and alarm_mode == 0:
+            #alarm_state = "01:10"
+            arduino.send_signal("      ", 6, 1)
+            player.stop_alarm()       #skru av alarm lyd
+            #sleep(0.5)
+            player.unpause_sound()
+            #sleep(0.2)
+            alarmTimer = 0
+            alarmTurnedOn = None
 
         sleep(0.1)
 finally:
