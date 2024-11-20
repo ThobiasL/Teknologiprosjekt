@@ -37,7 +37,7 @@ def lock_door():
 
     autodoorlock.set('status', True)
 
-    flash('Dør låst', 'message')
+    flash('Dør låst', 'success')
 
     return redirect(url_for('autodoorlock.show_page'))
 
@@ -49,6 +49,6 @@ def unlock_door():
 
     autodoorlock.set('status', False)
 
-    flash('Dør låst opp', 'message')
+    flash('Dør låst opp', 'success')
 
     return redirect(url_for('autodoorlock.show_page'))

@@ -1,12 +1,12 @@
 import pytest
 from application import create_app
-from application.database import db
+from adapters.database.flask.database_flask import db
 from application.config import TestConfig
 from werkzeug.security import generate_password_hash
-from adapters.database.user_flask import User
-from adapters.database.autodoorlock_flask import AutoDoorLock
-from adapters.database.medication_flask import Medication
-from adapters.database.task_flask import Task
+from adapters.database.flask.user_flask import User
+from adapters.database.flask.autodoorlock_flask import AutoDoorLock
+from adapters.database.flask.medication_flask import Medication
+from adapters.database.flask.task_flask import Task
 
 @pytest.fixture
 def app():

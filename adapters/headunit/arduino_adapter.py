@@ -1,5 +1,5 @@
 from ports.arduino_port import ArduinoPort
-from adapters.headunit_arduino import ArduinoSerial
+from adapters.headunit.headunit_arduino import ArduinoSerial
 
 class ArduinoAdapter(ArduinoPort):
     def __init__(self, port, baudrate):

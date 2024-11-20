@@ -1,5 +1,5 @@
 from ports.database_port import DatabasePort
-from application.database_core import SessionLocal
+from adapters.database.core.database_core import SessionLocal
 from services.headunit import Headunit
 
 class DatabaseAdapter(DatabasePort):

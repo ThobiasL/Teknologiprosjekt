@@ -1,9 +1,9 @@
-from adapters.headunit_wireless_communication import Wireless_communication
-from adapters.headunit_arduino import ArduinoSerial
+from adapters.headunit.headunit_wireless_communication import Wireless_communication
+from adapters.headunit.headunit_arduino import ArduinoSerial
 from services.headunit import Headunit
-from adapters.sound_player import SoundPlayer
+from adapters.headunit.sound_player import SoundPlayer
 from time import sleep, strftime
-from application.database_core import SessionLocal
+from adapters.database.core.database_core import SessionLocal
 from services.periodic_reader import PeriodicDatabaseReader
 
 # Knappe variabler

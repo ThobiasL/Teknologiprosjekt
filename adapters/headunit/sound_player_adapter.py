@@ -1,5 +1,5 @@
 from ports.sound_player_port import SoundPlayerPort
-from adapters.sound_player import SoundPlayer
+from adapters.headunit.sound_player import SoundPlayer
 
 class SoundPlayerAdapter(SoundPlayerPort):
     def __init__(self):

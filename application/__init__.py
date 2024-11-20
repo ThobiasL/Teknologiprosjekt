@@ -1,5 +1,5 @@
 from flask import Flask, session, request, redirect, url_for # Importerer nødvendige funksjoner fra Flask
-from application.database import db # Importerer databasen
+from adapters.database.flask.database_flask import db # Importerer databasen
 
 from .config import Config # Importerer konfigurasjon fra config.py
 

@@ -22,7 +22,7 @@ def task_detail(task_id):
     if request.method == 'POST':
         if 'toggle_schedule' in request.form:
             task.set('scheduled', not task.get('scheduled'))
-            flash(f"{'Aktivert' if task.get('scheduled') else 'Deaktivert'}", 'message')
+            flash(f"{'Aktivert' if task.get('scheduled') else 'Deaktivert'}", 'success')
         
         elif 'set_time' in request.form:
             time = request.form.get('time')

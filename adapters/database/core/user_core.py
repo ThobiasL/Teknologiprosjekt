@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean
-from adapters.database.core.base_core import Base, BaseMixin
+from .base_core import Base, BaseMixin
 from core.utils import hash_password, verify_password
 
 # Brukeradapter for databasen
