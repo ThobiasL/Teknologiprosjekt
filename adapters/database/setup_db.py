@@ -6,6 +6,8 @@ from adapters.database.autodoorlock_core import AutoDoorLock
 from adapters.database.medication_core import Medication
 from adapters.database.task_core import Task    
 
+# Initialiserer databasen med standardverdier, brukere får et felles, tilfeldig, hashet passord
+# Database-filen blir lagret i data/database.db, og mappen blir laget dersom den ikke eksisterer
 def initialize_database():
     # Sjekk og opprett databasekatalogen
     data_dir = os.path.join(os.path.dirname(__file__), '../..', 'data')
@@ -13,12 +15,10 @@ def initialize_database():
         os.makedirs(data_dir)
         print(f"Laget data-mappen for databaselagring")
 
-    # Initialiser databasen
     init_db()
     session = SessionLocal()
 
     try:
-        # Legg til standardbrukere
         if not session.query(User).first():
             default_password_hash = hash_password(os.urandom(24).hex())
             users = [
