@@ -104,12 +104,12 @@ try:
 
         # Håndtere dør-lås basert på databaseverdier        
             
-        #doorlock = db.readVariableStatusFromDatabase()
+        doorlock = db.readVariableStatusFromDatabase()
         doorlockTime = db.readAutoDoorLockTimeFromDatabase()
         doorlockTime = f"{doorlockTime}:00"
 
         if doorlockTime == getTime():
-            wireless.lockDoor()
+            wireless.unlockDoor()
     
         # Håndtere medisinering
         # Hent dagens navn
