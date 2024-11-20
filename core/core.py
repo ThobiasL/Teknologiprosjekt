@@ -25,9 +25,6 @@ editAlarm_mode = 0
 visit_mode = 0
 prev_visit_mode = -1
 
-# Pille dispenser variabler
-
-
 # Kall på funksjonene fra ArduinoSerial
 arduino = ArduinoSerial()
 
@@ -239,14 +236,12 @@ try:
             arduino.send_signal("Alarm!", 6, 1)
             if alarmTimer == 1:
                 player.pause_sound()
-                #player.play_sound("alarm")
                 player.play_alarm()
                 
 
             if alarmTimer == 12 and visit_mode == 1:
                 arduino.send_signal("visit ", 6, 1)
                 player.stop_alarm()   #skru av alarm lyd
-            #   sleep(0.5)
                 player.unpause_sound()
                 alarmTimer = 0
                 alarmTurnedOn = 0
@@ -254,18 +249,14 @@ try:
             if alarmTimer == 12:
                 arduino.send_signal("      ", 6, 1)
                 player.stop_alarm()   #skru av alarm lyd
-                #sleep(0.5)
                 player.unpause_sound()
                 alarmTimer = 0
                 alarmTurnedOn = 0
 
         elif alarmTurnedOn == 1 and alarm_mode == 0:
-            #alarm_state = "01:10"
             arduino.send_signal("      ", 6, 1)
             player.stop_alarm()       #skru av alarm lyd
-            #sleep(0.5)
             player.unpause_sound()
-            #sleep(0.2)
             alarmTimer = 0
             alarmTurnedOn = None
 
