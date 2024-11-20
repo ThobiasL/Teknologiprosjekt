@@ -1,5 +1,5 @@
 from application.database import db
-from adapters.database.base_flask import Base
+from adapters.database.flask.base_flask import Base
 from core.utils import hash_password, verify_password
 
 # Brukeradapter for databasen

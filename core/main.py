@@ -123,6 +123,9 @@ def main():
             # Leser signaler fra Arduino
             signal = arduino_adapter.read_signal()
             arduino_adapter.send_signal(current_datetime, 0, 0)
+            if isinstance(signal, int):
+                signal = str(signal)
+            print(f"Signal mottatt: {signal} ({type(signal)})")
 
             # Oppdatere alarm
             headunit_service.alarm.state = f"{headunit_service.alarm.hours}:{headunit_service.alarm.minutes}:00"

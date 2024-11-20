@@ -1,5 +1,5 @@
 from application.database import db
-from adapters.database.base_flask import Base
+from adapters.database.flask.base_flask import Base
 
 # Task-adapter for databasen
 class Task(Base):

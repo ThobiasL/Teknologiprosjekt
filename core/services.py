@@ -9,6 +9,8 @@ class HeadunitService:
         self.database = database
         self.alarm = Alarm()
         self.edit_alarm = 0
+        self.edit_alarm_mode = 0
+        self.alarm_time = 0
         self.visit_mode = 0
         self.prev_alarm_mode = 0 
         self.prev_visit_mode = 0 

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from adapters.database.autodoorlock_core import AutoDoorLock
-from adapters.database.medication_core import Medication
-from adapters.database.task_core import Task
+from adapters.database.core.autodoorlock_core import AutoDoorLock
+from adapters.database.core.medication_core import Medication
+from adapters.database.core.task_core import Task
 
 class Headunit:
     def __init__(self, db_session: Session):

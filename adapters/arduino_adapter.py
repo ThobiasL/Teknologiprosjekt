@@ -2,8 +2,8 @@ from ports.arduino_port import ArduinoPort
 from adapters.headunit_arduino import ArduinoSerial
 
 class ArduinoAdapter(ArduinoPort):
-    def __init__(self):
-        self.arduino = ArduinoSerial()
+    def __init__(self, port, baudrate):
+        self.arduino = ser
 
     def send_signal(self, message: str, position: int, flag: int):
         self.arduino.send_signal(message, position, flag)
@@ -12,4 +12,6 @@ class ArduinoAdapter(ArduinoPort):
         return self.arduino.read_signal()
 
     def close(self):
-        self.arduino.close()
+        if hasattr(self.arduino, 'close'):
+            self.arduino.close()
+        

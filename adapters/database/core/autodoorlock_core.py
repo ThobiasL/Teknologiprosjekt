@@ -1,7 +1,7 @@
 # Databasemodell for AutoDoorLock til kjernesiden av databasen.
 
 from sqlalchemy import Column, Integer, Boolean, String
-from adapters.database.base_core import Base, BaseMixin
+from adapters.database.core.base_core import Base, BaseMixin
 
 class AutoDoorLock(Base, BaseMixin):
     __tablename__ = 'autodoorlock'

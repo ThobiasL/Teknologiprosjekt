@@ -4,10 +4,10 @@ from application.database import db # Importerer databasen
 from .config import Config # Importerer konfigurasjon fra config.py
 
 # Importerer modeller
-from adapters.database.user_flask import User
-from adapters.database.autodoorlock_flask import AutoDoorLock
-from adapters.database.medication_flask import Medication
-from adapters.database.task_flask import Task
+from adapters.database.flask.user_flask import User
+from adapters.database.flask.autodoorlock_flask import AutoDoorLock
+from adapters.database.flask.medication_flask import Medication
+from adapters.database.flask.task_flask import Task
 
 # Importerer blueprints
 from adapters.http.main import main

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from adapters.database.base_flask import Base  # Base-klassen for modellene
+from adapters.database.flask.base_flask import Base  # Base-klassen for modellene
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))

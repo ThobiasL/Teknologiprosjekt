@@ -1,7 +1,7 @@
 # Databasemodell for Task til kjernesiden av databasen.
 
 from sqlalchemy import Column, Integer, String, Boolean
-from adapters.database.base_core import Base, BaseMixin
+from adapters.database.core.base_core import Base, BaseMixin
 
 class Task(Base, BaseMixin):
     __tablename__ = 'tasks'

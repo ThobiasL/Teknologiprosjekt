@@ -1,7 +1,7 @@
 # Rute for AutoDoorLock-modulen, inkluderer funksjonalitet for å endre låsetid og låse/åpne døren.
 
 from flask import Blueprint, request, redirect, url_for, render_template, flash # Importerer nødvendige funksjoner fra Flask
-from adapters.database.autodoorlock_flask import AutoDoorLock
+from adapters.database.flask.autodoorlock_flask import AutoDoorLock
 from core.utils import is_valid_time
 
 # Lager blueprint for 'lock'

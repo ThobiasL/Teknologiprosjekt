@@ -1,7 +1,7 @@
 # Databasemodell for Medication til kjernesiden av databasen.
 
 from sqlalchemy import Column, Integer, String, Boolean
-from adapters.database.base_core import Base, BaseMixin
+from adapters.database.core.base_core import Base, BaseMixin
 
 class Medication(Base, BaseMixin):
     __tablename__ = 'medication'

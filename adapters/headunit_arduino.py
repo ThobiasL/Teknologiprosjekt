@@ -34,5 +34,5 @@ class ArduinoSerial:
         sleep(self.write_delay)
 
     def close(self):
-        if self.connection.is_open:
+        if hasattr(self.connection, 'is_open') and self.connection.is_open:
             self.connection.close()
