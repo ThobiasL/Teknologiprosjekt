@@ -10,6 +10,9 @@ class HeadunitService:
         self.alarm = Alarm()
         self.edit_alarm = 0
         self.visit_mode = 0
+        self.prev_alarm_mode = 0 
+        self.prev_visit_mode = 0 
+        
 
     def handle_door_lock_update(self, status: bool):
         if status:

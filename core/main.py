@@ -1,4 +1,14 @@
 import sys
+import os
+
+# Fjern eventuelle feilaktige søkestier
+if "/home/teknologi-prosjekt/GitHub/Teknologiprosjekt/core" in sys.path:
+    sys.path.remove("/home/teknologi-prosjekt/GitHub/Teknologiprosjekt/core")
+
+# Legg til prosjektroten i sys.path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.append(project_root)
 import traceback
 from time import sleep, strftime
 from core.services import HeadunitService
@@ -7,7 +17,7 @@ from adapters.wireless_communication_adapter import WirelessCommunicationAdapter
 from adapters.arduino_adapter import ArduinoAdapter
 from adapters.sound_player_adapter import SoundPlayerAdapter
 from adapters.database_adapter import DatabaseAdapter
-from services.periodic_reader import PeriodicDatabaseReader
+from services.periodic_reader2 import PeriodicDatabaseReader
 
 
 def main():
@@ -36,7 +46,7 @@ def main():
 
     # Initialize and start PeriodicDatabaseReader
     db_reader = PeriodicDatabaseReader(
-        SessionLocal=database_adapter.session,
+        db_session_factory=database_adapter.get_session_factory(),
         on_door_lock_update=handle_door_lock_update,
         interval=0.5
     )
@@ -62,7 +72,7 @@ def main():
             # Håndtere dør-lås basert på databaseverdier        
             doorlock_time = database_adapter.read_auto_door_lock_time()
 
-            if doorlock_time == current_time():
+            if doorlock_time == current_time:
                 wireless_adapter.unlock_door()
 
             # Håndtere medisinering
@@ -77,7 +87,7 @@ def main():
                     dose_id = int(dose_key.split("_")[-1])
                     scheduled_time = f"{doses.get(f'dose_{dose_id}')}:00"
 
-                    if scheduled_time == current_time():
+                    if scheduled_time == current_time:
                         wireless_adapter.pill_dispensation()
                         print(f"Dose {dose_id} sendt til pille-dispenseren.")
                         # sound_player_adapter.pause_sound()
@@ -100,7 +110,7 @@ def main():
             tasks = database_adapter.read_tasks()
             for task in tasks:
                 task_time = f"{task['time']}:00"
-                if task_time == current_time():
+                if task_time == current_time:
                     if task["name"] == "go_for_a_walk":
                         sound_player_adapter.pause_sound()
                         sound_player_adapter.play_sound("go_for_a_walk")
@@ -112,11 +122,11 @@ def main():
 
             # Leser signaler fra Arduino
             signal = arduino_adapter.read_signal()
-            arduino_adapter.send_signal(current_datetime(), 0, 0)
+            arduino_adapter.send_signal(current_datetime, 0, 0)
 
             # Oppdatere alarm
             headunit_service.alarm.state = f"{headunit_service.alarm.hours}:{headunit_service.alarm.minutes}:00"
-            if headunit_service.alarm.state == current_time() and headunit_service.alarm.edit_alarm_mode == 0:
+            if headunit_service.alarm.state == current_time and headunit_service.alarm.edit_alarm_mode == 0:
                 headunit_service.alarm.turned_on = True
 
             if signal:

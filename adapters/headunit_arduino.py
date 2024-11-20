@@ -32,3 +32,7 @@ class ArduinoSerial:
 
         self.ser.write(b'\n')
         sleep(self.write_delay)
+
+    def close(self):
+        if self.connection.is_open:
+            self.connection.close()

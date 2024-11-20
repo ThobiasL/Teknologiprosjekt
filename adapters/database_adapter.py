@@ -6,6 +6,10 @@ class DatabaseAdapter(DatabasePort):
     def __init__(self):
         self.session = SessionLocal()
         self.db = Headunit(self.session)
+    
+    def get_session_factory(self):
+        """Returnerer fabrikkfunksjonen for å opprette nye sessions."""
+        return SessionLocal
 
     def send_auto_door_lock_time(self, status: int):
         self.db.sendAutoDoorLockTimeToDatabase(status)

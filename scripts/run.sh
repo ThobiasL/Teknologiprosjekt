@@ -48,4 +48,4 @@ echo "https://$IP_ADDRESS:8443"
 export PYTHONPATH=$(pwd) # Sett PYTHONPATH til root
 
 # Start Python skriptet
-python core/core.py
+python core/main.py
