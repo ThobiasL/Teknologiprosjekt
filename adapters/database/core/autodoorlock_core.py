@@ -1,3 +1,5 @@
+# Databasemodell for AutoDoorLock til kjernesiden av databasen.
+
 from sqlalchemy import Column, Integer, Boolean, String
 from adapters.database.base_core import Base, BaseMixin
 

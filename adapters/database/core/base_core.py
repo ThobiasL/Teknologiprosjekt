@@ -1,9 +1,12 @@
+# Basemodell med metoder for alle modeller på kjernesiden av databasen.
+
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()  # Ren SQLAlchemy Base
+Base = declarative_base()
 
 # Hjelpeklasse for generiske metoder
 class BaseMixin:
+    
     @classmethod
     def get_by_id(cls, session, id):
         return session.query(cls).get(id)
