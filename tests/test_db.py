@@ -1,7 +1,7 @@
 # Enhetstester for enkle databaseoperasjoner
 
 import pytest
-from application.database import db
+from adapters.database.flask.database_flask import db
 from adapters.database.user_flask import User
 from adapters.database.medication_flask import Medication
 from adapters.database.autodoorlock_flask import AutoDoorLock

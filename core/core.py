@@ -3,7 +3,7 @@ from adapters.headunit_arduino import ArduinoSerial
 from services.headunit import Headunit
 from adapters.sound_player import SoundPlayer
 from time import sleep, strftime
-from application.database_core import SessionLocal
+from adapters.database.core.database_core import SessionLocal
 from services.periodic_reader import PeriodicDatabaseReader
 
 # Knappe variabler

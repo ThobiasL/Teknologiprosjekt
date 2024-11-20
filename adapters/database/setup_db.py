@@ -1,10 +1,10 @@
 import os
-from application.database_core import init_db, SessionLocal  # Ren SQLAlchemy-konfigurasjon
+from adapters.database.core.database_core import init_db, SessionLocal  # Ren SQLAlchemy-konfigurasjon
 from core.utils import hash_password
-from adapters.database.user_core import User
-from adapters.database.autodoorlock_core import AutoDoorLock
-from adapters.database.medication_core import Medication
-from adapters.database.task_core import Task    
+from adapters.database.core.user_core import User
+from adapters.database.core.autodoorlock_core import AutoDoorLock
+from adapters.database.core.medication_core import Medication
+from adapters.database.core.task_core import Task    
 
 # Initialiserer databasen med standardverdier, brukere får et felles, tilfeldig, hashet passord
 # Database-filen blir lagret i data/database.db, og mappen blir laget dersom den ikke eksisterer

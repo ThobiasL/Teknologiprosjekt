@@ -1,7 +1,7 @@
 # Flaskrute for medication med funksjoner for å vise, endre og lagre doseringer
 
 from flask import Blueprint, flash, request, redirect, url_for, render_template # Importerer nødvendige funksjoner fra Flask
-from adapters.database.medication_flask import Medication
+from adapters.database.flask.medication_flask import Medication
 from core.utils import is_valid_time
 
 # Lager blueprint for 'medication'

@@ -1,5 +1,5 @@
-from application.database import db
-from adapters.database.base_flask import Base
+from .database_flask import db
+from .base_flask import Base
 
 # Medication-modell for databasen
 class Medication(Base):

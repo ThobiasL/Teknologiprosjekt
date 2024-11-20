@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from adapters.database.base_flask import Base  # Base-klassen for modellene
+from .base_core import Base, BaseMixin
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '../data/database.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '../../../data/database.db')
 
 # Opprett SQLAlchemy-engine og session
 engine = create_engine(SQLALCHEMY_DATABASE_URI, pool_pre_ping=True)

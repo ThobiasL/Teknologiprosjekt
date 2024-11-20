@@ -2,7 +2,7 @@
 
 import pytest
 import unittest
-from application.database import db
+from adapters.database.flask.database_flask import db
 from core.utils import verify_password, hash_password, is_valid_time
 from adapters.database.user_flask import User
 

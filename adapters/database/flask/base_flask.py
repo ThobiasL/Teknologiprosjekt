@@ -1,4 +1,4 @@
-from application.database import db
+from .database_flask import db
 
 # Basisklasse for databasemodeller
 class Base(db.Model):
