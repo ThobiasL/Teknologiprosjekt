@@ -3,7 +3,7 @@
 import pytest
 from flask import session
 from adapters.database.flask.database_flask import db
-from adapters.database.user_flask import User
+from adapters.database.flask.user_flask import User
 
 # Test for innlogging med riktig passord
 def test_login_success(client, app, init_data):

@@ -2,9 +2,9 @@
 
 import pytest
 from adapters.database.flask.database_flask import db
-from adapters.database.user_flask import User
-from adapters.database.medication_flask import Medication
-from adapters.database.autodoorlock_flask import AutoDoorLock
+from adapters.database.flask.user_flask import User
+from adapters.database.flask.medication_flask import Medication
+from adapters.database.flask.autodoorlock_flask import AutoDoorLock
 
 # Fixture for å opprette en bruker i testdatabasen
 @pytest.fixture
