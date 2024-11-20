@@ -1,5 +1,5 @@
 from ports.wireless_communication_port import WirelessCommunicationPort
-from adapters.headunit_wireless_communication import Wireless_communication
+from adapters.headunit.headunit_wireless_communication import Wireless_communication
 
 class WirelessCommunicationAdapter(WirelessCommunicationPort):
     def __init__(self):

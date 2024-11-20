@@ -13,10 +13,10 @@ import traceback
 from time import sleep, strftime
 from core.services import HeadunitService
 from core.models.datetime_model import DateTimeModel
-from adapters.wireless_communication_adapter import WirelessCommunicationAdapter
-from adapters.arduino_adapter import ArduinoAdapter
-from adapters.sound_player_adapter import SoundPlayerAdapter
-from adapters.database_adapter import DatabaseAdapter
+from adapters.headunit.wireless_communication_adapter import WirelessCommunicationAdapter
+from adapters.headunit.arduino_adapter import ArduinoAdapter
+from adapters.headunit.sound_player_adapter import SoundPlayerAdapter
+from adapters.headunit.database_adapter import DatabaseAdapter
 from services.periodic_reader2 import PeriodicDatabaseReader
 
 
