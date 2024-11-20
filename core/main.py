@@ -2,17 +2,13 @@ import sys
 import traceback
 from time import sleep, strftime
 from core.services import HeadunitService
+from core.models.datetime_model import DateTimeModel
 from adapters.wireless_communication_adapter import WirelessCommunicationAdapter
 from adapters.arduino_adapter import ArduinoAdapter
 from adapters.sound_player_adapter import SoundPlayerAdapter
 from adapters.database_adapter import DatabaseAdapter
 from services.periodic_reader import PeriodicDatabaseReader
 
-def get_datetime():
-    return strftime("%d.%m.%Y %H:%M")
-
-def get_time():
-    return strftime("%H:%M:%S")
 
 def main():
     # Initialize adapters
@@ -21,6 +17,10 @@ def main():
     sound_player_adapter = SoundPlayerAdapter()
     database_adapter = DatabaseAdapter()
 
+    # Initialize datetime
+    current_datetime = DateTimeModel.get_datetime()
+    current_time = DateTimeModel.get_time()
+
     # Initialize service
     headunit_service = HeadunitService(
         wireless_comm=wireless_adapter,
@@ -28,6 +28,7 @@ def main():
         sound_player=sound_player_adapter,
         database=database_adapter
     )
+
 
     # Define handler for door lock updates
     def handle_door_lock_update(status: bool):
@@ -61,7 +62,7 @@ def main():
             # Håndtere dør-lås basert på databaseverdier        
             doorlock_time = database_adapter.read_auto_door_lock_time()
 
-            if doorlock_time == get_time():
+            if doorlock_time == current_time():
                 wireless_adapter.unlock_door()
 
             # Håndtere medisinering
@@ -76,7 +77,7 @@ def main():
                     dose_id = int(dose_key.split("_")[-1])
                     scheduled_time = f"{doses.get(f'dose_{dose_id}')}:00"
 
-                    if scheduled_time == get_time():
+                    if scheduled_time == current_time():
                         wireless_adapter.pill_dispensation()
                         print(f"Dose {dose_id} sendt til pille-dispenseren.")
                         # sound_player_adapter.pause_sound()
@@ -99,7 +100,7 @@ def main():
             tasks = database_adapter.read_tasks()
             for task in tasks:
                 task_time = f"{task['time']}:00"
-                if task_time == get_time():
+                if task_time == current_time():
                     if task["name"] == "go_for_a_walk":
                         sound_player_adapter.pause_sound()
                         sound_player_adapter.play_sound("go_for_a_walk")
@@ -111,11 +112,11 @@ def main():
 
             # Leser signaler fra Arduino
             signal = arduino_adapter.read_signal()
-            arduino_adapter.send_signal(get_datetime(), 0, 0)
+            arduino_adapter.send_signal(current_datetime(), 0, 0)
 
             # Oppdatere alarm
             headunit_service.alarm.state = f"{headunit_service.alarm.hours}:{headunit_service.alarm.minutes}:00"
-            if headunit_service.alarm.state == get_time() and headunit_service.alarm.edit_alarm_mode == 0:
+            if headunit_service.alarm.state == current_time() and headunit_service.alarm.edit_alarm_mode == 0:
                 headunit_service.alarm.turned_on = True
 
             if signal:
