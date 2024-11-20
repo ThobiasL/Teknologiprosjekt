@@ -105,6 +105,7 @@ class SoundPlayer:
         """Stopp alarmlyden."""
         if self.alarm_channel:
             self.alarm_channel.stop()
+            pygame.mixer.stop()
             self.alarm_sound = None
             self.alarm_channel = None
             #pygame.mixer.sound.unload("audio/alarm.mp3")

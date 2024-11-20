@@ -23,7 +23,7 @@ from services.periodic_reader2 import PeriodicDatabaseReader
 def main():
     # Initialize adapters
     wireless_adapter = WirelessCommunicationAdapter()
-    arduino_adapter = ArduinoAdapter()
+    arduino_adapter = ArduinoAdapter(port="/dev/ttyACM0", baudrate=9600)
     sound_player_adapter = SoundPlayerAdapter()
     database_adapter = DatabaseAdapter()
 
@@ -56,6 +56,10 @@ def main():
         while True:
             # Behandle trådløs kommunikasjon
             wireless_info = wireless_adapter.get_message()
+            # Initialize datetime
+            current_datetime = DateTimeModel.get_datetime()
+            current_time = DateTimeModel.get_time()
+            #print(current_time)
 
             if wireless_info:
                 if "door_is_locked" in wireless_info:
@@ -125,11 +129,10 @@ def main():
             arduino_adapter.send_signal(current_datetime, 0, 0)
             if isinstance(signal, int):
                 signal = str(signal)
-            print(f"Signal mottatt: {signal} ({type(signal)})")
 
             # Oppdatere alarm
             headunit_service.alarm.state = f"{headunit_service.alarm.hours}:{headunit_service.alarm.minutes}:00"
-            if headunit_service.alarm.state == current_time and headunit_service.alarm.edit_alarm_mode == 0:
+            if headunit_service.alarm.state == current_time and headunit_service.edit_alarm_mode == 0:
                 headunit_service.alarm.turned_on = True
 
             if signal:
