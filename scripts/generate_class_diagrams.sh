@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export PYTHONPATH=$PYTHONPATH:$(pwd)
-
 # Finn roten til prosjektet
 ROOT="$(dirname "$0")/.."
+
+export PATH=$PATH:/usr/bin
 
 # Aktiver virtuelt miljø
 source "$ROOT/.venv/bin/activate"
 
-pytest -v --capture=no
+pyreverse -o dot -p Teknologiprosjekt .
