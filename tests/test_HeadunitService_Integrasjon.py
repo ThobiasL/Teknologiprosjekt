@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import Mock
 from core.services import HeadunitService
-from adapters.headunit.database_adapter import DatabaseAdapter
 from services.periodic_reader import PeriodicDatabaseReader
 
-
+# Tester at HeadunitService: Leser riktig tid for automatisk låsing fra databasen,
+# Sender en kommando for å låse døren når tiden samsvarer med den nåværende tiden.
 def test_headunit_service_with_database_integration():
     # Arrange
     database_mock = Mock()
@@ -32,6 +32,8 @@ def test_headunit_service_with_database_integration():
     database_mock.read_auto_door_lock_time.assert_called_once()
     database_mock.send_auto_door_lock_time.assert_called_with(1)
 
+# Henter en database-sesjon via get_session_factory,
+# Kaller handle_door_lock_update på HeadunitService med riktig argument når en dørstatusoppdatering oppstår.
 def test_periodic_reader_with_headunit_integration():
     # Arrange
     database_mock = Mock()
@@ -60,7 +62,8 @@ def test_periodic_reader_with_headunit_integration():
     database_mock.get_session_factory.assert_called_once()  # Sjekk at database-tilkoblingen ble brukt
     headunit_service.handle_door_lock_update.assert_called_with(True)  # Sjekk at callbacken ble kalt korrekt
 
-
+# Tester at WirelessCommunicationAdapter mottar en melding (get_message) som indikerer at døren er låst og
+# HeadunitService reagerer på meldingen ved å sende en kommando til databasen for å låse døren.
 def test_wireless_adapter_with_headunit_integration():
     # Arrange
     wireless_mock = Mock()
@@ -82,6 +85,7 @@ def test_wireless_adapter_with_headunit_integration():
     wireless_mock.get_message.assert_called_once()
     headunit_service.database.send_auto_door_lock_time.assert_called_with(1)
 
+# Sikrer at HeadunitService Kan bruke SoundPlayerAdapter til å spille av en lyd basert på en gitt kommando (play_sound("alarm")).
 def test_sound_player_and_headunit_integration():
     # Arrange
     sound_player_mock = Mock()

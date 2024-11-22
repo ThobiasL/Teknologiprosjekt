@@ -10,19 +10,18 @@ class Wireless_communication:
         self.max_retries = max_retries
         self.buffer_size = 1024
         self.lock = threading.Lock()
-        # self.listen_for_confirmations_and_signals = listen_for_confirmations_and_signals
-        # self.sock= sock
 
-        # Setup UDP socket for sending commands
+
+        # Setup UDP kontakt for å sende kommandoer
         self.send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        # Setup UDP socket for receiving confirmations and signals
+        # Sett opp UDP-kontakt for mottak av bekreftelser og signaler
         self.recv_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.recv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.recv_socket.bind(('', self.listen_port))  # Bind to all interfaces on listen_port
-        self.recv_socket.settimeout(1)  # Non-blocking with timeout for the listener thread
+        self.recv_socket.bind(('', self.listen_port))  # Bind til alle grensesnitt på listen_port
+        self.recv_socket.settimeout(1)  # Ikke-blokkerende med tidsavbrudd for mottak
 
-        # To handle received signals
+        # Define accepted signals
         self.accepted_signals = (
             "door_is_locked",
             "door_is_unlocked",
@@ -31,20 +30,17 @@ class Wireless_communication:
             "Pills_Dispens"
         )
 
-        # For correlating commands and confirmations
-        #self.command_lock = threading.Lock()
-        #self.pending_commands = {}
-
         # Store the last receiveed message
         self.last_received_message = None
-        #self.message_event = threading.Event()
 
-        # Start the listening thread
+
+        # starter en tråd for å lytte etter bekreftelser og signaler
         self.listening = True
         self.listener_thread = threading.Thread(target=self.readSignalFromESP32, daemon=True)
         self.listener_thread.start()
 
     def readSignalFromESP32(self):
+        # Lytter etter bekreftelser og signaler fra ESP32
         print(f"Listening for confirmations and signals on port {self.listen_port}...")
         while self.listening:
             try:
@@ -56,12 +52,13 @@ class Wireless_communication:
                 if message in self.accepted_signals:
                     self.last_received_message = message
             except socket.timeout:
-                continue  # No data received, continue listening
+                continue
             except Exception as e:
                 print(f"Error receiving message: {e}")
 
 
     def getMessage(self):
+        # Hent siste mottatte melding
         if self.last_received_message:
             message = self.last_received_message
             self.last_received_message = None  # Nullstill etter å ha hentet meldingen
@@ -72,6 +69,9 @@ class Wireless_communication:
         
 
     def sendSignalToESP32(self, esp32_ip, message, esp32_port=12345):
+        #esp32_ip (str): IP-adressen til ESP32.
+        #message (bytes): Melding er i bytes-format fordi arduino behandler Strings på en annen måte enn python.
+        #esp32_port (int): Porten ESP32 lytter på. Standard er 12345.
         with self.lock:
             if self.send_socket.fileno() == -1:
                 print("[ERROR] Send socket is closed or invalid.")
@@ -92,6 +92,7 @@ class Wireless_communication:
         self.sendSignalToESP32("192.168.1.240", b"Dispens Pills")
 
     def close_sockets(self):
+        # Lukk UDP-kontakter
         if self.recv_socket:
             self.recv_socket.close()
             print("Recv socket closed.")
