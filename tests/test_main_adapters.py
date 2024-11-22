@@ -4,7 +4,7 @@ from adapters.headunit.wireless_communication_adapter import WirelessCommunicati
 from adapters.headunit.arduino_adapter import ArduinoAdapter
 from adapters.headunit.database_adapter import DatabaseAdapter
 
-
+# Tester at get_message-metoden til WirelessCommunicationAdapter returnerer korrekte meldinger.
 def test_wirelessCommunicationAdapter_get_message():
     # Arrange
     adapter = WirelessCommunicationAdapter()
@@ -33,6 +33,8 @@ def test_wirelessCommunicationAdapter_get_message():
     assert message4 == "false_alarm"
     assert message5 == "Pills_Dispens"
 
+# Verifiserer at close-metoden kalles én gang på flere adaptere
+# (WirelessCommunicationAdapter, ArduinoAdapter, SoundPlayerAdapter, DatabaseAdapter og db_reader).
 def test_wirelessCommunicationAdapter_close():
     # Arrange
     wireless_adapter = Mock()
@@ -55,6 +57,8 @@ def test_wirelessCommunicationAdapter_close():
     database_adapter.close.assert_called_once()
     db_reader.close.assert_called_once()
 
+# Mock-metoder og serial.Serial brukes til å teste at send_signal-metoden til ArduinoAdapter kalles med riktige argumenter.
+# Metoden testes for flere adapterinstanser. Testen verifiserer også at serial.Serial-objektene opprettes korrekt.
 @patch('adapters.headunit.headunit_arduino.serial.Serial', autospec=True)
 def test_arduinoAdapter_send_signal(mock_serial):
     # Arrange: Mock en instans av Serial
@@ -84,6 +88,8 @@ def test_arduinoAdapter_send_signal(mock_serial):
         call("COM3", 9600),
     ])
 
+# Tester read_signal-metoden i ArduinoAdapter ved å mocke ulike signaler som kan mottas.
+# Testen sjekker at de returnerte verdiene samsvarer med forventningene, og at serial.Serial opprettes riktig.
 @patch('adapters.headunit.headunit_arduino.serial.Serial', autospec=True)
 def test_arduinoAdapter_read_signal(mock_serial):
     # Arrange: Mock en instans av Serial
@@ -114,6 +120,8 @@ def test_arduinoAdapter_read_signal(mock_serial):
         call("COM3", 9600),
     ])
 
+# Tester read_auto_door_lock_time-metoden i DatabaseAdapter.
+# Mock-metoder brukes til å simulere ulike tidspunkter for automatisk låsing. Testen sjekker at de returnerte verdiene er som forventet.
 def test_databaseAdapter_read_auto_door_lock_time():
     # Arrange
     adapter = DatabaseAdapter()

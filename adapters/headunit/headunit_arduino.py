@@ -4,11 +4,12 @@ from time import sleep
 class ArduinoSerial:
     def __init__(self, port='/dev/ttyACM0', baudrate=9600, read_delay=0.1, write_delay=0.1):
         self.ser = serial.Serial(port, baudrate)
-        sleep(read_delay)  # Delay to allow Arduino to initialize
+        sleep(read_delay)  # Venter på at serial skal initialisere
         self.write_delay = write_delay
 
+    # Leser signal fra Arduino.
     def read_signal(self):
-        """Reads a signal from the Arduino. If 'Encoder Position' is in the response, extracts the position as an integer."""
+        #Leser et signal fra Arduino. Hvis 'Encoder Position' er i svaret, trekker ut posisjonen som et heltall.
         if self.ser.in_waiting > 0:
             read_serial = str(self.ser.readline())
             read_serial = read_serial.strip("b'").strip("\\r\\n")
@@ -19,8 +20,8 @@ class ArduinoSerial:
             return read_serial
         return None
 
+    # Sender et formatert signal til Arduino med spesifiserte tekst-, kolonne- og radverdier.
     def send_signal(self, text, column, row):
-        """Sends a formatted signal to the Arduino with specified text, column, and row values."""
         self.ser.write(b'C')
         self.ser.write(bytes([column]))
 
@@ -33,6 +34,7 @@ class ArduinoSerial:
         self.ser.write(b'\n')
         sleep(self.write_delay)
 
+    # Lukker tilkoblingen til Arduino.
     def close(self):
         if self.ser.is_open:
             self.ser.close()

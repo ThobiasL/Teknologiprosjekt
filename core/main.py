@@ -57,8 +57,8 @@ def main():
             # Initialize datetime
             current_datetime = DateTimeModel.get_datetime()
             current_time = DateTimeModel.get_time()
-            #print(current_time)
 
+            # Behandle trådløse meldinger
             if wireless_info:
                 if "door_is_locked" in wireless_info:
                     database_adapter.send_auto_door_lock_time(1)
@@ -77,7 +77,7 @@ def main():
             if doorlock_time == current_time:
                 wireless_adapter.unlock_door()
 
-            # Håndtere medisinering
+            # Håndtere medisinering basert på planlagte doser
             today = strftime("%A")
             doses = database_adapter.read_medication_doses(today)
 
@@ -108,7 +108,7 @@ def main():
                         except Exception as e:
                             print(f"Feil under oppdatering av status for dose {dose_id}: {e}")
 
-            # Håndtere oppgaver
+            # Håndtere oppgaver basert på planlagte tider
             tasks = database_adapter.read_tasks()
             for task in tasks:
                 task_time = f"{task['time']}:00"
@@ -128,13 +128,13 @@ def main():
             if isinstance(signal, int):
                 signal = str(signal)
 
-            # Oppdatere alarm
+            # Sjekk alarmstatus og håndter alarm-logikk
             headunit_service.alarm.state = f"{headunit_service.alarm.hours}:{headunit_service.alarm.minutes}:00"
             if headunit_service.alarm.state == current_time and headunit_service.edit_alarm_mode == 0:
                 headunit_service.alarm.turned_on = True
 
             if signal:
-                # Prosesser signaler
+                # Prosesser signaler fra Arduino
                 if signal.startswith("alarm_mode:"):
                     _, value = signal.split(":")
                     headunit_service.alarm.mode = int(value.strip())
@@ -170,6 +170,7 @@ def main():
                 headunit_service.visit_time = 0
             headunit_service.prev_visit_mode = headunit_service.visit_mode
 
+            # Sjekk alarmstatus og håndter alarm-logikk
             if headunit_service.visit_mode == 1 and not headunit_service.alarm.turned_on:
                 arduino_adapter.send_signal("visit", 6, 1)
             elif headunit_service.visit_mode == 0:
@@ -206,13 +207,15 @@ def main():
                 headunit_service.alarm.timer = 0
                 headunit_service.alarm.turned_on = None
 
+            # Fullfør alarmhåndtering og oppgaver
             sleep(0.1)
+
     except KeyboardInterrupt:
         print("Program terminated by user.")
     except Exception as e:
         traceback.print_exc()
     finally:
-        # Lukk alle adaptere
+        # Lukk alle ressurser
         wireless_adapter.close()
         arduino_adapter.close()
         sound_player_adapter.close()
