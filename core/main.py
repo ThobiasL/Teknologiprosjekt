@@ -1,7 +1,5 @@
 import sys
 import os
-
-# Fjern eventuelle feilaktige søkestier
 if "/home/teknologi-prosjekt/GitHub/Teknologiprosjekt/core" in sys.path:
     sys.path.remove("/home/teknologi-prosjekt/GitHub/Teknologiprosjekt/core")
 
