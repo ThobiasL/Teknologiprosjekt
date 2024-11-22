@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+# SoundPlayerPort interface for å definere metoder for å kontrollere lydavspilling.
 class SoundPlayerPort(ABC):
     @abstractmethod
     def set_volume(self, volume: float):

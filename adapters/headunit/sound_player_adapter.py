@@ -1,6 +1,7 @@
 from ports.sound_player_port import SoundPlayerPort
 from adapters.headunit.sound_player import SoundPlayer
 
+# SoundPlayerAdapter-klassen implementerer SoundPlayerPort-interfacet. Inkluderer funksjoner for å kontrollere lydavspilling.
 class SoundPlayerAdapter(SoundPlayerPort):
     def __init__(self):
         self.player = SoundPlayer()

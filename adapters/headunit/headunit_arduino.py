@@ -1,6 +1,8 @@
 import serial
 from time import sleep
 
+# Klasse for å kommunisere med Arduino via serieport. 
+# Inkluderer funksjoner for å sende og motta signaler, samt lukke tilkoblingen.
 class ArduinoSerial:
     def __init__(self, port='/dev/ttyACM0', baudrate=9600, read_delay=0.1, write_delay=0.1):
         self.ser = serial.Serial(port, baudrate)

@@ -1,6 +1,7 @@
 from core.entities import Alarm
 from typing import Callable
 
+# Tjenesteklasse for Headunit. Håndterer noe av logikken for Headunit.
 class HeadunitService:
     def __init__(self, wireless_comm, arduino, sound_player, database):
         # Initialiser nødvendige komponenter

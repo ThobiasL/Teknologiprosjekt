@@ -1,7 +1,9 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Sjekker om tid følger formatet HH:MM, og returnerer False hvis ikke
+# Utils inneholder funksjoner for å sjekke om en tid er gyldig, og for hashing og shekking av hash for passord.
+
+
 def is_valid_time(value):
     try:
         datetime.strptime(value, '%H:%M')

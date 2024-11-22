@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List
 
+# Databaseport for å definere metoder for å sende og lese data fra databasen.
 class DatabasePort(ABC):
     @abstractmethod
     def send_auto_door_lock_time(self, status: int):

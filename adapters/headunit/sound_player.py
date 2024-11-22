@@ -1,6 +1,7 @@
 import pygame
 import os
 
+# Lydavspiller for å spille av lydfiler i prosjektet.
 class SoundPlayer:
     def __init__(self):
         self.root = os.path.dirname(os.path.abspath(__file__))

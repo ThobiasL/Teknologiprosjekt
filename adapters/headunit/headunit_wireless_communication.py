@@ -1,6 +1,8 @@
 import socket
 import threading
 
+# Klasse for å håndtere trådløs kommunikasjon med ESP32
+# Inkluderer funksjoner for å sende signaler og motta meldinger og signaler.
 class Wireless_communication:
     def __init__(self, esp32_ip="", esp32_port=12345, listen_port=54321, timeout=5, max_retries=3):
         self.esp32_ip = esp32_ip

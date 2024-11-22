@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+# WirelessCommunicationPort interface for å definere metoder for å kommunisere med ESP.
 class WirelessCommunicationPort(ABC):
     @abstractmethod
     def lock_door(self):

@@ -2,6 +2,7 @@ from ports.database_port import DatabasePort
 from adapters.database.core.database_core import SessionLocal
 from services.headunit import Headunit
 
+# Adapter for å kommunisere med databasen, implementerer DatabasePort-interfacet.
 class DatabaseAdapter(DatabasePort):
     def __init__(self):
         self.session = SessionLocal()

@@ -1,6 +1,8 @@
 from ports.wireless_communication_port import WirelessCommunicationPort
 from adapters.headunit.headunit_wireless_communication import Wireless_communication
 
+# Adapter for å kommunisere med ESP32 via trådløs kommunikasjon. Implementerer WirelessCommunicationPort-interfacet.
+# Inkluderer funktioner for å låse og låse opp dør, motta meldinger og dispensere piller.
 class WirelessCommunicationAdapter(WirelessCommunicationPort):
     def __init__(self):
         self.wireless = Wireless_communication()
