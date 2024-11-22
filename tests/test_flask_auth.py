@@ -5,7 +5,9 @@ from flask import session
 from adapters.database.flask.database_flask import db
 from adapters.database.flask.user_flask import User
 
-# Test for innlogging med riktig passord
+# Tester at innlogging med riktig passord fungerer.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 302 (omdirigering),
+# at brukeren videresendes til hjemmesiden, og at brukeren legges til i session.
 def test_login_success(client, app, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -20,8 +22,10 @@ def test_login_success(client, app, init_data):
         assert 'user_id' in session, "Bruker ble ikke lagt til i session. 1"
         assert session['user_id'] == user.id, "Bruker ble ikke lagt til i session. 2"
 
-# Test for feilet innlogging med feil passord
-def test_login_fail(client, app, init_data):
+# Tester at innlogging med feil passord ikke fungerer.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 200 (feilmelding vises),
+# at en feilmelding vises på siden, og at brukeren ikke legges til i session.
+def test_login_fail_wrong_password(client, app, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
         assert user is not None, "Bruker {user.name} ble ikke funnet i db."
@@ -30,17 +34,21 @@ def test_login_fail(client, app, init_data):
     assert response.status_code == 200
     assert b'Feil passord' in response.data
     with client.session_transaction() as session:
-        assert 'username' not in session
+        assert 'user_id' not in session
 
-# Test for innlogging med ugyldig brukernavn
+# Tester at innlogging med ugyldig brukernavn feiler.
+# Sjekker at statuskoden er 200 (feilmelding vises), at en feilmelding om ukjent bruker vises,
+# og at brukeren ikke legges til i session.
 def test_login_invalid_username(client):
     response = client.post('/login', data={'id': 999, 'password': 'password'})
     assert response.status_code == 200
     assert b'Brukeren finnes ikke' in response.data
     with client.session_transaction() as session:
-        assert 'username' not in session, "Bruker er innlogget."
+        assert 'user_id' not in session, "Bruker er innlogget."
 
-# Test for tilgang til beskyttet side når bruker er innlogget
+# Tester at innlogging gir tilgang til en beskyttet side.
+# Sjekker at brukeren finnes i databasen, og at statuskoden for tilgang til den
+# beskyttede siden er 200 (vellykket).
 def test_access_protected_page_with_login(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -51,7 +59,9 @@ def test_access_protected_page_with_login(client, app, login, init_data):
     response = client.get('/home')
     assert response.status_code == 200, "Bruker ble ikke videresendt til hjemmesiden."
 
-# Test for tilgang til beskyttet side uten innlogging
+# Tester at brukere uten innlogging ikke har tilgang til en beskyttet side.
+# Sjekker at brukeren ikke finnes i session, at statuskoden for tilgang er 302 (omdirigering),
+# og at brukeren videresendes til innloggingssiden.
 def test_access_protected_page_without_login(client):
     with client.session_transaction() as session:
         assert 'user_id' not in session, "Bruker er innlogget."
@@ -59,7 +69,9 @@ def test_access_protected_page_without_login(client):
     assert response.status_code == 302, "Bruker ble ikke videresendt."
     assert '/login' in response.location, "Bruker ble ikke videresendt til innlogging."
 
-# Test for å sikre at utlogging fungerer
+# Tester at utlogging fungerer korrekt.
+# Sjekker at brukeren finnes i databasen, at utlogging gir statuskode 302 (omdirigering),
+# at brukeren videresendes til innloggingssiden, og at brukeren fjernes fra session.
 def test_logout(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -72,7 +84,9 @@ def test_logout(client, app, login, init_data):
     with client.session_transaction() as session:
         assert 'user_id' not in session, "Bruker er innlogget."
 
-# Test for å sikre at passord kan endres
+# Tester at brukeren kan oppdatere passordet sitt.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 302 (omdirigering),
+# at brukeren videresendes til registreringssiden, og at innlogging fungerer med det nye passordet.
 def test_register_new_password(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -87,7 +101,9 @@ def test_register_new_password(client, app, login, init_data):
     with client.session_transaction() as session:
         assert 'user_id' in session, "Bruker ble ikke lagt til i session."
 
-# Test for å sikre at passord ikke kan endres til tomt felt
+# Tester at brukeren ikke kan oppdatere passordet sitt til et tomt passord.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 200 (feilmelding vises),
+# og at en passende feilmelding vises på siden.
 def test_register_empty_password(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -97,7 +113,9 @@ def test_register_empty_password(client, app, login, init_data):
     assert response.status_code == 200
     assert b'Bruker eller passord-feltet er tomt' in response.data, "Bruker endret passord til tomt felt."
 
-# Test for å verifisere at passord med spesialtegn kan settes
+# Tester at brukeren kan sette passord med spesialtegn.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 302 (omdirigering),
+# og at innlogging fungerer med passordet med spesialtegn.
 def test_register_new_password_special_chars(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -112,7 +130,9 @@ def test_register_new_password_special_chars(client, app, login, init_data):
     with client.session_transaction() as session:
         assert 'user_id' in session, "Bruker ble ikke lagt til i session."
 
-# Test for å verifisere at passord med norske bokstaver kan settes
+# Tester at brukeren kan sette passord med norske bokstaver.
+# Sjekker at brukeren finnes i databasen, at statuskoden er 302 (omdirigering),
+# og at innlogging fungerer med passordet med norske bokstaver.
 def test_register_new_password_norwegian_chars(client, app, login, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -127,7 +147,8 @@ def test_register_new_password_norwegian_chars(client, app, login, init_data):
     with client.session_transaction() as session:
         assert 'user_id' in session, "Bruker ble ikke lagt til i session."
 
-# Test for innlogging uten data
+# Tester at innlogging uten data feiler.
+# Sjekker at statuskoden er 200 (feilmelding vises), og at en passende feilmelding vises på siden.
 def test_login_without_data(client):
     response = client.post('/login', data={})
     assert response.status_code == 200 
@@ -135,26 +156,30 @@ def test_login_without_data(client):
     with client.session_transaction() as session:
         assert 'user_id' not in session, "Bruker er innlogget."
 
-# Test for å verifisere at passord er korrekt hashet
+# Tester at passordene hashes korrekt.
+# Sjekker at passordene ikke lagres i klartekst i databasen.
 def test_password_hashing(client, app, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
         assert user is not None, "Bruker ikke funnet i db"
         assert user.password_hash != 'password'
 
-# Test for innlogging med manglende brukernavn
+# Tester at innlogging med manglende brukernavn feiler.
+# Sjekker at statuskoden er 200 (feilmelding vises), og at brukeren ikke logges inn.
 def test_login_missing_username(client):
     response = client.post('/login', data={'password': 'password'})
     assert response.status_code == 200
     assert b'Fyll ut alle feltene' in response.data
 
-# Test for innlogging med manglende passord
+# Tester at innlogging med manglende passord feiler.
+# Sjekker at statuskoden er 200 (feilmelding vises), og at brukeren ikke logges inn.
 def test_login_missing_password(client):
     response = client.post('/login', data={'id': 1})
     assert response.status_code == 200
     assert b'Fyll ut alle feltene' in response.data
 
-# Test for flere samtidige innlogginger
+# Tester at flere brukere kan logge inn sekvensielt.
+# Sjekker at hver bruker legges til i session når de logger inn.
 def test_multiple_logins(client, app, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
@@ -168,7 +193,8 @@ def test_multiple_logins(client, app, init_data):
     with client.session_transaction() as session:
         assert session['user_id'] == user2.id
 
-# Test for flere feilede innlogginger
+# Tester at flere feilede innlogginger ikke gir tilgang.
+# Sjekker at brukeren ikke logges inn etter flere feilforsøk.
 def test_multiple_failed_logins(client, app, init_data):
     with app.app_context():
         user = User.query.filter_by(name='test_user').first()
