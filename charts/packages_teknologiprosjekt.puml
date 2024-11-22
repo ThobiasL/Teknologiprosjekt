@@ -1,0 +1,149 @@
+@startuml packages_teknologiprosjekt
+set namespaceSeparator none
+package "Teknologiprosjekt" as Teknologiprosjekt {
+}
+package "Teknologiprosjekt.adapters" as Teknologiprosjekt.adapters {
+}
+package "Teknologiprosjekt.adapters.database" as Teknologiprosjekt.adapters.database {
+}
+package "Teknologiprosjekt.adapters.database.core" as Teknologiprosjekt.adapters.database.core {
+}
+package "Teknologiprosjekt.adapters.database.core.autodoorlock_core" as Teknologiprosjekt.adapters.database.core.autodoorlock_core {
+}
+package "Teknologiprosjekt.adapters.database.core.base_core" as Teknologiprosjekt.adapters.database.core.base_core {
+}
+package "Teknologiprosjekt.adapters.database.core.database_core" as Teknologiprosjekt.adapters.database.core.database_core {
+}
+package "Teknologiprosjekt.adapters.database.core.medication_core" as Teknologiprosjekt.adapters.database.core.medication_core {
+}
+package "Teknologiprosjekt.adapters.database.core.task_core" as Teknologiprosjekt.adapters.database.core.task_core {
+}
+package "Teknologiprosjekt.adapters.database.core.user_core" as Teknologiprosjekt.adapters.database.core.user_core {
+}
+package "Teknologiprosjekt.adapters.database.flask" as Teknologiprosjekt.adapters.database.flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.autodoorlock_flask" as Teknologiprosjekt.adapters.database.flask.autodoorlock_flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.base_flask" as Teknologiprosjekt.adapters.database.flask.base_flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.database_flask" as Teknologiprosjekt.adapters.database.flask.database_flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.medication_flask" as Teknologiprosjekt.adapters.database.flask.medication_flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.task_flask" as Teknologiprosjekt.adapters.database.flask.task_flask {
+}
+package "Teknologiprosjekt.adapters.database.flask.user_flask" as Teknologiprosjekt.adapters.database.flask.user_flask {
+}
+package "Teknologiprosjekt.adapters.database.setup_db" as Teknologiprosjekt.adapters.database.setup_db {
+}
+package "Teknologiprosjekt.adapters.headunit" as Teknologiprosjekt.adapters.headunit {
+}
+package "Teknologiprosjekt.adapters.headunit.arduino_adapter" as Teknologiprosjekt.adapters.headunit.arduino_adapter {
+}
+package "Teknologiprosjekt.adapters.headunit.database_adapter" as Teknologiprosjekt.adapters.headunit.database_adapter {
+}
+package "Teknologiprosjekt.adapters.headunit.headunit_arduino" as Teknologiprosjekt.adapters.headunit.headunit_arduino {
+}
+package "Teknologiprosjekt.adapters.headunit.headunit_wireless_communication" as Teknologiprosjekt.adapters.headunit.headunit_wireless_communication {
+}
+package "Teknologiprosjekt.adapters.headunit.sound_player" as Teknologiprosjekt.adapters.headunit.sound_player {
+}
+package "Teknologiprosjekt.adapters.headunit.sound_player_adapter" as Teknologiprosjekt.adapters.headunit.sound_player_adapter {
+}
+package "Teknologiprosjekt.adapters.headunit.wireless_communication_adapter" as Teknologiprosjekt.adapters.headunit.wireless_communication_adapter {
+}
+package "Teknologiprosjekt.adapters.http" as Teknologiprosjekt.adapters.http {
+}
+package "Teknologiprosjekt.adapters.http.auth" as Teknologiprosjekt.adapters.http.auth {
+}
+package "Teknologiprosjekt.adapters.http.autodoorlock" as Teknologiprosjekt.adapters.http.autodoorlock {
+}
+package "Teknologiprosjekt.adapters.http.main" as Teknologiprosjekt.adapters.http.main {
+}
+package "Teknologiprosjekt.adapters.http.medication" as Teknologiprosjekt.adapters.http.medication {
+}
+package "Teknologiprosjekt.adapters.http.tasks" as Teknologiprosjekt.adapters.http.tasks {
+}
+package "Teknologiprosjekt.application" as Teknologiprosjekt.application {
+}
+package "Teknologiprosjekt.application.config" as Teknologiprosjekt.application.config {
+}
+package "Teknologiprosjekt.audio" as Teknologiprosjekt.audio {
+}
+package "Teknologiprosjekt.core" as Teknologiprosjekt.core {
+}
+package "Teknologiprosjekt.core.entities" as Teknologiprosjekt.core.entities {
+}
+package "Teknologiprosjekt.core.main" as Teknologiprosjekt.core.main {
+}
+package "Teknologiprosjekt.core.models" as Teknologiprosjekt.core.models {
+}
+package "Teknologiprosjekt.core.models.datetime_model" as Teknologiprosjekt.core.models.datetime_model {
+}
+package "Teknologiprosjekt.core.services" as Teknologiprosjekt.core.services {
+}
+package "Teknologiprosjekt.core.utils" as Teknologiprosjekt.core.utils {
+}
+package "Teknologiprosjekt.ports" as Teknologiprosjekt.ports {
+}
+package "Teknologiprosjekt.ports.arduino_port" as Teknologiprosjekt.ports.arduino_port {
+}
+package "Teknologiprosjekt.ports.database_port" as Teknologiprosjekt.ports.database_port {
+}
+package "Teknologiprosjekt.ports.sound_player_port" as Teknologiprosjekt.ports.sound_player_port {
+}
+package "Teknologiprosjekt.ports.wireless_communication_port" as Teknologiprosjekt.ports.wireless_communication_port {
+}
+package "Teknologiprosjekt.server" as Teknologiprosjekt.server {
+}
+package "Teknologiprosjekt.server.gunicorn.config" as Teknologiprosjekt.server.gunicorn.config {
+}
+package "Teknologiprosjekt.server.wsgi" as Teknologiprosjekt.server.wsgi {
+}
+package "Teknologiprosjekt.services" as Teknologiprosjekt.services {
+}
+package "Teknologiprosjekt.services.headunit" as Teknologiprosjekt.services.headunit {
+}
+package "Teknologiprosjekt.services.periodic_reader" as Teknologiprosjekt.services.periodic_reader {
+}
+package "Teknologiprosjekt.tests" as Teknologiprosjekt.tests {
+}
+package "Teknologiprosjekt.tests.conftest" as Teknologiprosjekt.tests.conftest {
+}
+package "Teknologiprosjekt.tests.test_flask_auth" as Teknologiprosjekt.tests.test_flask_auth {
+}
+package "Teknologiprosjekt.tests.test_flask_core" as Teknologiprosjekt.tests.test_flask_core {
+}
+package "Teknologiprosjekt.tests.test_flask_db" as Teknologiprosjekt.tests.test_flask_db {
+}
+package "Teknologiprosjekt.tests.test_flask_functions" as Teknologiprosjekt.tests.test_flask_functions {
+}
+package "Teknologiprosjekt.tests.test_flask_pages" as Teknologiprosjekt.tests.test_flask_pages {
+}
+Teknologiprosjekt.adapters.database.core.database_core --> Teknologiprosjekt.adapters.database.core.base_core
+Teknologiprosjekt.adapters.database.core.medication_core --> Teknologiprosjekt.adapters.database.core.base_core
+Teknologiprosjekt.adapters.database.core.task_core --> Teknologiprosjekt.adapters.database.core.base_core
+Teknologiprosjekt.adapters.database.core.user_core --> Teknologiprosjekt.adapters.database.core.base_core
+Teknologiprosjekt.adapters.database.flask.autodoorlock_flask --> Teknologiprosjekt.adapters.database.flask.base_flask
+Teknologiprosjekt.adapters.database.flask.autodoorlock_flask --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.adapters.database.flask.base_flask --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.adapters.database.flask.medication_flask --> Teknologiprosjekt.adapters.database.flask.base_flask
+Teknologiprosjekt.adapters.database.flask.medication_flask --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.adapters.database.flask.task_flask --> Teknologiprosjekt.adapters.database.flask.base_flask
+Teknologiprosjekt.adapters.database.flask.task_flask --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.adapters.database.flask.user_flask --> Teknologiprosjekt.adapters.database.flask.base_flask
+Teknologiprosjekt.adapters.database.flask.user_flask --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.adapters.database.setup_db --> Teknologiprosjekt.adapters.database.core
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.database.flask.autodoorlock_flask
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.database.flask.database_flask
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.database.flask.medication_flask
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.database.flask.task_flask
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.database.flask.user_flask
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.http.auth
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.http.autodoorlock
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.http.main
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.http.medication
+Teknologiprosjekt.application --> Teknologiprosjekt.adapters.http.tasks
+Teknologiprosjekt.application --> Teknologiprosjekt.application.config
+Teknologiprosjekt.core.main --> Teknologiprosjekt.core.services
+@enduml

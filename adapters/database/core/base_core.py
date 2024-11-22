@@ -4,7 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-# Hjelpeklasse for generiske metoder
+# Hjelpeklasse for generiske metoder, inneholder funksjon for å hente objekt fra databasen basert på id.
+# Getter og setter, samt save-metode for å lagre endringer til databasen.
 class BaseMixin:
     
     @classmethod

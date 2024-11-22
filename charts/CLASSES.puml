@@ -1,0 +1,250 @@
+@startuml Classes
+
+class base_flask as "Base" {
+  <<SQLAlchemy Declarative>>
+  get(attribute)
+  get_by_id(model, id)
+  save()
+  set(attribute, value)
+}
+
+class base_core as "BaseMixin" {
+  get(attribute)
+  get_by_id(session, id)
+  save(session)
+  set(session, attribute, value)
+}
+
+class autodoorlock_core as "AutoDoorLock" {
+  id
+  status
+  time
+}
+
+class autodoorlock_flask as "AutoDoorLock" {
+  id
+  status
+  time
+}
+
+class database_adapter as "DatabaseAdapter" {
+  db
+  session
+  close()
+  get_session_factory()
+  read_auto_door_lock_time() -> str
+  read_medication_doses(day: str) -> dict
+  read_tasks() -> list
+  read_variable_status()
+  send_auto_door_lock_time(status: int)
+  send_medication_dose_status(medication_id: int, dose_id: int)
+  task_done(task_name: str, task_time: str)
+}
+
+class database_port as "DatabasePort" {
+  {abstract}read_auto_door_lock_time() -> str
+  {abstract}read_medication_doses(day: str) -> Dict[str, bool]
+  {abstract}read_tasks() -> List[Dict]
+  {abstract}read_variable_status()
+  {abstract}send_auto_door_lock_time(status: int)
+  {abstract}send_medication_dose_status(medication_id: int, dose_id: int)
+  {abstract}task_done(task_name: str, task_time: str)
+}
+
+class config as "Config" {
+  JSON_AS_ASCII : bool
+  SECRET_KEY : NoneType
+  SQLALCHEMY_DATABASE_URI
+  SQLALCHEMY_TRACK_MODIFICATIONS : bool
+}
+
+class test_config as "TestConfig" {
+  SQLALCHEMY_DATABASE_URI : str
+  SQLALCHEMY_TRACK_MODIFICATIONS : bool
+  TESTING : bool
+}
+
+class arduino_adapter as "ArduinoAdapter" {
+  arduino
+  close()
+  read_signal() -> str
+  send_signal(message: str, position: int, flag: int)
+}
+
+class arduino_port as "ArduinoPort" {
+  {abstract}read_signal() -> str
+  {abstract}send_signal(message: str, position: int, flag: int)
+}
+
+class arduino_serial as "ArduinoSerial" {
+  ser : Serial
+  write_delay : float
+  close()
+  read_signal()
+  send_signal(text, column, row)
+}
+
+class headunit as "Headunit" {
+  db_session
+  readAutoDoorLockTimeFromDatabase()
+  readMedicationDosesFromDatabase(day: str)
+  readTasksFromDatabase()
+  readVariableStatusFromDatabase()
+  readVisteStatusFromDatabase()
+  sendAutoDoorLockTimeToDatabase(status: int)
+  sendMedicationDosesStatusToDatabase(medication_id: int, dose_id: int)
+  sendVisteStatusToDatabase(status: bool)
+  taskDone(name: str, time: str)
+}
+
+class headunit_service as "HeadunitService" {
+  alarm
+  alarm_time : int
+  arduino
+  database
+  edit_alarm : int
+  edit_alarm_mode : int
+  prev_alarm_mode : int
+  prev_visit_mode : int
+  sound_player
+  visit_mode : int
+  wireless_comm
+  handle_door_lock_update(status: bool)
+  update_alarm(signal: int)
+  volume_control(signal: int)
+}
+
+class periodic_reader as "PeriodicDatabaseReader" {
+  db_session_factory : sessionmaker
+  interval : float
+  last_door_lock_status : NoneType
+  on_door_lock_update : NoneType
+  stop_event : Event
+  thread : Thread
+  check_door_lock_status()
+  run()
+  start()
+  stop()
+}
+
+class wireless_communication as "Wireless_communication" {
+  accepted_signals : tuple
+  buffer_size : int
+  esp32_ip : str
+  esp32_port : int
+  last_received_message : NoneType
+  listen_port : int
+  listener_thread : Thread
+  listening : bool
+  lock : lock
+  max_retries : int
+  recv_socket : socket
+  send_socket : socket
+  timeout : int
+  close_sockets()
+  getMessage()
+  lockDoor()
+  pillDispensation()
+  readSignalFromESP32()
+  sendSignalToESP32(esp32_ip, message, esp32_port)
+  unlockDoor()
+}
+
+class wireless_communication_adapter as "WirelessCommunicationAdapter" {
+  wireless
+  close()
+  get_message() -> str
+  lock_door()
+  pill_dispensation()
+  unlock_door()
+}
+
+class wireless_communication_port as "WirelessCommunicationPort" {
+  {abstract}get_message() -> str
+  {abstract}lock_door()
+  {abstract}pill_dispensation()
+  {abstract}unlock_door()
+}
+
+class sound_player as "SoundPlayer" {
+  alarm_channel : NoneType
+  alarm_sound : NoneType
+  audio_dir
+  current_sound : NoneType
+  eat_dinner_channel : NoneType
+  eat_dinner_sound : NoneType
+  go_for_a_walk_channel : NoneType
+  go_for_a_walk_sound : NoneType
+  is_playing : bool
+  last_time_rec : float, int
+  paused_position : float, int
+  root
+  get_playing_position()
+  pause_sound()
+  play_alarm()
+  play_eat_dinner()
+  play_go_for_a_walk()
+  play_sound(sound_file, start)
+  set_volume(volume)
+  sound_is_not_playing()
+  stop_alarm()
+  stop_eat_dinner()
+  stop_go_for_a_walk()
+  stop_sound()
+  unpause_sound()
+}
+
+class sound_player_adapter as "SoundPlayerAdapter" {
+  player
+  task_playing : bool
+  close()
+  pause_sound()
+  play_alarm()
+  play_sound(sound_name: str)
+  set_volume(volume: float)
+  stop_alarm()
+  unpause_sound()
+}
+
+class sound_player_port as "SoundPlayerPort" {
+  {abstract}pause_sound()
+  {abstract}play_alarm()
+  {abstract}play_sound(sound_name: str)
+  {abstract}set_volume(volume: float)
+  {abstract}stop_alarm()
+  {abstract}unpause_sound()
+}
+
+class datetime_model as "DateTimeModel" {
+  get_datetime() -> str
+  get_time() -> str
+}
+
+class alarm as "Alarm" {
+  hours : str
+  minutes : str
+  mode : int
+  state : str
+  timer : int
+  turned_on : bool
+}
+
+config <|-- test_config
+base_flask <|-- autodoorlock_flask
+base_core <|-- autodoorlock_core
+base_flask <|-- medication_flask
+base_core <|-- medication_core
+base_flask <|-- task_flask
+base_core <|-- task_core
+base_flask <|-- user_flask
+base_core <|-- user_core
+database_port <|.. database_adapter
+arduino_port <|.. arduino_adapter
+sound_player_port <|.. sound_player_adapter
+wireless_communication_port <|.. wireless_communication_adapter
+headunit <-- periodic_reader
+alarm <-- headunit_service
+sound_player <-- sound_player_adapter
+wireless_communication <-- wireless_communication_adapter
+
+@enduml
